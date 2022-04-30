@@ -6,6 +6,7 @@ import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.CommentDto;
 import com.sparta.bluemoon.dto.CommentListDto;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
+import com.sparta.bluemoon.dto.response.MainPostForAnonymousResponseDto;
 import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
 import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
 import com.sparta.bluemoon.dto.response.PostResponseDto;
@@ -34,6 +35,8 @@ public class PostService {
     private static final String SORT_PROPERTIES = "id";
     // 남의 게시글 한 페이지당 보여줄 게시글의 수 (한 페이지당 보여줄 게시글의 수는 1개이지만 5개를 한번에 보내주기로 함)
     private static final int OTHER_POST_PAGEABLE_SIZE = 1;
+    // 비로그인 사용자에게 보여줄 main post index
+    private static final long MAIN_POST_INDEX_FOR_ANONYMOUS = 1L;
 
     //게시글 1개 상세 조회
     public PostResponseDto getPost(Long postId, UserDetailsImpl userDetails) {
@@ -121,5 +124,14 @@ public class PostService {
             newComments.add(commentDto);
         }
         return newComments;
+    }
+
+    // 비 로그인한 유저를 위해 main post를 보여주기
+    public MainPostForAnonymousResponseDto getMainPost() {
+        Post post = postRepository.findById(MAIN_POST_INDEX_FOR_ANONYMOUS).orElseThrow(
+            () -> new IllegalArgumentException("main 게시글이 존재하지 않습니다.")
+        );
+
+        return new MainPostForAnonymousResponseDto(post);
     }
 }
