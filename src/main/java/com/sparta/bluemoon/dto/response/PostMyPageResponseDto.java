@@ -14,13 +14,15 @@ public class PostMyPageResponseDto {
     private String title;
     private String content;
     private LocalDateTime createdAt;
+    private int count;
 
-    public PostMyPageResponseDto(Post pagedPost) {
+    public PostMyPageResponseDto(Post pagedPost, int count) {
         this.postId = pagedPost.getId();
         this.nickname = pagedPost.getUser().getNickname();
         this.userId = pagedPost.getUser().getId();
         this.title = pagedPost.getTitle();
         this.content = pagedPost.getContent();
         this.createdAt = pagedPost.getCreatedAt();
+        this.count = count;
     }
 }
