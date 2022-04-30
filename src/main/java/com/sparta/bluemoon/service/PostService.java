@@ -99,10 +99,13 @@ public class PostService {
         return new PostOtherOnePostResponseDto(post);
     }
 
+    //나의 게시글 리스트 조회 및 댓글 개수 추가
     private List<PostMyPageResponseDto> convertPostsToPostDtos(Page<Post> pagedPosts) {
         List<PostMyPageResponseDto> postDtos = new ArrayList<>();
         for (Post pagedPost : pagedPosts) {
-            postDtos.add(new PostMyPageResponseDto(pagedPost));
+            List<Comment> comments = commentRepository.findAllByPost(pagedPost);
+            int count = comments.size();
+            postDtos.add(new PostMyPageResponseDto(pagedPost, count));
         }
         return postDtos;
     }
