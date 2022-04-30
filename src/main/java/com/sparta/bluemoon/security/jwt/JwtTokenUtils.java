@@ -2,7 +2,7 @@ package com.sparta.bluemoon.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.sparta.hh99finalproject.security.UserDetailsImpl;
+import com.sparta.bluemoon.security.UserDetailsImpl;
 import java.util.Date;
 
 public final class JwtTokenUtils {

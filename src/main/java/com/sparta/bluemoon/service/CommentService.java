@@ -7,7 +7,6 @@ import com.sparta.bluemoon.dto.response.CommentResponseDto;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;

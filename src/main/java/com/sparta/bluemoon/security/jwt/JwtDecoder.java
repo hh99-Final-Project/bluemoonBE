@@ -1,11 +1,10 @@
 package com.sparta.bluemoon.security.jwt;
 
-import static com.sparta.hh99finalproject.security.jwt.JwtTokenUtils.*;
-import static com.sparta.hh99finalproject.security.jwt.JwtTokenUtils.CLAIM_EXPIRED_DATE;
-import static com.sparta.hh99finalproject.security.jwt.JwtTokenUtils.CLAIM_NICKNAME;
-import static com.sparta.hh99finalproject.security.jwt.JwtTokenUtils.CLAIM_USER_NAME;
-import static com.sparta.hh99finalproject.security.jwt.JwtTokenUtils.JWT_SECRET;
-
+import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.*;
+import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.CLAIM_EXPIRED_DATE;
+import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.CLAIM_NICKNAME;
+import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.CLAIM_USER_NAME;
+import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.JWT_SECRET;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;

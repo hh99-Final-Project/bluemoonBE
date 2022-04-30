@@ -1,6 +1,6 @@
 package com.sparta.bluemoon.security.provider;
 
-import com.sparta.hh99finalproject.security.UserDetailsImpl;
+import com.sparta.bluemoon.security.UserDetailsImpl;
 import javax.annotation.Resource;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

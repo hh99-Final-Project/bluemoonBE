@@ -1,7 +1,7 @@
 package com.sparta.bluemoon.security;
 
-import com.sparta.hh99finalproject.domain.User;
-import com.sparta.hh99finalproject.repository.UserRepository;
+import com.sparta.bluemoon.domain.User;
+import com.sparta.bluemoon.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
