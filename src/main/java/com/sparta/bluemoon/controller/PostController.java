@@ -60,4 +60,10 @@ public class PostController {
     public MainPostForAnonymousResponseDto getMainPost() {
         return postService.getMainPost();
     }
+
+    // 비로그인한 사용자에게 보여줄 게시글 상세페이지
+    @GetMapping("/api/posts/anonymous/one")
+    public PostResponseDto getMainDetailPost() {
+        return postService.getMainDetailPost();
+    }
 }

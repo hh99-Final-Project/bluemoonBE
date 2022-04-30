@@ -137,4 +137,25 @@ public class PostService {
 
         return new MainPostForAnonymousResponseDto(post);
     }
+
+    // 비 로그인한 유저를 위해 detail main post를 보여주기
+    public PostResponseDto getMainDetailPost() {
+        Post post = postRepository.findById(MAIN_POST_INDEX_FOR_ANONYMOUS).orElseThrow(
+            () -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다.")
+        );
+
+        // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
+        List<Comment> comments = commentRepository.findAllByPost(post);
+        List<CommentDto> newComments = new ArrayList<>();
+        for (Comment comment: comments) {
+            comment.setShow(false);
+            CommentDto commentDto = new CommentDto(comment);
+            newComments.add(commentDto);
+        }
+
+        //Dto에 담아주기
+        CommentListDto commentListDto = new CommentListDto(newComments);
+
+        return new PostResponseDto(post, commentListDto);
+    }
 }
