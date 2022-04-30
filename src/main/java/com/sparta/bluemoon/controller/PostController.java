@@ -1,6 +1,7 @@
 package com.sparta.bluemoon.controller;
 
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
+import com.sparta.bluemoon.dto.response.MainPostForAnonymousResponseDto;
 import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
 import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
 import com.sparta.bluemoon.dto.response.PostResponseDto;
@@ -52,5 +53,11 @@ public class PostController {
     @DeleteMapping("/api/posts/{postId}")
     public void delete(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.delete(postId, userDetails.getUser());
+    }
+
+    // 비로그인한 사용자에게 보여줄 게시글
+    @GetMapping("/api/posts/anonymous")
+    public MainPostForAnonymousResponseDto getMainPost() {
+        return postService.getMainPost();
     }
 }
