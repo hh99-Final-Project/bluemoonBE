@@ -6,12 +6,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
 @Getter
-@Setter
 public class User {
 
     @Id
@@ -33,6 +31,10 @@ public class User {
     }
 
     public void createNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void changeNickname(String nickname){
         this.nickname = nickname;
     }
 }
