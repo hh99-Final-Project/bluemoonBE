@@ -1,10 +1,10 @@
 package com.sparta.bluemoon.security;
 
-import com.sparta.hh99finalproject.security.filter.FormLoginFilter;
-import com.sparta.hh99finalproject.security.filter.JwtAuthFilter;
-import com.sparta.hh99finalproject.security.jwt.HeaderTokenExtractor;
-import com.sparta.hh99finalproject.security.provider.FormLoginAuthProvider;
-import com.sparta.hh99finalproject.security.provider.JWTAuthProvider;
+import com.sparta.bluemoon.security.filter.FormLoginFilter;
+import com.sparta.bluemoon.security.filter.JwtAuthFilter;
+import com.sparta.bluemoon.security.jwt.HeaderTokenExtractor;
+import com.sparta.bluemoon.security.provider.FormLoginAuthProvider;
+import com.sparta.bluemoon.security.provider.JWTAuthProvider;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.context.annotation.Bean;

@@ -6,13 +6,13 @@ import com.sparta.bluemoon.domain.ChatRoomUser;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatRoomResponseDto;
 import com.sparta.bluemoon.dto.request.ChatRoomUserRequestDto;
-import com.sparta.bluemoon.repository.repository.ChatMessageRepository;
-import com.sparta.bluemoon.repository.repository.ChatRoomRepository;
-import com.sparta.bluemoon.repository.repository.ChatRoomUserRepository;
-import com.sparta.bluemoon.repository.repository.UserRepository;
+import com.sparta.bluemoon.repository.ChatMessageRepository;
+import com.sparta.bluemoon.repository.ChatRoomRepository;
+import com.sparta.bluemoon.repository.ChatRoomUserRepository;
+import com.sparta.bluemoon.repository.UserRepository;
+import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;

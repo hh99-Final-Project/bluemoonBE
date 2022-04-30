@@ -1,10 +1,10 @@
 package com.sparta.bluemoon.security.provider;
 
-import com.sparta.hh99finalproject.domain.User;
-import com.sparta.hh99finalproject.repository.UserRepository;
-import com.sparta.hh99finalproject.security.UserDetailsImpl;
-import com.sparta.hh99finalproject.security.jwt.JwtDecoder;
-import com.sparta.hh99finalproject.security.jwt.JwtPreProcessingToken;
+import com.sparta.bluemoon.domain.User;
+import com.sparta.bluemoon.repository.UserRepository;
+import com.sparta.bluemoon.security.UserDetailsImpl;
+import com.sparta.bluemoon.security.jwt.JwtDecoder;
+import com.sparta.bluemoon.security.jwt.JwtPreProcessingToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

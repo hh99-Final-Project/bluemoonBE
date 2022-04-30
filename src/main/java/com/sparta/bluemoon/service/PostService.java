@@ -1,12 +1,14 @@
 package com.sparta.bluemoon.service;
 
 import com.sparta.bluemoon.domain.Post;
+import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
 import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
 import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
-import com.sparta.bluemoon.repository.PostRepository;
 import java.util.ArrayList;
 import java.util.List;
+import com.sparta.bluemoon.repository.CommentRepository;
+import com.sparta.bluemoon.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

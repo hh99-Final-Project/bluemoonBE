@@ -1,7 +1,7 @@
 package com.sparta.bluemoon.security.filter;
 
-import com.sparta.hh99finalproject.security.jwt.HeaderTokenExtractor;
-import com.sparta.hh99finalproject.security.jwt.JwtPreProcessingToken;
+import com.sparta.bluemoon.security.jwt.HeaderTokenExtractor;
+import com.sparta.bluemoon.security.jwt.JwtPreProcessingToken;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
