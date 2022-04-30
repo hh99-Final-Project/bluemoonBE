@@ -3,6 +3,7 @@ package com.sparta.bluemoon.controller;
 import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
 import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
+import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
 import com.sparta.bluemoon.service.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +39,12 @@ public class PostController {
     @DeleteMapping("/api/posts/{postId}")
     public void delete(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.delete(postId, userDetails.getUser());
+    }
+
+    // 남의 랜덤 게시글 1개 조회
+    @GetMapping("/api/posts")
+    public PostOtherOnePostResponseDto getOtherPost(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return postService.findOneOtherPage(userDetails.getUser());
     }
 }

@@ -3,6 +3,7 @@ package com.sparta.bluemoon.service;
 import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
 import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
+import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
 import com.sparta.bluemoon.repository.PostRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,5 +68,21 @@ public class PostService {
             postDtos.add(new PostMyPageResponseDto(pagedPost));
         }
         return postDtos;
+    }
+
+    // 남의 게시글 훔쳐보기 (1개만)
+    public PostOtherOnePostResponseDto findOneOtherPage(User user) {
+
+        long otherPostsCount = postRepository.countByUserNot(user);
+
+        if (otherPostsCount < 1) {
+            throw new IllegalArgumentException("남이 쓴 게시글이 존재하지 않습니다.");
+        }
+
+        List<Post> otherPosts = postRepository.findAllByUserNot(user);
+
+        int idx = (int)(Math.random() * otherPosts.size());
+        Post post = otherPosts.get(idx);
+        return new PostOtherOnePostResponseDto(post);
     }
 }
