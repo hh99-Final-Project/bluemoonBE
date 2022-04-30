@@ -4,8 +4,6 @@ import com.sparta.bluemoon.domain.Comment;
 import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.dto.request.CommentRequestDto;
 import com.sparta.bluemoon.dto.response.CommentResponseDto;
-import com.sparta.bluemoon.repository.CommentRepository;
-import com.sparta.bluemoon.repository.PostRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

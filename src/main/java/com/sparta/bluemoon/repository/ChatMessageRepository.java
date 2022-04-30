@@ -1,4 +1,4 @@
-package com.sparta.bluemoon.repository.repository;
+package com.sparta.bluemoon.repository;
 
 
 import com.sparta.bluemoon.domain.ChatMessage;

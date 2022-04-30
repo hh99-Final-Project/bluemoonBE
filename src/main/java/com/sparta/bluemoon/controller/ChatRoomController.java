@@ -2,6 +2,7 @@ package com.sparta.bluemoon.controller;
 
 import com.sparta.bluemoon.dto.ChatRoomResponseDto;
 import com.sparta.bluemoon.dto.request.ChatRoomUserRequestDto;
+import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

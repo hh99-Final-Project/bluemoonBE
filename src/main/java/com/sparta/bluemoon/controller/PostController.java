@@ -1,9 +1,10 @@
 package com.sparta.bluemoon.controller;
 
-import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
 import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
 import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
+import com.sparta.bluemoon.dto.response.PostResponseDto;
+import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.service.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 @RestController
 @RequiredArgsConstructor
 public class PostController {
@@ -35,16 +35,22 @@ public class PostController {
         return postService.findOneMyPage(pageId, userDetails.getUser());
     }
 
-    // 게시글 삭제
-    @DeleteMapping("/api/posts/{postId}")
-    public void delete(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        postService.delete(postId, userDetails.getUser());
-    }
-
-    // 남의 랜덤 게시글 1개 조회
+    // 남의 랜덤 게시글 5개 조회
     @GetMapping("/api/posts")
     public PostOtherOnePostResponseDto getOtherPost(@AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         return postService.findOneOtherPage(userDetails.getUser());
+    }
+
+    //게시글 1개 상세 조회
+    @GetMapping("/api/posts/{postId}")
+    public PostResponseDto getPost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.getPost(postId, userDetails);
+    }
+
+    // 게시글 삭제
+    @DeleteMapping("/api/posts/{postId}")
+    public void delete(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        postService.delete(postId, userDetails.getUser());
     }
 }
