@@ -29,6 +29,7 @@ public class ChatRoomService {
     private final ChatRoomUserRepository chatRoomUserRepository;
     private final ChatMessageRepository chatMessageRepository;
 
+    //채팅방 생성
     public void createChatRoom (
             ChatRoomUserRequestDto requestDto,
             UserDetailsImpl userDetails) {
@@ -95,6 +96,46 @@ public class ChatRoomService {
         }
     }
 
+
+
+    //채팅방 조회
+    public List<ChatRoomResponseDto> getChatRoom(UserDetailsImpl userDetails) {
+        //user로 챗룸 유저를 찾고>>챗룸 유저에서 채팅방을 찾는다
+        //마자
+        //마지막나온 메시지 ,내용 ,시간
+        List<ChatRoomResponseDto> responseDtos = new ArrayList<>();
+        List<ChatRoomUser> chatRoomUsers = chatRoomUserRepository.findAllByUser(userDetails.getUser());
+
+
+        for (ChatRoomUser chatRoomUser : chatRoomUsers) {
+
+            ChatRoomResponseDto responseDto = createChatRoomDto(chatRoomUser);
+            responseDtos.add(responseDto);
+
+            //정렬
+            responseDtos.sort(Collections.reverseOrder());
+        }
+        return responseDtos;
+    }
+
+
+    public ChatRoomResponseDto createChatRoomDto(ChatRoomUser chatRoomUser) {
+        String roomName = chatRoomUser.getName();
+        Long roomId = chatRoomUser.getChatRoom().getId();
+        String lastMessage;
+        LocalDateTime lastTime;
+        //마지막
+        List<ChatMessage> Messages = chatMessageRepository.findAllByChatRoomOrderByCreatedAt(chatRoomUser.getChatRoom());
+        //메시지 없을 때 디폴트
+        if (Messages.isEmpty()) {
+            lastMessage = "채팅방이 생성 되었습니다.";
+            lastTime = LocalDateTime.now();
+        } else {
+            lastMessage = Messages.get(0).getContent();
+            lastTime = Messages.get(0).getCreatedAt();
+        }
+        return new ChatRoomResponseDto(roomName, roomId, lastMessage, lastTime);
+    }
 
 
 

@@ -27,4 +27,10 @@ public class ChatRoomController {
         chatRoomService.createChatRoom(requestDto, userDetails);
     }
 
+    //내가 가진 채팅방 조회
+    @GetMapping ("/rooms")
+    public List<ChatRoomResponseDto> getChatRoom (@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return chatRoomService.getChatRoom(userDetails);
+    }
+
 }
