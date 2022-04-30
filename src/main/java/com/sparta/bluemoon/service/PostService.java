@@ -2,7 +2,16 @@ package com.sparta.bluemoon.service;
 
 import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
+import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
+import com.sparta.bluemoon.repository.PostRepository;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,5 +44,28 @@ public class PostService {
         }
 
         postRepository.delete(post);
+    }
+
+    // 나의 게시글 리스트 조회 (마이 페이지)
+    public List<PostMyPageResponseDto> findOneMyPage(Integer pageId, User user) {
+
+        // paging 처리 해야 하는 수 보다 게시글의 수가 적을 경우 고려
+        int postSize = Math.min(postRepository.findByUser(user).size(), MY_POST_PAGEABLE_SIZE);
+        Pageable pageable = PageRequest
+            .of(pageId, postSize, Sort.by((Direction.DESC), SORT_PROPERTIES));
+
+        // 내가 쓴 게시글 페이징을 이용해서 들고오기
+        Page<Post> pagedPosts = postRepository.findByUser(user, pageable);
+
+        // 들고온 게시글을 dto로 변환해서 반환
+        return convertPostsToPostDtos(pagedPosts);
+    }
+
+    private List<PostMyPageResponseDto> convertPostsToPostDtos(Page<Post> pagedPosts) {
+        List<PostMyPageResponseDto> postDtos = new ArrayList<>();
+        for (Post pagedPost : pagedPosts) {
+            postDtos.add(new PostMyPageResponseDto(pagedPost));
+        }
+        return postDtos;
     }
 }
