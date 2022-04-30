@@ -1,6 +1,6 @@
 package com.sparta.bluemoon.security;
 
-import com.sparta.hh99finalproject.security.jwt.JwtTokenUtils;
+import com.sparta.bluemoon.security.jwt.JwtTokenUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;

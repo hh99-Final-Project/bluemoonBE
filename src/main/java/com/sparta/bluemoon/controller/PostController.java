@@ -1,9 +1,9 @@
 package com.sparta.bluemoon.controller;
 
-import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
 import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
 import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
+import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.service.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

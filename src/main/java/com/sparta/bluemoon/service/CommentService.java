@@ -9,7 +9,6 @@ import com.sparta.bluemoon.repository.PostRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
