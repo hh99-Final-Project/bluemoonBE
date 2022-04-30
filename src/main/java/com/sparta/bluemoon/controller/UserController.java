@@ -1,6 +1,7 @@
 package com.sparta.bluemoon.controller;
 
 import com.sparta.bluemoon.dto.request.NicknameCheckRequestDto;
+import com.sparta.bluemoon.dto.request.NicknameSignupRequestDto;
 import com.sparta.bluemoon.dto.response.UserInfoDto;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.service.UserService;
@@ -27,6 +28,12 @@ public class UserController {
     @PostMapping("/api/nicknames")
     public boolean isDuplicated(@RequestBody NicknameCheckRequestDto nicknameCheckRequestDto) {
         return userService.isDuplicated(nicknameCheckRequestDto.getNickname());
+    }
+
+    //로그인한 유저에 닉네임 정보 입력하기
+    @PostMapping("/api/user/nickname")
+    public void signupNickname(@RequestBody NicknameSignupRequestDto nicknameSignupRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        userService.signupNickname(nicknameSignupRequestDto, userDetails);
     }
 
     @GetMapping("/api/test")
