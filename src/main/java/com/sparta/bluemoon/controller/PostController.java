@@ -37,10 +37,11 @@ public class PostController {
         return postService.findOneMyPage(pageId, userDetails.getUser());
     }
 
-    // 남의 랜덤 게시글 5개 조회
+    // 남의 게시글 5개 조회
+    // toDo: 추후 phasing 처리를 해줄 예정임
+    // toDo: 이춘님 요청으로 급하게 변경하는 건이라 코드가 더러움 -> 코드 리팩토링 해야함
     @GetMapping("/api/posts")
-    public PostOtherOnePostResponseDto getOtherPost(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-
+    public List<PostOtherOnePostResponseDto> getOtherPost(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.findOneOtherPage(userDetails.getUser());
     }
 

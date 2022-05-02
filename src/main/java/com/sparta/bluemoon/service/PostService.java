@@ -93,7 +93,7 @@ public class PostService {
 
 
     // 남의 게시글 훔쳐보기 (1개만)
-    public PostOtherOnePostResponseDto findOneOtherPage(User user) {
+    public List<PostOtherOnePostResponseDto> findOneOtherPage(User user) {
 
         long otherPostsCount = postRepository.countByUserNot(user);
 
@@ -103,9 +103,14 @@ public class PostService {
 
         List<Post> otherPosts = postRepository.findAllByUserNot(user);
 
-        int idx = (int)(Math.random() * otherPosts.size());
-        Post post = otherPosts.get(idx);
-        return new PostOtherOnePostResponseDto(post);
+//        int idx = (int)(Math.random() * otherPosts.size());
+//        Post post = otherPosts.get(idx);
+        List<PostOtherOnePostResponseDto> postDtos = new ArrayList<>();
+        for (int i = 0; i < Math.min(5, otherPosts.size()); i++) {
+            postDtos.add(new PostOtherOnePostResponseDto(otherPosts.get(i)));
+        }
+
+        return postDtos;
     }
 
     //나의 게시글 리스트 조회 및 댓글 개수 추가
