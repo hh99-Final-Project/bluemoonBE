@@ -33,7 +33,11 @@ public class JWTAuthProvider implements AuthenticationProvider {
         //    -> JWT 에 userId, username, role 정보를 암호화/복호화하여 사용
 
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));;
+                .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
+        String beforeToken = user.getToken();
+        if(!token.equals(beforeToken)){
+            throw new IllegalArgumentException("여기서 에러가 터질껄?");
+        }
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }

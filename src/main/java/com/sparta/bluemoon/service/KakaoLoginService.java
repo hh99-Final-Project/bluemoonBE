@@ -145,7 +145,8 @@ public class KakaoLoginService {
         // Token 생성
         final String token = JwtTokenUtils.generateJwtToken(userDetails);
         System.out.println("token = " + token);
-
+        kakaoUser.registToken(token);
+        userRepository.save(kakaoUser);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization","Bearer "+token);
         return ResponseEntity.ok()

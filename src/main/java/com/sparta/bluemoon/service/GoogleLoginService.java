@@ -82,6 +82,8 @@ public class GoogleLoginService {
         final String token = JwtTokenUtils.generateJwtToken(userDetails);
         System.out.println("token = " + token);
 
+        googleUser.registToken(token);
+        userRepository.save(googleUser);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization","Bearer "+token);
 
