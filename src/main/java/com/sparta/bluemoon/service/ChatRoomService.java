@@ -12,6 +12,9 @@ import com.sparta.bluemoon.repository.ChatRoomUserRepository;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -99,13 +102,16 @@ public class ChatRoomService {
 
 
     //채팅방 조회
-    public List<ChatRoomResponseDto> getChatRoom(UserDetailsImpl userDetails) {
+    public List<ChatRoomResponseDto> getChatRoom(UserDetailsImpl userDetails, int page) {
         //user로 챗룸 유저를 찾고>>챗룸 유저에서 채팅방을 찾는다
         //마자
         //마지막나온 메시지 ,내용 ,시간
+        int display = 5;
+        Pageable pageable = PageRequest.of(page,display);
         List<ChatRoomResponseDto> responseDtos = new ArrayList<>();
-        List<ChatRoomUser> chatRoomUsers = chatRoomUserRepository.findAllByUser(userDetails.getUser());
+        Page<ChatRoomUser> chatRoomUsers = chatRoomUserRepository.findAllByUser(userDetails.getUser(),pageable);
 
+        //TODO:챗 유저로 받아야하나??chatRoomUsers.getContent();
 
         for (ChatRoomUser chatRoomUser : chatRoomUsers) {
 

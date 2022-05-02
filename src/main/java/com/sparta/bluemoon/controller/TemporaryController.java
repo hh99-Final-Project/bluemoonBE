@@ -28,9 +28,10 @@ public class TemporaryController {
     }
 
     //나의 임시저장 조회 list//페이징 처리 필요
-    @GetMapping("/api/mytemporarys")
-    public List<TemporaryResponseDto> getTemporarys(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return temporaryService.getTemporarys(userDetails);
+    @GetMapping("/api/mytemporarys/{page}")
+    public List<TemporaryResponseDto> getTemporarys(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                    @PathVariable int page){
+        return temporaryService.getTemporarys(userDetails, page);
     }
 
     //임시저장 상세조회

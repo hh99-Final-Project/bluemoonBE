@@ -7,6 +7,9 @@ import com.sparta.bluemoon.dto.response.TemporaryResponseDto;
 import com.sparta.bluemoon.repository.TemporaryRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,9 +28,11 @@ public class TemporaryService {
     }
 
     //나의 임시글 조회
-    public List<TemporaryResponseDto> getTemporarys(UserDetailsImpl userDetails) {
+    public List<TemporaryResponseDto> getTemporarys(UserDetailsImpl userDetails, int page) {
         //service로 옮기기 리팩터링+페이징 처리
-        List<Temporary> temporaries = temporaryRepository.findByUser(userDetails.getUser());
+        int display = 5;
+        Pageable pageable = PageRequest.of(page,display);
+        Page<Temporary> temporaries = temporaryRepository.findByUser(userDetails.getUser(),pageable);
 
         List<TemporaryResponseDto> responseDtos = new ArrayList<>();
         for(Temporary temp : temporaries){

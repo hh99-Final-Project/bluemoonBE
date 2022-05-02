@@ -6,10 +6,7 @@ import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,9 +26,10 @@ public class ChatRoomController {
     }
 
     //내가 가진 채팅방 조회
-    @GetMapping ("/api/rooms")
-    public List<ChatRoomResponseDto> getChatRoom (@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return chatRoomService.getChatRoom(userDetails);
+    @GetMapping ("/api/rooms/{page}")
+    public List<ChatRoomResponseDto> getChatRoom (@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                  @PathVariable int page) {
+        return chatRoomService.getChatRoom(userDetails, page);
     }
 
 }
