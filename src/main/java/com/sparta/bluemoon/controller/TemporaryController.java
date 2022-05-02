@@ -90,7 +90,7 @@ public class TemporaryController {
         //글 쓴사람 체크
         temporaryService.checkWriter(temporary, userDetails);
 
-        postService.create(requestDto, userDetails.getUser());
+        postService.createWithoutVoice(requestDto, userDetails.getUser());
         temporaryRepository.deleteById(tempId);
 
     }

@@ -38,4 +38,7 @@ out/
 
 #custom
 application.properties
-application-oauth.yml
+application.yml
+application-alpha.yml
+application-local.yml
+aws.yml

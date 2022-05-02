@@ -45,13 +45,16 @@ public class PostService {
         // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
         List<CommentDto> newCommentList = getCommentDtos(userDetails, post);
 
-        //Dto에 담아주기
-
         return new PostResponseDto(post, newCommentList);
     }
 
     // 게시글(다이어리) 저장
-    public void create(PostCreateRequestDto postCreateRequestDto, User user) {
+    public void create(PostCreateRequestDto postCreateRequestDto, String voiceUrl, User user) {
+        Post post = new Post(postCreateRequestDto, voiceUrl, user);
+        postRepository.save(post);
+    }
+
+    public void createWithoutVoice(PostCreateRequestDto postCreateRequestDto, User user) {
         Post post = new Post(postCreateRequestDto, user);
         postRepository.save(post);
     }
