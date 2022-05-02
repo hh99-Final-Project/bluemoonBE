@@ -75,7 +75,8 @@ public class NaverLoginService {
         // Token 생성
         final String token = JwtTokenUtils.generateJwtToken(userDetails);
         System.out.println("token = " + token);
-
+        naverUser.registToken(token);
+        userRepository.save(naverUser);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization","Bearer "+token);
         return ResponseEntity.ok()

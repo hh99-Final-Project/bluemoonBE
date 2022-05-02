@@ -1,9 +1,7 @@
 package com.sparta.bluemoon.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +22,9 @@ public class User {
 
     private String password;
 
+    @Column(length = 1000)
+    private String token;
+
 
     public User(String email, String password) {
         this.username = email;
@@ -36,5 +37,9 @@ public class User {
 
     public void changeNickname(String nickname){
         this.nickname = nickname;
+    }
+
+    public void registToken(String token){
+        this.token = token;
     }
 }
