@@ -32,6 +32,7 @@ public class PostController {
     // 나의 게시글 전체 조회 (페이지당 5건, id를 기준으로 내림차순으로 반환)
     @GetMapping("/api/myposts/{pageId}")
     public List<PostMyPageResponseDto> getMyPost(@PathVariable Integer pageId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        System.out.println("HI");
         pageId -= 1;
         return postService.findOneMyPage(pageId, userDetails.getUser());
     }
