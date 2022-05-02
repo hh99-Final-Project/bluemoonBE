@@ -10,6 +10,7 @@ import com.sparta.bluemoon.dto.response.MainPostForAnonymousResponseDto;
 import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
 import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
 import com.sparta.bluemoon.dto.response.PostResponseDto;
+import com.sparta.bluemoon.dto.response.SocialLoginResponseDto;
 import com.sparta.bluemoon.repository.CommentRepository;
 import com.sparta.bluemoon.repository.PostRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
@@ -21,6 +22,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -76,13 +79,16 @@ public class PostService {
 
         // paging 처리 해야 하는 수 보다 게시글의 수가 적을 경우 고려
         int postSize = Math.min(postRepository.findByUser(user).size(), MY_POST_PAGEABLE_SIZE);
-        Pageable pageable = PageRequest.of(pageId, postSize, Sort.by((Direction.DESC), SORT_PROPERTIES));
-
-        // 내가 쓴 게시글 페이징을 이용해서 들고오기
-        Page<Post> pagedPosts = postRepository.findByUser(user, pageable);
-
-        // 들고온 게시글을 dto로 변환해서 반환
-        return convertPostsToPostDtos(pagedPosts);
+        try {
+            Pageable pageable = PageRequest
+                .of(pageId, postSize, Sort.by((Direction.DESC), SORT_PROPERTIES));
+            // 내가 쓴 게시글 페이징을 이용해서 들고오기
+            Page<Post> pagedPosts = postRepository.findByUser(user, pageable);
+            // 들고온 게시글을 dto로 변환해서 반환
+            return convertPostsToPostDtos(pagedPosts);
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
 
