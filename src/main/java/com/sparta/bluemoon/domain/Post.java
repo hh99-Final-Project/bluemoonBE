@@ -27,6 +27,9 @@ public class Post extends Timestamped {
     // 게시글 내용
     private String content;
 
+    //게시글 음성파일
+    private String voiceUrl;
+
     private boolean isShow;
 
     @OneToMany(mappedBy = "post")
@@ -34,6 +37,14 @@ public class Post extends Timestamped {
 
     @ManyToOne
     private User user;
+
+    public Post(PostCreateRequestDto postCreateRequestDto, String voiceUrl, User user) {
+        this.title = postCreateRequestDto.getTitle();
+        this.content = postCreateRequestDto.getContent();
+        this.voiceUrl = voiceUrl;
+        this.user = user;
+    }
+
 
     public Post(PostCreateRequestDto postCreateRequestDto, User user) {
         this.title = postCreateRequestDto.getTitle();

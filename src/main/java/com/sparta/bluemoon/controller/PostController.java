@@ -7,26 +7,31 @@ import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
 import com.sparta.bluemoon.dto.response.PostResponseDto;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.service.PostService;
+
+import java.io.IOException;
 import java.util.List;
+
+import com.sparta.bluemoon.service.VoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 @RestController
 @RequiredArgsConstructor
 public class PostController {
 
     private final PostService postService;
+    private final VoiceService voiceService;
 
-    // 게시글 저장
+
     @PostMapping("/api/posts")
-    public void create(@RequestBody PostCreateRequestDto postCreateRequestDto,
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        postService.create(postCreateRequestDto, userDetails.getUser());
+    public void create(
+            @RequestPart PostCreateRequestDto postCreateRequestDto,
+            @RequestPart MultipartFile file,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+            String voiceUrl = voiceService.upload(file,"static");
+            postService.create(postCreateRequestDto, voiceUrl, userDetails.getUser());
     }
 
     // 나의 게시글 전체 조회 (페이지당 5건, id를 기준으로 내림차순으로 반환)
@@ -68,4 +73,5 @@ public class PostController {
     public PostResponseDto getMainDetailPost() {
         return postService.getMainDetailPost();
     }
+
 }
