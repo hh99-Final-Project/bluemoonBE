@@ -4,13 +4,11 @@ import com.sparta.bluemoon.domain.Comment;
 import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.CommentDto;
-import com.sparta.bluemoon.dto.CommentListDto;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
 import com.sparta.bluemoon.dto.response.MainPostForAnonymousResponseDto;
 import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
 import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
 import com.sparta.bluemoon.dto.response.PostResponseDto;
-import com.sparta.bluemoon.dto.response.SocialLoginResponseDto;
 import com.sparta.bluemoon.repository.CommentRepository;
 import com.sparta.bluemoon.repository.PostRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
@@ -22,8 +20,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -50,9 +46,8 @@ public class PostService {
         List<CommentDto> newCommentList = getCommentDtos(userDetails, post);
 
         //Dto에 담아주기
-        CommentListDto commentListDto = new CommentListDto(newCommentList);
 
-        return new PostResponseDto(post, commentListDto);
+        return new PostResponseDto(post, newCommentList);
     }
 
     // 게시글(다이어리) 저장
@@ -165,8 +160,7 @@ public class PostService {
         }
 
         //Dto에 담아주기
-        CommentListDto commentListDto = new CommentListDto(newComments);
 
-        return new PostResponseDto(post, commentListDto);
+        return new PostResponseDto(post, newComments);
     }
 }

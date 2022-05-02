@@ -1,10 +1,12 @@
 package com.sparta.bluemoon.dto.response;
 
 import com.sparta.bluemoon.domain.Post;
-import com.sparta.bluemoon.dto.CommentListDto;
+import com.sparta.bluemoon.dto.CommentDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,10 +18,10 @@ public class PostResponseDto {
     private String nickname;
     private String title;
     private String content;
-    private CommentListDto comments;
+    private List<CommentDto> comments;
     private boolean isShow;
 
-    public PostResponseDto(Post post1, CommentListDto commentList) {
+    public PostResponseDto(Post post1, List<CommentDto> commentList) {
         this.postId = post1.getId();
         this.userId = post1.getUser().getId();
         this.nickname = post1.getUser().getNickname();

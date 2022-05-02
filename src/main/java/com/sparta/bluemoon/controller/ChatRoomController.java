@@ -21,7 +21,7 @@ public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
     //방생성
-    @PostMapping ("/rooms")
+    @PostMapping ("/api/rooms")
     public void createChatRoom(
             @RequestBody ChatRoomUserRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -29,7 +29,7 @@ public class ChatRoomController {
     }
 
     //내가 가진 채팅방 조회
-    @GetMapping ("/rooms")
+    @GetMapping ("/api/rooms")
     public List<ChatRoomResponseDto> getChatRoom (@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return chatRoomService.getChatRoom(userDetails);
     }
