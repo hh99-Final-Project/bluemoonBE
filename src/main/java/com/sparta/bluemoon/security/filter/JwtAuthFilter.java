@@ -1,7 +1,5 @@
 package com.sparta.bluemoon.security.filter;
 
-import com.sparta.bluemoon.domain.User;
-import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.jwt.HeaderTokenExtractor;
 import com.sparta.bluemoon.security.jwt.JwtPreProcessingToken;
 import java.io.IOException;

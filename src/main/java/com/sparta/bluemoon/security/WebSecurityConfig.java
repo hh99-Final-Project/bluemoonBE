@@ -137,6 +137,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        skipPathList.add("GET,/google/login/redirect");
         skipPathList.add("POST,/api/login/google");
 
+        //웹소켓 관련 api
+        skipPathList.add("GET,/stomp/chat/**/**");
+        skipPathList.add("GET,/stomp/chat/**");
+
         // naver login
         skipPathList.add("GET,/naver/login");
         skipPathList.add("GET,/naver/login/redirect");
