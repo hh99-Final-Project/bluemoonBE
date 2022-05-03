@@ -25,6 +25,7 @@ public class ChatRoomUser {
     // 채팅방 이름
     private String name;
 
+
     @ManyToOne
     @JoinColumn(name = "chatroom_id")
     private ChatRoom chatRoom;

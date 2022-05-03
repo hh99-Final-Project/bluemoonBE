@@ -5,6 +5,7 @@ import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.repository.CommentRepository;
+import com.sparta.bluemoon.repository.PointRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PointService {
-
-
-
+    private final PointRepository pointRepository;
     //포인트 주기
     @Transactional
     public int pointChange(Point point, String state){
@@ -26,6 +25,7 @@ public class PointService {
         int postCount = point.getPostCount();
         int commentCount = point.getCommentCount();
         int lottoCount = point.getLottoCount();
+
         if(state=="POST_POINT"){
             myPoint+=500;
             postCount--;
@@ -47,10 +47,17 @@ public class PointService {
         return myPoint;
     }
 
+
     //카운트 업데이트 변경감지 자동 db저장
     @Transactional
-    public void countReset(Point point) {
-        point.resetCount();
+    public void countReset() {
+
+        List<Point> points = pointRepository.findAll();
+
+        for(Point point:points){
+            //업데이트
+            point.resetCount();
+        }
     }
 
 
@@ -63,8 +70,7 @@ public class PointService {
 //            throw new IllegalArgumentException("1000 포인트 부터 추첨할 수 있습니다.");
 //        }
 //        // 추첨 과정
-//        point-=POST_POINT;
-//        user.update(point);
+//
 //    }
 
 }

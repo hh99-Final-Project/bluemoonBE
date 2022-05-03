@@ -21,15 +21,12 @@ public class Scheduler {
 
 
     // 초, 분, 시, 일, 월, 주 순서
-    @Scheduled(cron = "0 0 1 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void updateCount() throws InterruptedException {
         System.out.println("횟수 리셋");
         //TimeUnit.SECONDS.sleep(1);
         // 저장된 모든 유저 포인트 조회
-        List<Point> points = pointRepository.findAll();
-        for(Point point:points){
-            //업데이트
-            pointService.countReset(point);
-        }
+
+        pointService.countReset();
     }
 }

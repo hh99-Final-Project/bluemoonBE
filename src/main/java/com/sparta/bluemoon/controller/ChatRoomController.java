@@ -29,6 +29,7 @@ public class ChatRoomController {
     @GetMapping ("/api/rooms/{page}")
     public List<ChatRoomResponseDto> getChatRoom (@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                   @PathVariable int page) {
+        page -= 1;
         return chatRoomService.getChatRoom(userDetails, page);
     }
 

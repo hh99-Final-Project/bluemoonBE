@@ -15,6 +15,4 @@ public class UserInfoDto {
         this.userId = userDetails.getUser().getId();
         this.nickname = userDetails.getUser().getNickname();
     }
-
-
 }

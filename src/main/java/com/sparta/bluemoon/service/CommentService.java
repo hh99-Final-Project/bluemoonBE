@@ -30,18 +30,16 @@ public class CommentService {
 
 
     //댓글 저장
-    public CommentResponseDto saveComment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails) {
+    public CommentResponseDto saveComment(CommentRequestDto requestDto, UserDetailsImpl userDetails, String voiceUrl) {
 
-        Post post= postRepository.findById(commentRequestDto.getPostId()).orElseThrow(
+        Post post= postRepository.findByPostUuid(requestDto.getPostUuid()).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다.")
         );
-        Comment comment = new Comment(commentRequestDto, userDetails, post);
+        Comment comment = new Comment(requestDto, userDetails, post, voiceUrl);
         commentRepository.save(comment);
 
         //댓글 작성시간
         String dateResult = getCurrentTime();
-
-
 
         //유저의 현재 포인트
         int userPoint = userDetails.getUser().getPoint().getMyPoint();
@@ -49,24 +47,23 @@ public class CommentService {
         List<Comment> userComments = commentRepository.findAllByPostAndUser(post,userDetails.getUser());
         //처음썼고 카운트가 남아있다면 포인트 주기 있다면 넘어가기
         Point point = pointRepository.findByUser(userDetails.getUser());
-        if(!userComments.isEmpty()&&(point.getCommentCount()!=0)){
+
+        if((userComments.size()==1)&&(point.getCommentCount()!=0)){
              userPoint = pointService.pointChange(point,"COMMENT_POINT");
         }
 
-
-        return new CommentResponseDto(commentRequestDto, userDetails, dateResult,userPoint);
-
+        return new CommentResponseDto(requestDto, userDetails, dateResult, userPoint);
     }
 
     //댓글 삭제
-    public void deleteComment(Long commentId, UserDetailsImpl userDetails) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(
+    public void deleteComment(String commentId, UserDetailsImpl userDetails) {
+        Comment comment = commentRepository.findByCommentUuid(commentId).orElseThrow(
                 ()-> new IllegalArgumentException("해당하는 댓글이 존재하지 않습니다.")
         );
         if (!comment.getUser().equals(userDetails.getUser())){
             throw new IllegalArgumentException("글을 작성한 유저만 삭제할 수 있습니다.");
         }
-        commentRepository.deleteById(commentId);
+        commentRepository.deleteByCommentUuid(commentId);
     }
 
     //현재시간 추출 메소드

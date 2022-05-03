@@ -20,9 +20,17 @@ public class Point {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private int postCount = 0;
-    private int commentCount = 0;
-    private int lottoCount = 0;
+    private int postCount;
+    private int commentCount;
+    private int lottoCount;
+
+    public Point(int mypoint, User user, int postCount, int commentCount, int lottoCount) {
+        this.myPoint = mypoint;
+        this.user = user;
+        this.postCount=postCount;
+        this.commentCount=commentCount;
+        this.lottoCount=lottoCount;
+    }
 
     public void update(int point, int postCount, int commentCount, int lottoCount) {
         this.myPoint = point;
@@ -34,7 +42,7 @@ public class Point {
     public void resetCount() {
         this.postCount = 1;
         this.commentCount = 5;
-        this.lottoCount = 0;
+        this.lottoCount = 1;
     }
 
 }
