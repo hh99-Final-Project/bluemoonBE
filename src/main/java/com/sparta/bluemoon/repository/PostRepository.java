@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
@@ -20,4 +21,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByUserNot(User user);
 
     Page<Post> findByUser(User user, Pageable pageable);
+
+    Optional<Post> findByPostUuid(String postId);
 }

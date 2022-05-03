@@ -1,17 +1,15 @@
 package com.sparta.bluemoon.domain;
 
 import com.sparta.bluemoon.dto.request.CommentRequestDto;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
+import javax.persistence.*;
 
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -27,6 +25,10 @@ public class Comment extends Timestamped{
     private String content;
 
     private boolean isShow;
+
+    //commentId 대체할 UUID 생성
+    @Column(unique = true)
+    private String commentUuid = UUID.randomUUID().toString();
 
     @ManyToOne
     private User user;

@@ -38,8 +38,8 @@ public class PostService {
     private static final long MAIN_POST_INDEX_FOR_ANONYMOUS = 1L;
 
     //게시글 1개 상세 조회
-    public PostResponseDto getPost(Long postId, UserDetailsImpl userDetails) {
-        Post post = postRepository.findById(postId).orElseThrow(
+    public PostResponseDto getOnePost(String postId, UserDetailsImpl userDetails) {
+        Post post = postRepository.findByPostUuid(postId).orElseThrow(
             () -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다.")
         );
         // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
@@ -49,19 +49,20 @@ public class PostService {
     }
 
     // 게시글(다이어리) 저장
-    public void create(PostCreateRequestDto postCreateRequestDto, String voiceUrl, User user) {
-        Post post = new Post(postCreateRequestDto, voiceUrl, user);
+    public String create(PostCreateRequestDto requestDto, String voiceUrl, User user) {
+        Post post = new Post(requestDto, voiceUrl, user);
         postRepository.save(post);
+        return voiceUrl;
     }
-
+    //임시저장글 voice없이 저장
     public void createWithoutVoice(PostCreateRequestDto postCreateRequestDto, User user) {
         Post post = new Post(postCreateRequestDto, user);
         postRepository.save(post);
     }
 
     // 게시글(다이어리) 삭제
-    public void delete(Long postId, User user) {
-        Post post = postRepository.findById(postId).orElseThrow(
+    public void delete(String postId, User user) {
+        Post post = postRepository.findByPostUuid(postId).orElseThrow(
             () -> new IllegalArgumentException("존재하지 않는 게시글입니다.")
         );
 

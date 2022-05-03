@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CommentRequestDto {
 
-    private Long postId;
+    private String postUuid;
     private String content;
 }

@@ -7,10 +7,8 @@ import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
 import com.sparta.bluemoon.dto.response.PostResponseDto;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.service.PostService;
-
 import java.io.IOException;
 import java.util.List;
-
 import com.sparta.bluemoon.service.VoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,20 +22,19 @@ public class PostController {
     private final PostService postService;
     private final VoiceService voiceService;
 
-
-    @PostMapping("/api/posts")
-    public void create(
-            @RequestPart PostCreateRequestDto postCreateRequestDto,
+    //게시글 작성
+    @PostMapping(value = "/api/posts", consumes = {"multipart/form-data"})
+    public String create(
+            @RequestPart PostCreateRequestDto requestDto,
             @RequestPart MultipartFile file,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
             String voiceUrl = voiceService.upload(file,"static");
-            postService.create(postCreateRequestDto, voiceUrl, userDetails.getUser());
+            return postService.create(requestDto, voiceUrl, userDetails.getUser());
     }
 
     // 나의 게시글 전체 조회 (페이지당 5건, id를 기준으로 내림차순으로 반환)
     @GetMapping("/api/myposts/{pageId}")
     public List<PostMyPageResponseDto> getMyPost(@PathVariable Integer pageId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        System.out.println("HI");
         pageId -= 1;
         return postService.findOneMyPage(pageId, userDetails.getUser());
     }
@@ -54,13 +51,13 @@ public class PostController {
 
     //게시글 1개 상세 조회
     @GetMapping("/api/posts/{postId}")
-    public PostResponseDto getPost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.getPost(postId, userDetails);
+    public PostResponseDto getOnePost(@PathVariable String postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return postService.getOnePost(postId, userDetails);
     }
 
     // 게시글 삭제
     @DeleteMapping("/api/posts/{postId}")
-    public void delete(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public void delete(@PathVariable String postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         postService.delete(postId, userDetails.getUser());
     }
 
