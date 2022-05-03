@@ -24,10 +24,8 @@ public class PostController {
     public PostCreateResponseDto create(@RequestPart(required = false) PostCreateRequestDto requestDto,
                          @RequestPart(required = false) MultipartFile file,
                          @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
-
         String voiceUrl = "";
         if (file!=null) {
-
             voiceUrl = voiceService.upload(file, "static");
         }
         return postService.create(requestDto, voiceUrl, userDetails.getUser());
@@ -74,5 +72,4 @@ public class PostController {
     public PostResponseDto getMainDetailPost() {
         return postService.getMainDetailPost();
     }
-
 }

@@ -6,13 +6,20 @@ import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.CommentDto;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
+import com.sparta.bluemoon.dto.response.MainPostForAnonymousResponseDto;
+import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
+import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
+import com.sparta.bluemoon.dto.response.PostResponseDto;
+import com.sparta.bluemoon.repository.CommentQuerydslRepository;
 import com.sparta.bluemoon.dto.response.*;
 import com.sparta.bluemoon.repository.CommentRepository;
 import com.sparta.bluemoon.repository.PointRepository;
 import com.sparta.bluemoon.repository.PostRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,8 +37,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final PointRepository pointRepository;
     private final CommentRepository commentRepository;
+    private final CommentQuerydslRepository commentQuerydslRepository;
     private final PointService pointService;
-
 
     // 내 게시글 한 페이지당 보여줄 게시글의 수
     private static final int MY_POST_PAGEABLE_SIZE = 5;
@@ -149,16 +156,34 @@ public class PostService {
     private List<CommentDto> getCommentDtos(UserDetailsImpl userDetails, Post post) {
         User user = post.getUser();
 
-        List<CommentDto> newComments = new ArrayList<>();
-        List<Comment> comments = commentRepository.findAllByPost(post);
-        for (Comment comment: comments) {
-            if (comment.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(user.getId())) {
-                comment.setShow(true);
+//        List<Comment> comments = commentRepository.findAllByPost(post);
+        List<Comment> comments = commentQuerydslRepository.findCommentByPost(post);
+        System.out.println("comments.size() = " + comments.size());
+
+        List<CommentDto> result = new ArrayList<>();
+        Map<Long, CommentDto> map = new HashMap<>();
+        comments.stream().forEach(c -> {
+            CommentDto dto = new CommentDto(c);
+            if (c.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(user.getId())) {
+                dto.setShow(true);
             }
-            CommentDto commentDto = new CommentDto(comment);
-            newComments.add(commentDto);
-        }
-        return newComments;
+
+            map.put(dto.getId(), dto);
+            if(c.getParent() != null) {
+                map.get(c.getParent().getId()).getChildren().add(dto);
+            } else {
+                result.add(dto);
+            }
+        });
+
+//        for (Comment comment: comments) {
+//            if (comment.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(user.getId())) {
+//                comment.setShow(true);
+//            }
+//            CommentDto commentDto = new CommentDto(comment);
+//            newComments.add(commentDto);
+//        }
+        return result;
     }
 
     // 비 로그인한 유저를 위해 main post를 보여주기
