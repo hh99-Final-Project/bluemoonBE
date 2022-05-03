@@ -74,9 +74,6 @@ public class GoogleLoginService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        //처음 로그인한 유저는 nickname에 빈값을 반환
-        String nickname = "";
-        googleUser.createNickname(nickname);
 
         // Token 생성
         final String token = JwtTokenUtils.generateJwtToken(userDetails);
@@ -102,7 +99,8 @@ public class GoogleLoginService {
             String encodedPassword = passwordEncoder.encode(password);
 
             // toDo: 랜덤 닉네임 부여
-            googleUser = new User(email, encodedPassword);
+            String nickname = "";
+            googleUser = new User(email, encodedPassword, nickname);
             userRepository.save(googleUser);
         }
         return googleUser;

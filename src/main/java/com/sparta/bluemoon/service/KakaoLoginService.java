@@ -116,9 +116,9 @@ public class KakaoLoginService {
         return nickname;
     }
 
-    private User registerKakaoUserIfNeeded(String nickname) {
+    private User registerKakaoUserIfNeeded(String email) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
-        User kakaoUser = userRepository.findByUsername(nickname)
+        User kakaoUser = userRepository.findByUsername(email)
             .orElse(null);
         if (kakaoUser == null) {
             // 회원가입
@@ -127,9 +127,11 @@ public class KakaoLoginService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-            kakaoUser = new User(nickname, encodedPassword);
+            String nickname = "";
+            kakaoUser = new User(email, encodedPassword, nickname);
             userRepository.save(kakaoUser);
         }
+
         return kakaoUser;
     }
 
@@ -139,8 +141,7 @@ public class KakaoLoginService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         //처음 로그인한 유저는 nickname에 빈값을 반환
-        String nickname = "";
-        kakaoUser.createNickname(nickname);
+
 
         // Token 생성
         final String token = JwtTokenUtils.generateJwtToken(userDetails);

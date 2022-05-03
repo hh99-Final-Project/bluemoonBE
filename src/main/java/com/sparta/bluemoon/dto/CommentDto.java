@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class CommentDto {
 
-    private Long id;
+    private String commentUuid;
     private String nickname;
     private String content;
     private LocalDateTime createdAt;
@@ -17,7 +17,7 @@ public class CommentDto {
     private boolean isShow;
 
     public CommentDto(Comment comment) {
-        this.id = comment.getId();
+        this.commentUuid = comment.getCommentUuid();
         this.nickname = comment.getUser().getNickname();
         this.content = comment.getContent();
         this.createdAt = comment.getCreatedAt();

@@ -68,9 +68,7 @@ public class NaverLoginService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // toDo: random Nickname 추가해 줘야함
-        String nickname = "닉네임 넣어줄 예정이에요";
-        naverUser.createNickname(nickname);
+
 
         // Token 생성
         final String token = JwtTokenUtils.generateJwtToken(userDetails);
@@ -94,7 +92,8 @@ public class NaverLoginService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-            naverUser = new User(email, encodedPassword);
+            String nickname = "";
+            naverUser = new User(email, encodedPassword, nickname);
             userRepository.save(naverUser);
         }
         return naverUser;
