@@ -1,10 +1,7 @@
 package com.sparta.bluemoon.controller;
 
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
-import com.sparta.bluemoon.dto.response.MainPostForAnonymousResponseDto;
-import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
-import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
-import com.sparta.bluemoon.dto.response.PostResponseDto;
+import com.sparta.bluemoon.dto.response.*;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.service.PostService;
 
@@ -25,13 +22,15 @@ public class PostController {
     private final VoiceService voiceService;
 
 
+    //게시글 생성
     @PostMapping("/api/posts")
-    public void create(
+    public PostCreateResponseDto create(
             @RequestPart PostCreateRequestDto postCreateRequestDto,
-            @RequestPart MultipartFile file,
+            @RequestPart  MultipartFile file,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
             String voiceUrl = voiceService.upload(file,"static");
-            postService.create(postCreateRequestDto, voiceUrl, userDetails.getUser());
+
+            return postService.create(postCreateRequestDto, voiceUrl, userDetails.getUser());
     }
 
     // 나의 게시글 전체 조회 (페이지당 5건, id를 기준으로 내림차순으로 반환)
