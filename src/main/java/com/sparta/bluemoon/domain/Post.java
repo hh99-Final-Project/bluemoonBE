@@ -3,12 +3,9 @@ package com.sparta.bluemoon.domain;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import java.util.UUID;
+import javax.persistence.*;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,15 +29,19 @@ public class Post extends Timestamped {
 
     private boolean isShow;
 
+    //postId 대체할 UUID 생성
+    @Column(unique = true)
+    private String postUuid = UUID.randomUUID().toString();
+
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne
     private User user;
 
-    public Post(PostCreateRequestDto postCreateRequestDto, String voiceUrl, User user) {
-        this.title = postCreateRequestDto.getTitle();
-        this.content = postCreateRequestDto.getContent();
+    public Post(PostCreateRequestDto requestDto, String voiceUrl, User user) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
         this.voiceUrl = voiceUrl;
         this.user = user;
     }

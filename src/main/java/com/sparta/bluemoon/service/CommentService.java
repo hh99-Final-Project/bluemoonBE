@@ -24,7 +24,7 @@ public class CommentService {
     //댓글 저장
     public CommentResponseDto saveComment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails) {
 
-        Post post= postRepository.findById(commentRequestDto.getPostId()).orElseThrow(
+        Post post= postRepository.findByPostUuid(commentRequestDto.getPostUuid()).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다.")
         );
         Comment comment = new Comment(commentRequestDto, userDetails, post);
@@ -38,14 +38,14 @@ public class CommentService {
     }
 
     //댓글 삭제
-    public void deleteComment(Long commentId, UserDetailsImpl userDetails) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(
+    public void deleteComment(String commentId, UserDetailsImpl userDetails) {
+        Comment comment = commentRepository.findByCommentUuid(commentId).orElseThrow(
                 ()-> new IllegalArgumentException("해당하는 댓글이 존재하지 않습니다.")
         );
         if (!comment.getUser().equals(userDetails.getUser())){
             throw new IllegalArgumentException("글을 작성한 유저만 삭제할 수 있습니다.");
         }
-        commentRepository.deleteById(commentId);
+        commentRepository.deleteByCommentUuid(commentId);
     }
 
     //현재시간 추출 메소드

@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PostResponseDto {
 
-    private Long postId;
+    private String postId;
     private Long userId;
     private String nickname;
     private String title;
@@ -22,7 +22,7 @@ public class PostResponseDto {
     private boolean isShow;
 
     public PostResponseDto(Post post1, List<CommentDto> commentList) {
-        this.postId = post1.getId();
+        this.postId = post1.getPostUuid();
         this.userId = post1.getUser().getId();
         this.nickname = post1.getUser().getNickname();
         this.title = post1.getTitle();

@@ -138,8 +138,8 @@ public class KakaoLoginService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // toDo: random Nickname 추가해 줘야함
-        String nickname = "닉네임 넣어줄 예정이에요";
+        //처음 로그인한 유저는 nickname에 빈값을 반환
+        String nickname = "";
         kakaoUser.createNickname(nickname);
 
         // Token 생성

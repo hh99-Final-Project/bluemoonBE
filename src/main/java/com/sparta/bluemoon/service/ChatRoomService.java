@@ -127,7 +127,8 @@ public class ChatRoomService {
 
     public ChatRoomResponseDto createChatRoomDto(ChatRoomUser chatRoomUser) {
         String roomName = chatRoomUser.getName();
-        Long roomId = chatRoomUser.getChatRoom().getId();
+        String roomId = chatRoomUser.getChatRoom().getChatRoomUuid();
+        System.out.println(roomId);
         String lastMessage;
         LocalDateTime lastTime;
         //마지막
