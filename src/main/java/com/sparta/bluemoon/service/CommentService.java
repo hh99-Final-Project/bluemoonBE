@@ -11,6 +11,8 @@ import com.sparta.bluemoon.repository.PostRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,11 +58,12 @@ public class CommentService {
     }
 
     //댓글 삭제
+    @Transactional
     public void deleteComment(String commentId, UserDetailsImpl userDetails) {
         Comment comment = commentRepository.findByCommentUuid(commentId).orElseThrow(
                 ()-> new IllegalArgumentException("해당하는 댓글이 존재하지 않습니다.")
         );
-        if (!comment.getUser().equals(userDetails.getUser())){
+        if (!comment.getUser().getId().equals(userDetails.getUser().getId())){
             throw new IllegalArgumentException("글을 작성한 유저만 삭제할 수 있습니다.");
         }
         commentRepository.deleteByCommentUuid(commentId);

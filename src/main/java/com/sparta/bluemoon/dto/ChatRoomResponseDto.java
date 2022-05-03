@@ -12,14 +12,14 @@ import lombok.Setter;
 @Setter
 public class ChatRoomResponseDto implements Comparable<ChatRoomResponseDto> {
     private String roomName;
-    private String roomId;
+    private String chatRoomUuid;
     private String lastMessage;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createAt;
 
     public ChatRoomResponseDto(String roomName, String roomId, String lastMessage,LocalDateTime lastTime ) {
         this.roomName = roomName;
-        this.roomId=roomId;
+        this.chatRoomUuid=roomId;
         this.lastMessage=lastMessage;
         this.createAt=lastTime;
     }

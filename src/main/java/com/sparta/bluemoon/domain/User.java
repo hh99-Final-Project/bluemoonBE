@@ -35,19 +35,11 @@ public class User {
     private Point point;
 
 
-
-
-
-    public User(String email, String password) {
+    public User(String email, String password, String nickname) {
         this.username = email;
         this.password = password;
     }
 
-
-
-    public void createNickname(String nickname) {
-        this.nickname = nickname;
-    }
 
     public void changeNickname(String nickname){
         this.nickname = nickname;

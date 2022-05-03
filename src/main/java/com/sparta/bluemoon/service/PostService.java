@@ -116,9 +116,6 @@ public class PostService {
 
         // 남의 게시글 수
         int otherPostsCount = postRepository.countByUserNot(user);
-        if (otherPostsCount < 1) {
-            throw new IllegalArgumentException("남이 쓴 게시글이 존재하지 않습니다.");
-        }
 
         // paging 처리 해야 하는 수 보다 게시글의 수가 적을 경우 고려
         int postSize = Math.min(otherPostsCount, MY_POST_PAGEABLE_SIZE);

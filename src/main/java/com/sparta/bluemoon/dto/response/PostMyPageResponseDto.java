@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PostMyPageResponseDto {
-    private String postId;
+    private String postUuid;
     private String nickname;
     private Long userId;
     private String title;
@@ -17,7 +17,7 @@ public class PostMyPageResponseDto {
     private int count;
 
     public PostMyPageResponseDto(Post pagedPost, int count) {
-        this.postId = pagedPost.getPostUuid();
+        this.postUuid = pagedPost.getPostUuid();
         this.nickname = pagedPost.getUser().getNickname();
         this.userId = pagedPost.getUser().getId();
         this.title = pagedPost.getTitle();

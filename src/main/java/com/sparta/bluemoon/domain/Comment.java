@@ -42,8 +42,9 @@ public class Comment extends Timestamped{
     @JoinColumn(name = "post_id")
     private Post post;
 
+    //requestDto가 비어있을경우 빈칸으로 처리
     public Comment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails, Post post, String voiceUrl){
-        this.content = commentRequestDto.getContent();
+        this.content = (commentRequestDto == null ? "" : commentRequestDto.getContent());
         this.post = post;
         this.user = userDetails.getUser();
         this.voiceUrl = voiceUrl;

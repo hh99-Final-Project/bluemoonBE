@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class PostOtherOnePostResponseDto {
     // 게시글 pk
-    private String postId;
+    private String postUuid;
 
     // 글 작성자의 랜덤 닉네임
     private String nickname;
@@ -27,7 +27,7 @@ public class PostOtherOnePostResponseDto {
     private LocalDateTime createdAt;
 
     public PostOtherOnePostResponseDto(Post post) {
-        this.postId = post.getPostUuid();
+        this.postUuid = post.getPostUuid();
         this.nickname = post.getUser().getNickname();
         this.userId = post.getUser().getId();
         this.title = post.getTitle();

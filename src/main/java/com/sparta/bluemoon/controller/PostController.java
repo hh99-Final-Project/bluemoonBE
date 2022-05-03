@@ -27,6 +27,7 @@ public class PostController {
 
         String voiceUrl = "";
         if (file!=null) {
+
             voiceUrl = voiceService.upload(file, "static");
         }
         return postService.create(requestDto, voiceUrl, userDetails.getUser());

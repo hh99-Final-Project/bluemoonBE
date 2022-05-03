@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CommentResponseDto {
 
-    private String postId;
+    private String postUuid;
     private String nickname;
     private String content;
     private String createdAt;
@@ -20,7 +20,7 @@ public class CommentResponseDto {
 
 
     public CommentResponseDto(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails, String dateResult, int point) {
-        this.postId = commentRequestDto.getPostUuid();
+        this.postUuid = commentRequestDto.getPostUuid();
         this.nickname = userDetails.getUser().getNickname();
         this.content = commentRequestDto.getContent();
         this.createdAt = dateResult;
