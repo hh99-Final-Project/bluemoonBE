@@ -2,8 +2,13 @@ package com.sparta.bluemoon.domain;
 
 import javax.persistence.*;
 
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Entity
 @NoArgsConstructor
@@ -25,11 +30,20 @@ public class User {
     @Column(length = 1000)
     private String token;
 
+    //포인트
+    @OneToOne(mappedBy = "user")
+    private Point point;
+
+
+
+
 
     public User(String email, String password) {
         this.username = email;
         this.password = password;
     }
+
+
 
     public void createNickname(String nickname) {
         this.nickname = nickname;

@@ -21,11 +21,11 @@ public class CommentController {
 
     //댓글 저장
     @PostMapping(value = "/api/comments", consumes = {"multipart/form-data"})
-    public CommentResponseDto saveComment(@RequestPart CommentRequestDto requestDto,
-                                          @RequestPart MultipartFile file,
+    public CommentResponseDto saveComment(@RequestPart(required = false) CommentRequestDto requestDto,
+                                          @RequestPart(required = false) MultipartFile file,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         String voiceUrl = "";
-        if(!file.isEmpty()){
+        if(file!=null){
             voiceUrl = voiceService.upload(file,"static");
         }
         return commentService.saveComment(requestDto, userDetails, voiceUrl);

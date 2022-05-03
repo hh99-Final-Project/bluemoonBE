@@ -16,12 +16,15 @@ public class CommentResponseDto {
     private String content;
     private String createdAt;
     private boolean isShow;
+    private int point;
 
-    public CommentResponseDto(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails, String dateResult) {
+
+    public CommentResponseDto(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails, String dateResult, int point) {
         this.postId = commentRequestDto.getPostUuid();
         this.nickname = userDetails.getUser().getNickname();
         this.content = commentRequestDto.getContent();
         this.createdAt = dateResult;
         this.isShow = true;
+        this.point= point;
     }
 }
