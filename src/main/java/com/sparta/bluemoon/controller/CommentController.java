@@ -25,7 +25,8 @@ public class CommentController {
                                           @RequestPart(required = false) MultipartFile file,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         String voiceUrl = "";
-        if(file != null){
+        if(file!=null){
+
             voiceUrl = voiceService.upload(file,"static");
         }
         return commentService.saveComment(requestDto, userDetails, voiceUrl);
