@@ -91,24 +91,30 @@ public class PostService {
 
 
     // 남의 게시글 훔쳐보기 (1개만)
-    public List<PostOtherOnePostResponseDto> findOneOtherPage(User user) {
+    public List<PostOtherOnePostResponseDto> findOtherUserPosts(User user, int pageId) {
 
-        long otherPostsCount = postRepository.countByUserNot(user);
-
+        // 남의 게시글 수
+        int otherPostsCount = postRepository.countByUserNot(user);
         if (otherPostsCount < 1) {
             throw new IllegalArgumentException("남이 쓴 게시글이 존재하지 않습니다.");
         }
 
-        List<Post> otherPosts = postRepository.findAllByUserNot(user);
+        // paging 처리 해야 하는 수 보다 게시글의 수가 적을 경우 고려
+        int postSize = Math.min(otherPostsCount, MY_POST_PAGEABLE_SIZE);
+        try {
+            Pageable pageable = PageRequest
+                .of(pageId, postSize, Sort.by((Direction.DESC), SORT_PROPERTIES));
+            Page<Post> otherPosts = postRepository.findAllByUserNot(user, pageable);
 
-//        int idx = (int)(Math.random() * otherPosts.size());
-//        Post post = otherPosts.get(idx);
-        List<PostOtherOnePostResponseDto> postDtos = new ArrayList<>();
-        for (int i = 0; i < Math.min(5, otherPosts.size()); i++) {
-            postDtos.add(new PostOtherOnePostResponseDto(otherPosts.get(i)));
+            List<PostOtherOnePostResponseDto> postDtos = new ArrayList<>();
+            for (int i = 0; i < Math.min(5, otherPosts.getSize()); i++) {
+                postDtos.add(new PostOtherOnePostResponseDto(otherPosts.getContent().get(i)));
+            }
+
+            return postDtos;
+        } catch (Exception e) {
+            return new ArrayList<>();
         }
-
-        return postDtos;
     }
 
     //나의 게시글 리스트 조회 및 댓글 개수 추가
