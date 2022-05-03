@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    Long countByUserNot(User user);
+    int countByUserNot(User user);
 
     List<Post> findByUser(User user);
 

@@ -43,11 +43,13 @@ public class PostController {
     }
 
     // 남의 게시글 5개 조회
-    // toDo: 추후 phasing 처리를 해줄 예정임
-    // toDo: 이춘님 요청으로 급하게 변경하는 건이라 코드가 더러움 -> 코드 리팩토링 해야함
-    @GetMapping("/api/posts")
-    public List<PostOtherOnePostResponseDto> getOtherPost(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.findOneOtherPage(userDetails.getUser());
+    // toDo: 코드 리팩토링 하기전
+    @GetMapping("/api/posts/{pageId}")
+    public List<PostOtherOnePostResponseDto> getOtherPost(
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @RequestParam int pageId) {
+        pageId -= 1;
+        return postService.findOtherUserPosts(userDetails.getUser(), pageId);
     }
 
     //게시글 1개 상세 조회
