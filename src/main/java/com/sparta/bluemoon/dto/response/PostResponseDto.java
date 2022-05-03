@@ -19,6 +19,7 @@ public class PostResponseDto {
     private String title;
     private String content;
     private List<CommentDto> comments;
+    private String voiceUrl;
     private boolean isShow;
 
     public PostResponseDto(Post post1, List<CommentDto> commentList) {
@@ -28,6 +29,7 @@ public class PostResponseDto {
         this.title = post1.getTitle();
         this.content = post1.getContent();
         this.comments = commentList;
+        this.voiceUrl = post1.getVoiceUrl();
         this.isShow = post1.isShow();
     }
 }

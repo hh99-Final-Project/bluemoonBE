@@ -28,8 +28,12 @@ public class PostController {
             @RequestPart PostCreateRequestDto requestDto,
             @RequestPart MultipartFile file,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
-            String voiceUrl = voiceService.upload(file,"static");
-            return postService.create(requestDto, voiceUrl, userDetails.getUser());
+        String voiceUrl = "";
+        if (!file.isEmpty()) {
+            voiceUrl = voiceService.upload(file, "static");
+
+        }
+        return postService.create(requestDto, voiceUrl, userDetails.getUser());
     }
 
     // 나의 게시글 전체 조회 (페이지당 5건, id를 기준으로 내림차순으로 반환)
@@ -50,7 +54,7 @@ public class PostController {
     }
 
     //게시글 1개 상세 조회
-    @GetMapping("/api/posts/{postId}")
+    @GetMapping("/api/postsDetail/{postId}")
     public PostResponseDto getOnePost(@PathVariable String postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return postService.getOnePost(postId, userDetails);
     }
