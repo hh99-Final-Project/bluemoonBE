@@ -28,9 +28,6 @@ public class CommentController {
                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         String voiceUrl = "";
         if(file!=null){
-//            "postUuid": "141d80d1-01b3-4c5e-8089-e83b4362d2e9",
-//                "content": "내용",
-//                "parentUuid": ""
             voiceUrl = voiceService.upload(file,"static");
         }
         return commentService.saveComment(requestDto, userDetails, voiceUrl);
