@@ -44,7 +44,7 @@ public class CommentService {
 
         // 상위 댓글 정보 추출
         Comment parentComment = commentRepository
-            .findByCommentUuid(commentRequestDto.getParentUuid()).orElse(null);
+            .findByCommentUuid(requestDto.getParentUuid()).orElse(null);
 
 
         Comment comment = new Comment(requestDto, userDetails, post, voiceUrl, parentComment);

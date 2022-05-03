@@ -9,3 +9,5 @@ public class NicknameSignupRequestDto {
 
     private String nickname;
 }
+
+

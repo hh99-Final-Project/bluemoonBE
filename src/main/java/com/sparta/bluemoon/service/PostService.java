@@ -161,14 +161,14 @@ public class PostService {
         System.out.println("comments.size() = " + comments.size());
 
         List<CommentDto> result = new ArrayList<>();
-        Map<Long, CommentDto> map = new HashMap<>();
+        Map<String, CommentDto> map = new HashMap<>();
         comments.stream().forEach(c -> {
             CommentDto dto = new CommentDto(c);
             if (c.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(user.getId())) {
                 dto.setShow(true);
             }
 
-            map.put(dto.getId(), dto);
+            map.put(dto.getCommentUuid(), dto);
             if(c.getParent() != null) {
                 map.get(c.getParent().getId()).getChildren().add(dto);
             } else {
