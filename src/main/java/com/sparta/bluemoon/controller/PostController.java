@@ -24,10 +24,9 @@ public class PostController {
 
     //게시글 작성
     @PostMapping(value = "/api/posts", consumes = {"multipart/form-data"})
-    public String create(
-            @RequestPart PostCreateRequestDto requestDto,
-            @RequestPart MultipartFile file,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+    public String create(@RequestPart PostCreateRequestDto requestDto,
+                         @RequestPart MultipartFile file,
+                         @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         String voiceUrl = "";
         if (!file.isEmpty()) {
             voiceUrl = voiceService.upload(file, "static");
@@ -48,7 +47,7 @@ public class PostController {
     @GetMapping("/api/posts/{pageId}")
     public List<PostOtherOnePostResponseDto> getOtherPost(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
-        @RequestParam int pageId) {
+        @PathVariable int pageId) {
         pageId -= 1;
         return postService.findOtherUserPosts(userDetails.getUser(), pageId);
     }

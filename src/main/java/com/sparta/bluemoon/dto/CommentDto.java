@@ -13,6 +13,7 @@ public class CommentDto {
     private String nickname;
     private String content;
     private LocalDateTime createdAt;
+    private String voiceUrl;
     private boolean isShow;
 
     public CommentDto(Comment comment) {
@@ -20,6 +21,7 @@ public class CommentDto {
         this.nickname = comment.getUser().getNickname();
         this.content = comment.getContent();
         this.createdAt = comment.getCreatedAt();
+        this.voiceUrl = comment.getVoiceUrl();
         this.isShow = comment.isShow();
     }
 }

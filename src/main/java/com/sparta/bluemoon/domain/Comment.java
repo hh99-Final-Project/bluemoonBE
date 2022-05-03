@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -26,6 +28,9 @@ public class Comment extends Timestamped{
 
     private boolean isShow;
 
+    //댓글 음성파일
+    private String voiceUrl;
+
     //commentId 대체할 UUID 생성
     @Column(unique = true)
     private String commentUuid = UUID.randomUUID().toString();
@@ -37,10 +42,11 @@ public class Comment extends Timestamped{
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Comment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails, Post post){
+    public Comment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails, Post post, String voiceUrl){
         this.content = commentRequestDto.getContent();
         this.post = post;
         this.user = userDetails.getUser();
+        this.voiceUrl = voiceUrl;
         this.isShow = true;
     }
 }
