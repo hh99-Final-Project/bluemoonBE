@@ -22,18 +22,18 @@ public class CommentService {
     private final PostRepository postRepository;
 
     //댓글 저장
-    public CommentResponseDto saveComment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails) {
+    public CommentResponseDto saveComment(CommentRequestDto requestDto, UserDetailsImpl userDetails, String voiceUrl) {
 
-        Post post= postRepository.findByPostUuid(commentRequestDto.getPostUuid()).orElseThrow(
+        Post post= postRepository.findByPostUuid(requestDto.getPostUuid()).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다.")
         );
-        Comment comment = new Comment(commentRequestDto, userDetails, post);
+        Comment comment = new Comment(requestDto, userDetails, post, voiceUrl);
         commentRepository.save(comment);
 
         //댓글 작성시간
         String dateResult = getCurrentTime();
 
-        return new CommentResponseDto(commentRequestDto, userDetails, dateResult);
+        return new CommentResponseDto(requestDto, userDetails, dateResult);
 
     }
 
