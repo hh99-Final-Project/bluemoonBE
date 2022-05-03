@@ -15,14 +15,25 @@ public class CommentController {
     private final CommentService commentService;
 
     //댓글 저장
+//    @PostMapping("/api/comments")
+//    public CommentResponseDto saveComment(@RequestBody CommentRequestDto commentRequestDto,
+//        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return commentService.saveComment(commentRequestDto, userDetails);
+//    }
+
+
+    // 댓글 저장할떄는 상위 댓글의 정보를 받아와야한다.
+    // 최상위 댓글의 경우 상위 댓글이 존재하지 않으므로 값을 빈칸으로 보내주면 된다.
     @PostMapping("/api/comments")
-    public CommentResponseDto saveComment(@RequestBody CommentRequestDto commentRequestDto,
+    public CommentResponseDto saveComment(
+        @RequestBody CommentRequestDto commentRequestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.saveComment(commentRequestDto, userDetails);
     }
+
     //댓글 삭제
-    @DeleteMapping("/api/comments/{commentId}")
-    public void deleteComment(@PathVariable String commentId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        commentService.deleteComment(commentId, userDetails);
+    @DeleteMapping("/api/comments/{commentUuid}")
+    public void deleteComment(@PathVariable String commentUuid, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        commentService.deleteComment(commentUuid, userDetails);
     }
 }

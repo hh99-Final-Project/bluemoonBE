@@ -25,11 +25,11 @@ public class PostController {
     //게시글 작성
     @PostMapping(value = "/api/posts", consumes = {"multipart/form-data"})
     public String create(
-            @RequestPart PostCreateRequestDto requestDto,
-            @RequestPart MultipartFile file,
+            @RequestPart(required = false) PostCreateRequestDto requestDto,
+            @RequestPart(required = false) MultipartFile file,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         String voiceUrl = "";
-        if (!file.isEmpty()) {
+        if (file != null) {
             voiceUrl = voiceService.upload(file, "static");
 
         }
@@ -76,5 +76,4 @@ public class PostController {
     public PostResponseDto getMainDetailPost() {
         return postService.getMainDetailPost();
     }
-
 }

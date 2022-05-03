@@ -2,9 +2,12 @@ package com.sparta.bluemoon.domain;
 
 import com.sparta.bluemoon.dto.request.CommentRequestDto;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 import com.sparta.bluemoon.security.UserDetailsImpl;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +18,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @NoArgsConstructor
-public class Comment extends Timestamped{
+public class Comment extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,10 +40,35 @@ public class Comment extends Timestamped{
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Comment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails, Post post){
+    // 상위 댓글
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
+    // 하위 댓글
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    private List<Comment> children = new ArrayList<>();
+
+    // 삭제 여부
+    @Enumerated(value = EnumType.STRING)
+    private DeleteStatus isDeleted;
+
+    public Comment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails, Post post,
+        Comment parentComment) {
         this.content = commentRequestDto.getContent();
         this.post = post;
         this.user = userDetails.getUser();
         this.isShow = true;
+        this.parent = parentComment;
+        if (this.parent != null) {
+            this.parent.getChildren().add(this);
+        }
+        this.isDeleted = DeleteStatus.N;
+    }
+
+    public void changeDeletedStatus(DeleteStatus type) {
+        System.out.println(this.isDeleted);
+        this.isDeleted = type;
+        System.out.println(this.isDeleted);
     }
 }
