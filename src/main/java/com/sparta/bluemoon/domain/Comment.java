@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Getter
@@ -28,6 +30,9 @@ public class Comment extends Timestamped {
     private String content;
 
     private boolean isShow;
+
+    //댓글 음성파일
+    private String voiceUrl;
 
     //commentId 대체할 UUID 생성
     @Column(unique = true)
@@ -53,11 +58,12 @@ public class Comment extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private DeleteStatus isDeleted;
 
-    public Comment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails, Post post,
-        Comment parentComment) {
-        this.content = commentRequestDto.getContent();
+    //requestDto가 비어있을경우 빈칸으로 처리
+    public Comment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails, Post post, String voiceUrl, Comment parentComment){
+        this.content = (commentRequestDto == null ? "" : commentRequestDto.getContent());
         this.post = post;
         this.user = userDetails.getUser();
+        this.voiceUrl = voiceUrl;
         this.isShow = true;
         this.parent = parentComment;
         if (this.parent != null) {

@@ -39,9 +39,10 @@ public class Post extends Timestamped {
     @ManyToOne
     private User user;
 
+    //requestDto가 비어있을경우 빈칸으로 처리
     public Post(PostCreateRequestDto requestDto, String voiceUrl, User user) {
-        this.title = requestDto.getTitle();
-        this.content = requestDto.getContent();
+        this.title = (requestDto == null ? "" : requestDto.getTitle());
+        this.content = (requestDto == null ? "" : requestDto.getContent());
         this.voiceUrl = voiceUrl;
         this.user = user;
     }

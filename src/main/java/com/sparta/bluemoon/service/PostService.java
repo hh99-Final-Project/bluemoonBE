@@ -1,6 +1,7 @@
 package com.sparta.bluemoon.service;
 
 import com.sparta.bluemoon.domain.Comment;
+import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.CommentDto;
@@ -10,7 +11,9 @@ import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
 import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
 import com.sparta.bluemoon.dto.response.PostResponseDto;
 import com.sparta.bluemoon.repository.CommentQuerydslRepository;
+import com.sparta.bluemoon.dto.response.*;
 import com.sparta.bluemoon.repository.CommentRepository;
+import com.sparta.bluemoon.repository.PointRepository;
 import com.sparta.bluemoon.repository.PostRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import java.util.ArrayList;
@@ -25,13 +28,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
+    private final PointRepository pointRepository;
     private final CommentRepository commentRepository;
     private final CommentQuerydslRepository commentQuerydslRepository;
+    private final PointService pointService;
 
     // 내 게시글 한 페이지당 보여줄 게시글의 수
     private static final int MY_POST_PAGEABLE_SIZE = 5;
@@ -41,6 +48,8 @@ public class PostService {
     private static final int OTHER_POST_PAGEABLE_SIZE = 1;
     // 비로그인 사용자에게 보여줄 main post index
     private static final long MAIN_POST_INDEX_FOR_ANONYMOUS = 1L;
+
+
 
     //게시글 1개 상세 조회
     public PostResponseDto getOnePost(String postId, UserDetailsImpl userDetails) {
@@ -54,12 +63,25 @@ public class PostService {
     }
 
     // 게시글(다이어리) 저장
-    public String create(PostCreateRequestDto requestDto, String voiceUrl, User user) {
-        Post post = new Post(requestDto, voiceUrl, user);
+
+    public PostCreateResponseDto create(PostCreateRequestDto postCreateRequestDto, String voiceUrl, User user) {
+        Post post = new Post(postCreateRequestDto, voiceUrl, user);
         postRepository.save(post);
-        return voiceUrl;
+
+        int userPoint = user.getPoint().getMyPoint();
+
+        Point point = pointRepository.findByUser(user);
+        if(point.getPostCount()!=0){
+            userPoint = pointService.pointChange(point,"POST_POINT");
+        }
+
+        //TODO: 임의로 음성녹음 파일 추가
+        return new PostCreateResponseDto(voiceUrl, userPoint);
     }
-    //임시저장글 voice없이 저장
+
+
+
+
     public void createWithoutVoice(PostCreateRequestDto postCreateRequestDto, User user) {
         Post post = new Post(postCreateRequestDto, user);
         postRepository.save(post);
@@ -101,9 +123,6 @@ public class PostService {
 
         // 남의 게시글 수
         int otherPostsCount = postRepository.countByUserNot(user);
-        if (otherPostsCount < 1) {
-            throw new IllegalArgumentException("남이 쓴 게시글이 존재하지 않습니다.");
-        }
 
         // paging 처리 해야 하는 수 보다 게시글의 수가 적을 경우 고려
         int postSize = Math.min(otherPostsCount, MY_POST_PAGEABLE_SIZE);
@@ -116,7 +135,6 @@ public class PostService {
             for (int i = 0; i < Math.min(5, otherPosts.getSize()); i++) {
                 postDtos.add(new PostOtherOnePostResponseDto(otherPosts.getContent().get(i)));
             }
-
             return postDtos;
         } catch (Exception e) {
             return new ArrayList<>();

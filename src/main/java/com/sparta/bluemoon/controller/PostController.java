@@ -1,10 +1,7 @@
 package com.sparta.bluemoon.controller;
 
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
-import com.sparta.bluemoon.dto.response.MainPostForAnonymousResponseDto;
-import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
-import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
-import com.sparta.bluemoon.dto.response.PostResponseDto;
+import com.sparta.bluemoon.dto.response.*;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.service.PostService;
 import java.io.IOException;
@@ -24,16 +21,15 @@ public class PostController {
 
     //게시글 작성
     @PostMapping(value = "/api/posts", consumes = {"multipart/form-data"})
-    public String create(
-            @RequestPart(required = false) PostCreateRequestDto requestDto,
-            @RequestPart(required = false) MultipartFile file,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+    public PostCreateResponseDto create(@RequestPart(required = false) PostCreateRequestDto requestDto,
+                         @RequestPart(required = false) MultipartFile file,
+                         @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         String voiceUrl = "";
-        if (file != null) {
+        if (file!=null) {
             voiceUrl = voiceService.upload(file, "static");
-
         }
         return postService.create(requestDto, voiceUrl, userDetails.getUser());
+
     }
 
     // 나의 게시글 전체 조회 (페이지당 5건, id를 기준으로 내림차순으로 반환)
@@ -48,7 +44,7 @@ public class PostController {
     @GetMapping("/api/posts/{pageId}")
     public List<PostOtherOnePostResponseDto> getOtherPost(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
-        @RequestParam int pageId) {
+        @PathVariable int pageId) {
         pageId -= 1;
         return postService.findOtherUserPosts(userDetails.getUser(), pageId);
     }
