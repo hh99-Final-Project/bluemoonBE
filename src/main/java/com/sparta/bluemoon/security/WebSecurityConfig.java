@@ -4,6 +4,7 @@ import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.filter.FormLoginFilter;
 import com.sparta.bluemoon.security.filter.JwtAuthFilter;
 import com.sparta.bluemoon.security.jwt.HeaderTokenExtractor;
+import com.sparta.bluemoon.security.jwt.JwtDecoder;
 import com.sparta.bluemoon.security.provider.FormLoginAuthProvider;
 import com.sparta.bluemoon.security.provider.JWTAuthProvider;
 import java.util.ArrayList;
@@ -31,13 +32,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JWTAuthProvider jwtAuthProvider;
     private final HeaderTokenExtractor headerTokenExtractor;
+    private final UserRepository userRepository;
+    private final JwtDecoder jwtDecoder;
 
     public WebSecurityConfig(
             JWTAuthProvider jwtAuthProvider,
-            HeaderTokenExtractor headerTokenExtractor
+            HeaderTokenExtractor headerTokenExtractor,
+            UserRepository userRepository,
+            JwtDecoder jwtDecoder
     ) {
         this.jwtAuthProvider = jwtAuthProvider;
         this.headerTokenExtractor = headerTokenExtractor;
+        this.userRepository = userRepository;
+        this.jwtDecoder = jwtDecoder;
     }
 
     @Bean
@@ -148,10 +155,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 회원 관리 API 허용
         skipPathList.add("GET,/user/**");
         skipPathList.add("POST,/user/**");
-        skipPathList.add("GET,/ws-stomp/**/**");
-        skipPathList.add("GET,/ws-stomp/**");
 //        skipPathList.add("GET,/api/**");
         skipPathList.add("GET,/api/test");
+
+        //비로그인 사용자 api
+        skipPathList.add("GET,/api/posts/anonymous/**");
+        skipPathList.add("GET,/api/posts/anonymous");
 
         skipPathList.add("GET,/");
         skipPathList.add("POST,/");
@@ -166,7 +175,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         JwtAuthFilter filter = new JwtAuthFilter(
                 matcher,
-                headerTokenExtractor
+                headerTokenExtractor,
+                jwtDecoder,
+                userRepository
         );
         filter.setAuthenticationManager(super.authenticationManagerBean());
 

@@ -21,7 +21,6 @@ import java.util.UUID;
 @Service
 public class VoiceService {
 
-    private final PostRepository postRepository;
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
@@ -37,7 +36,6 @@ public class VoiceService {
         return upload(uploadFile, dirName);
 
     }
-
 
     // S3로 파일 업로드하기
     private String upload(File uploadFile, String dirName) {

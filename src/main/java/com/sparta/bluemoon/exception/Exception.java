@@ -10,4 +10,5 @@ public class Exception {
 
     private String errorMessage;
     private HttpStatus httpStatus;
+    private boolean isAlreadyLogined;
 }

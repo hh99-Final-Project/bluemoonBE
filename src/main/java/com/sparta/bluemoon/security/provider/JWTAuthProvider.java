@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -21,9 +20,9 @@ public class JWTAuthProvider implements AuthenticationProvider {
 
     private final UserRepository userRepository;
 
+
     @Override
-    public Authentication authenticate(Authentication authentication)
-            throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication) {
         String token = (String) authentication.getPrincipal();
         String username = jwtDecoder.decodeUsername(token);
 
@@ -34,10 +33,7 @@ public class JWTAuthProvider implements AuthenticationProvider {
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
-        String beforeToken = user.getToken();
-        if(!token.equals(beforeToken)){
-            throw new IllegalArgumentException("여기서 에러가 터질껄?");
-        }
+
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
