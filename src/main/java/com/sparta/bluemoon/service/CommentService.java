@@ -4,7 +4,6 @@ import com.sparta.bluemoon.domain.Comment;
 import com.sparta.bluemoon.domain.DeleteStatus;
 import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.Post;
-import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.request.CommentRequestDto;
 import com.sparta.bluemoon.dto.response.CommentResponseDto;
 import com.sparta.bluemoon.repository.CommentRepository;
@@ -20,7 +19,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

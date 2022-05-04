@@ -15,6 +15,7 @@ public class ExceptionHandling {
         exception.setErrorMessage(except.getMessage());
         exception.setHttpStatus(HttpStatus.BAD_REQUEST);
 
-        return new ResponseEntity(exception, HttpStatus.OK);
+        return new ResponseEntity(exception, HttpStatus.BAD_REQUEST);
     }
+
 }

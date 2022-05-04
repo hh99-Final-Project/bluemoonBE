@@ -1,6 +1,11 @@
 package com.sparta.bluemoon.security.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.bluemoon.domain.User;
+import com.sparta.bluemoon.exception.Exception;
+import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.jwt.HeaderTokenExtractor;
+import com.sparta.bluemoon.security.jwt.JwtDecoder;
 import com.sparta.bluemoon.security.jwt.JwtPreProcessingToken;
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -21,14 +26,18 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
     private final HeaderTokenExtractor extractor;
+    private final JwtDecoder jwtDecoder;
+    private final UserRepository userRepository;
 
     public JwtAuthFilter(
             RequestMatcher requiresAuthenticationRequestMatcher,
-            HeaderTokenExtractor extractor
-    ) {
+            HeaderTokenExtractor extractor,
+            JwtDecoder jwtDecoder, UserRepository userRepository) {
         super(requiresAuthenticationRequestMatcher);
 
         this.extractor = extractor;
+        this.jwtDecoder = jwtDecoder;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -37,6 +46,7 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
             HttpServletResponse response
     ) throws AuthenticationException, IOException {
 
+
         // JWT 값을 담아주는 변수 TokenPayload
         String tokenPayload = request.getHeader("Authorization");
         if (tokenPayload == null) {
@@ -44,10 +54,24 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
             response.sendRedirect("/user/loginView");
             return null;
         }
-
+        String nowToken = extractor.extract(tokenPayload, request);
         JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(
                 extractor.extract(tokenPayload, request));
 
+        String username = jwtDecoder.decodeUsername(nowToken);
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저가 없습니다")
+        );
+        if(!user.getToken().equals(nowToken)){
+            ObjectMapper mapper = new ObjectMapper();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8"); // HelloData 객체
+            Exception exception = new Exception();
+            exception.setAlreadyLogined(true);
+
+            String result = mapper.writeValueAsString(exception);
+            response.getWriter().write(result);
+        }
         return super
                 .getAuthenticationManager()
                 .authenticate(jwtToken);

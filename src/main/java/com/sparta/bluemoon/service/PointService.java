@@ -1,12 +1,7 @@
 package com.sparta.bluemoon.service;
 
-import com.sparta.bluemoon.domain.Comment;
 import com.sparta.bluemoon.domain.Point;
-import com.sparta.bluemoon.domain.Post;
-import com.sparta.bluemoon.domain.User;
-import com.sparta.bluemoon.repository.CommentRepository;
 import com.sparta.bluemoon.repository.PointRepository;
-import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
