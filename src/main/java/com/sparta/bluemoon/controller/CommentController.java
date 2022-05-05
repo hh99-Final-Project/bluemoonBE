@@ -30,7 +30,7 @@ public class CommentController {
         if(file!=null){
             voiceUrl = voiceService.upload(file,"static");
         }
-        return commentService.saveComment(requestDto, userDetails, voiceUrl);
+        return commentService.saveComment(requestDto, userDetails.getUser(), voiceUrl);
     }
 
     //댓글 삭제

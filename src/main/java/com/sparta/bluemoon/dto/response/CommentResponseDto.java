@@ -1,6 +1,7 @@
 package com.sparta.bluemoon.dto.response;
 
 import com.sparta.bluemoon.domain.Comment;
+import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.request.CommentRequestDto;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.Getter;
@@ -20,9 +21,9 @@ public class CommentResponseDto {
     private int point;
 
 
-    public CommentResponseDto(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails, String dateResult, int point) {
+    public CommentResponseDto(CommentRequestDto commentRequestDto, User user, String dateResult, int point) {
         this.postUuid = commentRequestDto.getPostUuid();
-        this.nickname = userDetails.getUser().getNickname();
+        this.nickname = user.getNickname();
         this.content = commentRequestDto.getContent();
         this.createdAt = dateResult;
         this.isShow = true;

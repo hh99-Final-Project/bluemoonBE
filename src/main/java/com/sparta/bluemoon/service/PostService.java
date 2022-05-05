@@ -49,8 +49,6 @@ public class PostService {
     // 비로그인 사용자에게 보여줄 main post index
     private static final long MAIN_POST_INDEX_FOR_ANONYMOUS = 1L;
 
-
-
     //게시글 1개 상세 조회
     public PostResponseDto getOnePost(String postId, UserDetailsImpl userDetails) {
         Post post = postRepository.findByPostUuid(postId).orElseThrow(
@@ -63,7 +61,7 @@ public class PostService {
     }
 
     // 게시글(다이어리) 저장
-
+    @Transactional
     public PostCreateResponseDto create(PostCreateRequestDto postCreateRequestDto, String voiceUrl, User user) {
         Post post = new Post(postCreateRequestDto, voiceUrl, user);
         postRepository.save(post);

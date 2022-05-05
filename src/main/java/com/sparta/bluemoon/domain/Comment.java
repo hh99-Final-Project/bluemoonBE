@@ -59,10 +59,10 @@ public class Comment extends Timestamped {
     private DeleteStatus isDeleted;
 
     //requestDto가 비어있을경우 빈칸으로 처리
-    public Comment(CommentRequestDto commentRequestDto, UserDetailsImpl userDetails, Post post, String voiceUrl, Comment parentComment){
+    public Comment(CommentRequestDto commentRequestDto, User user, Post post, String voiceUrl, Comment parentComment){
         this.content = (commentRequestDto == null ? "" : commentRequestDto.getContent());
         this.post = post;
-        this.user = userDetails.getUser();
+        this.user = user;
         this.voiceUrl = voiceUrl;
         this.isShow = true;
         this.parent = parentComment;

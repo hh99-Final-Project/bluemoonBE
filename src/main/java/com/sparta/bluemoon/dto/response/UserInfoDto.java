@@ -10,6 +10,7 @@ public class UserInfoDto {
 
     private Long userId;
     private String nickname;
+    private int myPoint;
 
     public UserInfoDto(UserDetailsImpl userDetails) {
         this.userId = userDetails.getUser().getId();
