@@ -1,8 +1,6 @@
 package com.sparta.bluemoon.service;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.domain.User;
