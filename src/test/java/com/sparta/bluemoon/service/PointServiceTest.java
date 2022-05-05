@@ -60,4 +60,23 @@ class PointServiceTest {
         assertThat(user.getPoint().getCommentCount()).isEqualTo(5);
         assertThat(user.getPoint().getLottoCount()).isEqualTo(1);
     }
+
+    @Test
+    @Order(3)
+    @DisplayName("user가 게시글을 하나 작성했을 때 point 확인.")
+    public void userPoint2() {
+        // given
+        User user = userRepository.findByUsername("email").get();
+        PostCreateRequestDto postCreateRequestDto = new PostCreateRequestDto("title", "content");
+
+        // when
+        postService.create(postCreateRequestDto, "voiceUrl", user);
+        user = userRepository.findByUsername("email").get();
+
+        // then
+        assertThat(user.getPoint().getMyPoint()).isEqualTo(500);
+        assertThat(user.getPoint().getPostCount()).isEqualTo(0);
+        assertThat(user.getPoint().getCommentCount()).isEqualTo(5);
+        assertThat(user.getPoint().getLottoCount()).isEqualTo(1);
+    }
 }
