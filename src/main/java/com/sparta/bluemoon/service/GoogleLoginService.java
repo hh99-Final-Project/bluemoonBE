@@ -7,10 +7,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.sparta.bluemoon.config.GoogleConfigUtils;
+import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.request.GoogleLoginRequest;
 import com.sparta.bluemoon.dto.response.GoogleLoginResponse;
 import com.sparta.bluemoon.dto.response.SocialLoginResponseDto;
+import com.sparta.bluemoon.repository.PointRepository;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.security.jwt.JwtTokenUtils;
@@ -35,6 +37,7 @@ public class GoogleLoginService {
     private final GoogleConfigUtils configUtils;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PointRepository pointRepository;
 
     // token을 얻기 위한 code 요청
     public ResponseEntity<Object> requestAuthCodeFromGoogle() {
@@ -98,10 +101,17 @@ public class GoogleLoginService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-            // toDo: 랜덤 닉네임 부여
             String nickname = "";
             googleUser = new User(email, encodedPassword, nickname);
             userRepository.save(googleUser);
+
+            // 사용자 포인트 부여
+            int mypoint = 0;
+            int postCount = 1;
+            int commentCount = 5;
+            int lottoCount = 1;
+            Point point = new Point(mypoint, googleUser, postCount, commentCount, lottoCount);
+            pointRepository.save(point);
         }
         return googleUser;
     }

@@ -3,8 +3,10 @@ package com.sparta.bluemoon.test;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.response.SocialLoginResponseDto;
+import com.sparta.bluemoon.repository.PointRepository;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.security.jwt.JwtTokenUtils;
@@ -32,6 +34,7 @@ public class NaverLoginService {
     private final ConfigUtils configUtils;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PointRepository pointRepository;
 
     public ResponseEntity<Object> requestAuthCodeFromNaver() {
         String authUrl = configUtils.naverInitUrl();
@@ -82,7 +85,7 @@ public class NaverLoginService {
             .body(new SocialLoginResponseDto(naverUser));
     }
 
-    private User registerNaverUserIfNeeded(String email) {
+    public User registerNaverUserIfNeeded(String email) {
         User naverUser = userRepository.findByUsername(email)
             .orElse(null);
         if (naverUser == null) {
@@ -95,6 +98,14 @@ public class NaverLoginService {
             String nickname = "";
             naverUser = new User(email, encodedPassword, nickname);
             userRepository.save(naverUser);
+
+            // 사용자 포인트 부여
+            int mypoint = 0;
+            int postCount = 1;
+            int commentCount = 5;
+            int lottoCount = 1;
+            Point point = new Point(mypoint, naverUser, postCount, commentCount, lottoCount);
+            pointRepository.save(point);
         }
         return naverUser;
 
@@ -125,16 +136,6 @@ public class NaverLoginService {
         String email = jsonNode.get("response").get("email").asText();
         String name = jsonNode.get("response").get("name").asText();
 
-        System.out.println("id = " + id);
-        System.out.println("nickname = " + nickname);
-        System.out.println("email = " + email);
-        System.out.println("name = " + name);
-//        String nickname = jsonNode.get("properties")
-//            .get("nickname").asText();
-//        String email = jsonNode.get("naver_account")
-//            .get("email").asText();
-//
-//        return new NaverUserInfoDto(id, nickname, email);
         return email;
     }
 

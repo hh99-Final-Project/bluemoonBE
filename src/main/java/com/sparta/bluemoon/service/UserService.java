@@ -33,12 +33,6 @@ public class UserService {
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 유저가 존재하지 않습니다.")
         );
-        int mypoint = 0;
-        int postCount = 1;
-        int commentCount = 5;
-        int lottoCount = 1;
-        Point point = new Point(mypoint, user,postCount,commentCount,lottoCount);
-        pointRepository.save(point);
         user.changeNickname(nicknameSignupRequestDto.getNickname());
 
     }

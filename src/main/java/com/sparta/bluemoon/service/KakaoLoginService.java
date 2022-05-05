@@ -4,8 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.bluemoon.config.KakaoConfigUtils;
+import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.response.SocialLoginResponseDto;
+import com.sparta.bluemoon.repository.PointRepository;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.security.jwt.JwtTokenUtils;
@@ -30,6 +32,7 @@ public class KakaoLoginService {
     private final KakaoConfigUtils configUtils;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PointRepository pointRepository;
 
     public ResponseEntity<Object> requestAuthCodeFromKakao() {
         String authUrl = configUtils.kakaoInitUrl();
@@ -130,6 +133,14 @@ public class KakaoLoginService {
             String nickname = "";
             kakaoUser = new User(email, encodedPassword, nickname);
             userRepository.save(kakaoUser);
+
+            // 사용자 포인트 부여
+            int mypoint = 0;
+            int postCount = 1;
+            int commentCount = 5;
+            int lottoCount = 1;
+            Point point = new Point(mypoint, kakaoUser, postCount, commentCount, lottoCount);
+            pointRepository.save(point);
         }
 
         return kakaoUser;

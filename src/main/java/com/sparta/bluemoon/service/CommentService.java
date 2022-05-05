@@ -4,6 +4,7 @@ import com.sparta.bluemoon.domain.Comment;
 import com.sparta.bluemoon.domain.DeleteStatus;
 import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.Post;
+import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.request.CommentRequestDto;
 import com.sparta.bluemoon.dto.response.CommentResponseDto;
 import com.sparta.bluemoon.repository.CommentRepository;
@@ -29,40 +30,39 @@ public class CommentService {
     private final PointService pointService;
     private final PointRepository pointRepository;
 
-
-
-
     //댓글 저장
-    public CommentResponseDto saveComment(CommentRequestDto requestDto, UserDetailsImpl userDetails, String voiceUrl) {
-
+    @Transactional
+    public CommentResponseDto saveComment(CommentRequestDto requestDto, User user, String voiceUrl) {
+        System.out.println("NNNNDFJKSLDFSDF");
         Post post= postRepository.findByPostUuid(requestDto.getPostUuid()).orElseThrow(
                 () -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다.")
         );
-
 
         // 상위 댓글 정보 추출
         Comment parentComment = commentRepository
             .findByCommentUuid(requestDto.getParentUuid()).orElse(null);
 
 
-        Comment comment = new Comment(requestDto, userDetails, post, voiceUrl, parentComment);
+        Comment comment = new Comment(requestDto, user, post, voiceUrl, parentComment);
         commentRepository.save(comment);
 
         //댓글 작성시간
         String dateResult = getCurrentTime();
 
         //유저의 현재 포인트
-        int userPoint = userDetails.getUser().getPoint().getMyPoint();
+        int userPoint = user.getPoint().getMyPoint();
         //게시글에 유저가 쓴 코멘트가 존재하는지 판단
-        List<Comment> userComments = commentRepository.findAllByPostAndUser(post,userDetails.getUser());
+        List<Comment> userComments = commentRepository.findAllByPostAndUser(post, user);
         //처음썼고 카운트가 남아있다면 포인트 주기 있다면 넘어가기
-        Point point = pointRepository.findByUser(userDetails.getUser());
+        Point point = pointRepository.findByUser(user);
 
         if((userComments.size()==1)&&(point.getCommentCount()!=0)){
-             userPoint = pointService.pointChange(point,"COMMENT_POINT");
+            System.out.println("HI");
+            userPoint = pointService.pointChange(point,"COMMENT_POINT");
+            System.out.println(userPoint);
         }
 
-        return new CommentResponseDto(requestDto, userDetails, dateResult, userPoint);
+        return new CommentResponseDto(requestDto, user, dateResult, userPoint);
     }
 
     //댓글 삭제
