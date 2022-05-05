@@ -63,14 +63,15 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
                 () -> new IllegalArgumentException("해당 유저가 없습니다")
         );
         if(!user.getToken().equals(nowToken)){
+
             ObjectMapper mapper = new ObjectMapper();
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8"); // HelloData 객체
             Exception exception = new Exception();
             exception.setAlreadyLogined(true);
-
             String result = mapper.writeValueAsString(exception);
-            response.getWriter().write(result);
+            response.getWriter().print(result);
+            throw new RuntimeException("에러111111111111111111");
         }
         return super
                 .getAuthenticationManager()
