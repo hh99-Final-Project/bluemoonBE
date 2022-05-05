@@ -30,7 +30,8 @@ public class Comment extends Timestamped {
     private String content;
 
     private boolean isShow;
-
+    //true가 잠금 false가 공개
+    private boolean isLock;
     //댓글 음성파일
     private String voiceUrl;
 
@@ -65,6 +66,7 @@ public class Comment extends Timestamped {
         this.user = userDetails.getUser();
         this.voiceUrl = voiceUrl;
         this.isShow = true;
+        this.isLock = commentRequestDto.isLock();
         this.parent = parentComment;
         if (this.parent != null) {
             this.parent.getChildren().add(this);
