@@ -21,20 +21,20 @@ public class ChatController {
     private final UserRepository userRepository;
     private final JwtDecoder jwtDecoder;
 
-    /**
-     * websocket "/pub/chat/enter"로 들어오는 메시징을 처리한다.
-     */
-    @MessageMapping("/chat/enter")
-    public void enter(ChatMessageDto chatMessageDto, @Header("token") String token) {
+//    /**
+//     * websocket "/pub/chat/enter"로 들어오는 메시징을 처리한다.
+//     */
+//    @MessageMapping("/chat/enter")
+//    public void enter(ChatMessageDto chatMessageDto, @Header("token") String token) {
+////
+////        Long userId = chatMessageDto.getUserId();
+////        User otherUser = userRepository.findById(userId).get();
+////        chatMessageDto.setUsername(otherUser.getUsername());
 //
-//        Long userId = chatMessageDto.getUserId();
-//        User otherUser = userRepository.findById(userId).get();
-//        chatMessageDto.setUsername(otherUser.getUsername());
-
-//        chatMessageDto.setMessage(String.format("%s님이 %s방에 입장하셨습니다.", username, roomname));
-        String topic = channelTopic.getTopic();
-        redisTemplate.convertAndSend(topic, chatMessageDto);
-    }
+////        chatMessageDto.setMessage(String.format("%s님이 %s방에 입장하셨습니다.", username, roomname));
+//        String topic = channelTopic.getTopic();
+//        redisTemplate.convertAndSend(topic, chatMessageDto);
+//    }
 
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.

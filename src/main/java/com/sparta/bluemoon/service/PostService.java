@@ -56,6 +56,7 @@ public class PostService {
         );
         // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
         List<CommentDto> newCommentList = getCommentDtos(userDetails, post);
+        //댓글 비공개 시 볼 수 있는 사람 특정
 
         return new PostResponseDto(post, newCommentList);
     }
@@ -166,6 +167,9 @@ public class PostService {
             CommentDto dto = new CommentDto(c);
             if (c.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(user.getId())) {
                 dto.setShow(true);
+                if(dto.isLock()){
+                    dto.setLock(false);
+                }
             }
 
             map.put(dto.getCommentUuid(), dto);

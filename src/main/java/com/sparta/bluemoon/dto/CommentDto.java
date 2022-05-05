@@ -17,6 +17,7 @@ public class CommentDto {
     private LocalDateTime createdAt;
     private String voiceUrl;
     private boolean isShow;
+    private boolean isLock;
     private List<CommentDto> children = new ArrayList<>();
 
     public CommentDto(Comment comment) {
@@ -25,6 +26,7 @@ public class CommentDto {
         this.content = comment.getContent();
         this.createdAt = comment.getCreatedAt();
         this.voiceUrl = comment.getVoiceUrl();
+        //댓글 작성자이면 false를 보내줌
         this.isShow = comment.isShow();
     }
 }
