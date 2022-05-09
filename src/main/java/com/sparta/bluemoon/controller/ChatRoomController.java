@@ -26,10 +26,10 @@ public class ChatRoomController {
 
     //방생성
     @PostMapping ("/api/rooms")
-    public void createChatRoom(
+    public String createChatRoom(
             @RequestBody ChatRoomUserRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        chatRoomService.createChatRoom(requestDto, userDetails);
+        return chatRoomService.createChatRoom(requestDto, userDetails);
     }
 
     //내가 가진 채팅방 조회
