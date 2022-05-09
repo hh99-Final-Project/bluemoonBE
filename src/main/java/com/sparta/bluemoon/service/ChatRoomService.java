@@ -35,7 +35,7 @@ public class ChatRoomService {
     private final ChatMessageRepository chatMessageRepository;
 
     //채팅방 생성
-    public void createChatRoom (
+    public String createChatRoom (
             ChatRoomUserRequestDto requestDto,
             UserDetailsImpl userDetails) {
 
@@ -55,6 +55,7 @@ public class ChatRoomService {
         ChatRoom room = new ChatRoom(roomHashCode);
         chatRoomRepository.save(room);
 
+
         //내 방
         ChatRoomUser chatRoomUser = new ChatRoomUser(userDetails.getUser(), anotherUser, room);
         //다른 사람 방
@@ -63,6 +64,8 @@ public class ChatRoomService {
         //저장
         chatRoomUserRepository.save(chatRoomUser);
         chatRoomUserRepository.save(chatRoomAnotherUser);
+
+        return room.getChatRoomUuid();
     }
 
     //for 둘 다 있는 방 판단
