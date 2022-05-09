@@ -1,5 +1,6 @@
 package com.sparta.bluemoon.controller;
 
+import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatMessageDto;
 import com.sparta.bluemoon.dto.request.ChatMessageEnterDto;
 import com.sparta.bluemoon.repository.UserRepository;
@@ -7,6 +8,9 @@ import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.security.jwt.JwtDecoder;
 import com.sparta.bluemoon.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
