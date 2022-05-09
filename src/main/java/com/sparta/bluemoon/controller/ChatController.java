@@ -2,9 +2,11 @@ package com.sparta.bluemoon.controller;
 
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatMessageDto;
+import com.sparta.bluemoon.dto.request.ChatMessageEnterDto;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.security.jwt.JwtDecoder;
+import com.sparta.bluemoon.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -18,23 +20,24 @@ import org.springframework.stereotype.Controller;
 public class ChatController {
     private final RedisTemplate redisTemplate;
     private final ChannelTopic channelTopic;
-    private final UserRepository userRepository;
+    private final ChatService chatService;
     private final JwtDecoder jwtDecoder;
+    private final UserRepository userRepository;
 
 //    /**
 //     * websocket "/pub/chat/enter"로 들어오는 메시징을 처리한다.
 //     */
-//    @MessageMapping("/chat/enter")
-//    public void enter(ChatMessageDto chatMessageDto, @Header("token") String token) {
-////
-////        Long userId = chatMessageDto.getUserId();
-////        User otherUser = userRepository.findById(userId).get();
-////        chatMessageDto.setUsername(otherUser.getUsername());
-//
-////        chatMessageDto.setMessage(String.format("%s님이 %s방에 입장하셨습니다.", username, roomname));
-//        String topic = channelTopic.getTopic();
-//        redisTemplate.convertAndSend(topic, chatMessageDto);
-//    }
+    @MessageMapping("/chat/enter")
+    public void enter(ChatMessageEnterDto chatMessageEnterDto, @Header("token") String token) {
+        String username = jwtDecoder.decodeUsername(token);
+        User user = userRepository.findByUsername(username).orElseThrow(
+            () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
+        );
+
+        chatService.enter(user.getId(), chatMessageEnterDto.getRoomId());
+        String topic = channelTopic.getTopic();
+        redisTemplate.convertAndSend(topic, chatMessageEnterDto);
+    }
 
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.

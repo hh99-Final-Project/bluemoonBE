@@ -29,28 +29,37 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         String jwtToken = "";
         if (StompCommand.CONNECT == accessor.getCommand()) {
-            // 사용자 확인
-            jwtToken = accessor.getFirstNativeHeader("token");
-            String username = jwtDecoder.decodeUsername(jwtToken);
-            User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
-            );
+            // toDo : 모든 화면에서 socket이 뚫려 있기 때문에 대화방에서 온 connect라는 것을 알 수 있는 것이 있어야 한다.
+            String type = accessor.getFirstNativeHeader("type");
+            if (type.equals("CHAT")) {
+                // 사용자 확인
+                jwtToken = accessor.getFirstNativeHeader("token");
+                String username = jwtDecoder.decodeUsername(jwtToken);
+                User user = userRepository.findByUsername(username).orElseThrow(
+                    () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+                );
 
-            Long userId = user.getId();
-            String sessionId = (String) message.getHeaders().get("simpSessionId");
-            redisRepository.saveMyInfo(sessionId, userId);
+                Long userId = user.getId();
+                String sessionId = (String) message.getHeaders().get("simpSessionId");
+                redisRepository.saveMyInfo(sessionId, userId);
+            }
 
         } else if (StompCommand.CONNECT == accessor.getCommand()) { // Websocket 연결 종료
 
             String sessionId = (String) message.getHeaders().get("simpSessionId");
-            Long userId = redisRepository.getMyInfo(sessionId);
 
-            // 채팅방 퇴장 정보 저장
-            if (redisRepository.existChatRoomUserInfo(userId)) {
-                redisRepository.exitUserEnterRoomId(userId);
+            // 채팅방에서 나가는 것이 맞는지 확인 작업
+            if (redisRepository.existMyInfo(sessionId)) {
+                Long userId = redisRepository.getMyInfo(sessionId);
+
+                // 채팅방 퇴장 정보 저장
+                if (redisRepository.existChatRoomUserInfo(userId)) {
+                    redisRepository.exitUserEnterRoomId(userId);
+                }
+
+                redisRepository.deleteMyInfo(sessionId);
             }
 
-            redisRepository.deleteMyInfo(sessionId);
         }
         return message;
     }
