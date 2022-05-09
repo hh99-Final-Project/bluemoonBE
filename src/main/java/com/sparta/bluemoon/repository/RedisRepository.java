@@ -63,7 +63,7 @@ public class RedisRepository {
     }
 
     //
-    public int getChatRoomMessageCount(String roomId, String userId) {
+    public int getChatRoomMessageCount(String roomId, Long userId) {
         return hashOpsChatRoomMessageInfo.get(roomId, userId);
     }
 

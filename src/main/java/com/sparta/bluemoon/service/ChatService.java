@@ -84,4 +84,23 @@ public class ChatService {
         sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
         return sdf.format(date);
     }
+
+    public void updateUnReadMessageCount(ChatMessageDto chatMessageDto) {
+        Long otherUserId = chatMessageDto.getOtherUserId();
+        String roomId = chatMessageDto.getRoomId();
+        // 상대방이 채팅방에 들어가 있지 않거나 들어가 있어도 나와 같은 대화방이 아닌 경우 안 읽은 메세지 처리를 할 것이다.
+        if (!redisRepository.existChatRoomUserInfo(otherUserId) || !redisRepository.getUserEnterRoomId(otherUserId).equals(roomId)) {
+
+            redisRepository.addChatRoomMessageCount(roomId, otherUserId);
+            int unReadMessageCount = redisRepository
+                .getChatRoomMessageCount(roomId, otherUserId);
+            String topic = channelTopic.getTopic();
+
+            User otherUser = userRepository.findById(otherUserId).get();
+            ChatMessageDto chatMessageDto1 = new ChatMessageDto(chatMessageDto,
+                String.format("안 읽은 메세지의 갯수는 %s개 입니다.", unReadMessageCount), otherUser.getUsername());
+
+            redisTemplate.convertAndSend(topic, chatMessageDto1);
+        }
+    }
 }
