@@ -34,7 +34,9 @@ public class ChatService {
    public void sendMessage(ChatMessageDto chatMessageDto) {
         User user = userRepository.findById(chatMessageDto.getUserId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
-        ChatRoom chatRoom = chatRoomRepository.findByChatRoomUuid(chatMessageDto.getRoomId());
+        ChatRoom chatRoom = chatRoomRepository.findByChatRoomUuid(chatMessageDto.getRoomId()).orElseThrow(
+                () -> new IllegalArgumentException("채팅방이 존재하지 않습니다.")
+        );
         ChatMessage chatMessage = new ChatMessage(user, chatMessageDto, chatRoom);
         chatMessageRepository.save(chatMessage);
 
