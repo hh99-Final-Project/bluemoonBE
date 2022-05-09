@@ -42,9 +42,7 @@ public class ChatService {
     }
 
     //채팅팅
-   public void sendMessage(ChatMessageDto chatMessageDto) {
-        User user = userRepository.findById(chatMessageDto.getUserId()).orElseThrow(
-                () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
+   public void sendMessage(ChatMessageDto chatMessageDto, User user) {
         ChatRoom chatRoom = chatRoomRepository.findByChatRoomUuid(chatMessageDto.getRoomId()).orElseThrow(
                 () -> new IllegalArgumentException("채팅방이 존재하지 않습니다.")
         );
@@ -59,9 +57,7 @@ public class ChatService {
         redisTemplate.convertAndSend(topic, chatMessageDto);
     }
     //알람
-    public void sendAlarm(ChatMessageDto chatMessageDto) {
-       User user = userRepository.findById(chatMessageDto.getUserId()).orElseThrow(
-               () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
+    public void sendAlarm(ChatMessageDto chatMessageDto, User user) {
         Alarm alarm = new Alarm(chatMessageDto, user);
         alarmRepository.save(alarm);
 

@@ -49,12 +49,17 @@ public class ChatController {
             () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
         );
 
-        chatService.sendMessage(chatMessageDto);
+        chatService.sendMessage(chatMessageDto, user);
         chatService.updateUnReadMessageCount(chatMessageDto);
     }
     //알람
     @MessageMapping("/chat/alarm")
-    public void alarm(ChatMessageDto chatMessageDto){
-        chatService.sendAlarm(chatMessageDto);
+    public void alarm(ChatMessageDto chatMessageDto, @Header("token") String token){
+        String username = jwtDecoder.decodeUsername(token);
+        User user = userRepository.findByUsername(username).orElseThrow(
+            () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
+        );
+
+        chatService.sendAlarm(chatMessageDto, user);
     }
 }
