@@ -134,7 +134,7 @@ public class ChatRoomService {
         String lastMessage;
         LocalDateTime lastTime;
         //마지막
-        List<ChatMessage> Messages = chatMessageRepository.findAllByChatRoomOrderByCreatedAt(chatRoomUser.getChatRoom());
+        List<ChatMessage> Messages = chatMessageRepository.findAllByChatRoomOrderByCreatedAtDesc(chatRoomUser.getChatRoom());
         //메시지 없을 때 디폴트
         if (Messages.isEmpty()) {
             lastMessage = "채팅방이 생성 되었습니다.";

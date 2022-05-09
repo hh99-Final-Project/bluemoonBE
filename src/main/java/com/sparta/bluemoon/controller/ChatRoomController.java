@@ -62,7 +62,7 @@ public class ChatRoomController {
         if(!chatroom.getChatRoomUsers().contains(userDetails.getUser())){
             throw new IllegalArgumentException("접근 불가능한 채팅방 입니다.");
         }
-        return chatMessageRepository.findAllByChatRoomOrderByCreatedAt(chatroom);
+        return chatMessageRepository.findAllByChatRoomOrderByCreatedAtAsc(chatroom);
     }
     
 
