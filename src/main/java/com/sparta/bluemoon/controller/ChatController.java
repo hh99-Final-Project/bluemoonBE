@@ -24,9 +24,10 @@ public class ChatController {
     private final JwtDecoder jwtDecoder;
     private final UserRepository userRepository;
 
-//    /**
-//     * websocket "/pub/chat/enter"로 들어오는 메시징을 처리한다.
-//     */
+    /**
+     * websocket "/pub/chat/enter"로 들어오는 메시징을 처리한다.
+     * 채팅방에 입장했을 경우
+     */
     @MessageMapping("/chat/enter")
     public void enter(ChatMessageEnterDto chatMessageEnterDto, @Header("token") String token) {
         String username = jwtDecoder.decodeUsername(token);
