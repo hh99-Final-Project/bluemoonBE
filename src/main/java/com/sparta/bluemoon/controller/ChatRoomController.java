@@ -51,6 +51,19 @@ public class ChatRoomController {
 
         chatRoomService.deleteChatRoom(chatroom, userDetails.getUser());
     }
+
+    //이전 채팅 메시지 불러오기
+    @GetMapping("api/rooms/{roomId}")
+    public List<ChatMessage> getPreviousChatMessage(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        ChatRoom chatroom = chatRoomRepository.findByChatRoomUuid(roomId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 채팅방입니다.")
+        );
+        //혹시 채팅방 이용자가 아닌데 들어온다면,
+        if(!chatroom.getChatRoomUsers().contains(userDetails.getUser())){
+            throw new IllegalArgumentException("접근 불가능한 채팅방 입니다.");
+        }
+        return chatMessageRepository.findAllByChatRoomOrderByCreatedAt(chatroom);
+    }
     
 
 }
