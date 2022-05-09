@@ -30,6 +30,6 @@ public class ChatRoom {
 
 
     public ChatRoom(int roomUsers) {
-        this.roomHashCode=roomUsers;
+        this.roomHashCode = roomUsers;
     }
 }
