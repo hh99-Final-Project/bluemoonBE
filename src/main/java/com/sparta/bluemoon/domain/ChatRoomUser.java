@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-public class ChatRoomUser {
+public class ChatRoomUser extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

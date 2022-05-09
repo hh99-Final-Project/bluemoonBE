@@ -16,12 +16,15 @@ public class ChatRoomResponseDto implements Comparable<ChatRoomResponseDto> {
     private String lastMessage;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createAt;
+    private String dayBefore;
 
-    public ChatRoomResponseDto(String roomName, String roomId, String lastMessage,LocalDateTime lastTime ) {
+    public ChatRoomResponseDto(String roomName, String roomId, String lastMessage,
+        LocalDateTime lastTime, String dayBefore) {
         this.roomName = roomName;
         this.chatRoomUuid=roomId;
         this.lastMessage=lastMessage;
         this.createAt=lastTime;
+        this.dayBefore = dayBefore;
     }
 
     @Override

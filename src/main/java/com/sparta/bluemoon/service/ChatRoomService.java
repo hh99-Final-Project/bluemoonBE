@@ -11,6 +11,8 @@ import com.sparta.bluemoon.repository.ChatRoomRepository;
 import com.sparta.bluemoon.repository.ChatRoomUserRepository;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
+import com.sparta.util.Calculator;
+import java.time.temporal.ChronoUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -114,7 +116,7 @@ public class ChatRoomService {
         //TODO:챗 유저로 받아야하나??chatRoomUsers.getContent();
 
         for (ChatRoomUser chatRoomUser : chatRoomUsers) {
-
+            ChatRoom chatRoom = chatRoomUser.getChatRoom();
             ChatRoomResponseDto responseDto = createChatRoomDto(chatRoomUser);
             responseDtos.add(responseDto);
 
@@ -141,7 +143,9 @@ public class ChatRoomService {
             lastMessage = Messages.get(0).getContent();
             lastTime = Messages.get(0).getCreatedAt();
         }
-        return new ChatRoomResponseDto(roomName, roomId, lastMessage, lastTime);
+        long dayBeforeTime = ChronoUnit.MINUTES.between(lastTime, LocalDateTime.now());
+        String dayBefore = Calculator.time(dayBeforeTime);
+        return new ChatRoomResponseDto(roomName, roomId, lastMessage, lastTime, dayBefore);
     }
 
 
