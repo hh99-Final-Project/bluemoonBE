@@ -1,6 +1,5 @@
 package com.sparta.bluemoon.controller;
 
-import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatMessageDto;
 import com.sparta.bluemoon.dto.request.ChatMessageEnterDto;
 import com.sparta.bluemoon.repository.UserRepository;
@@ -8,11 +7,7 @@ import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.security.jwt.JwtDecoder;
 import com.sparta.bluemoon.service.ChatService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 
 @RequiredArgsConstructor
@@ -45,9 +40,11 @@ public class ChatController {
      */
     @MessageMapping("/chat/message")
     public void message(ChatMessageDto chatMessageDto) {
-
-
-        String topic = channelTopic.getTopic();
-        redisTemplate.convertAndSend(topic, chatMessageDto);
+        chatService.sendMessage(chatMessageDto);
+    }
+    //알람
+    @MessageMapping("/chat/alarm")
+    public void alarm(ChatMessageDto chatMessageDto){
+        chatService.sendAlarm(chatMessageDto);
     }
 }

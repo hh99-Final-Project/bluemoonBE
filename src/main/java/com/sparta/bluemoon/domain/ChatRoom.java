@@ -20,16 +20,16 @@ public class ChatRoom {
     @Column
     private String chatRoomUuid = UUID.randomUUID().toString();
 
-    @OneToMany(mappedBy = "chatRoom")
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<ChatMessage> chatMessages = new ArrayList<>();
 
     private int roomHashCode;
 
-    @OneToMany(mappedBy = "chatRoom")
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<ChatRoomUser> chatRoomUsers = new ArrayList<>();
 
-
     public ChatRoom(int roomUsers) {
-        this.roomHashCode=roomUsers;
+        this.roomHashCode = roomUsers;
     }
+
 }

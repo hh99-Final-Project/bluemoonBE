@@ -35,7 +35,7 @@ public class ChatRoomService {
     private final ChatMessageRepository chatMessageRepository;
 
     //채팅방 생성
-    public void createChatRoom (
+    public String createChatRoom (
             ChatRoomUserRequestDto requestDto,
             UserDetailsImpl userDetails) {
 
@@ -55,6 +55,7 @@ public class ChatRoomService {
         ChatRoom room = new ChatRoom(roomHashCode);
         chatRoomRepository.save(room);
 
+
         //내 방
         ChatRoomUser chatRoomUser = new ChatRoomUser(userDetails.getUser(), anotherUser, room);
         //다른 사람 방
@@ -63,6 +64,8 @@ public class ChatRoomService {
         //저장
         chatRoomUserRepository.save(chatRoomUser);
         chatRoomUserRepository.save(chatRoomAnotherUser);
+
+        return room.getChatRoomUuid();
     }
 
     //for 둘 다 있는 방 판단
@@ -134,13 +137,13 @@ public class ChatRoomService {
         String lastMessage;
         LocalDateTime lastTime;
         //마지막
-        List<ChatMessage> Messages = chatMessageRepository.findAllByChatRoomOrderByCreatedAt(chatRoomUser.getChatRoom());
+        List<ChatMessage> Messages = chatMessageRepository.findAllByChatRoomOrderByCreatedAtDesc(chatRoomUser.getChatRoom());
         //메시지 없을 때 디폴트
         if (Messages.isEmpty()) {
             lastMessage = "채팅방이 생성 되었습니다.";
             lastTime = LocalDateTime.now();
         } else {
-            lastMessage = Messages.get(0).getContent();
+            lastMessage = Messages.get(0).getMessage();
             lastTime = Messages.get(0).getCreatedAt();
         }
         long dayBeforeTime = ChronoUnit.MINUTES.between(lastTime, LocalDateTime.now());
@@ -149,7 +152,15 @@ public class ChatRoomService {
     }
 
 
-
-
-
+    //채팅방 삭제
+    public void deleteChatRoom(ChatRoom chatroom, User user) {
+        if (chatroom.getChatRoomUsers().size()!=1) {
+            chatRoomUserRepository.deleteByChatRoomAndAndUser(chatroom, user);
+        } else if (chatroom.getChatRoomUsers().size()==1){
+            chatRoomRepository.delete(chatroom);
+        }
+//        else{
+//            throw new IllegalArgumentException("존재하지 않는 채팅방 입니다.");
+//        }
+    }
 }
