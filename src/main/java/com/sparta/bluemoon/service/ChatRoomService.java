@@ -145,7 +145,15 @@ public class ChatRoomService {
     }
 
 
-
-
-
+    //채팅방 삭제
+    public void deleteChatRoom(ChatRoom chatroom, User user) {
+        if (chatroom.getChatRoomUsers().size()!=1) {
+            chatRoomUserRepository.deleteByChatRoomAndAndUser(chatroom, user);
+        } else if (chatroom.getChatRoomUsers().size()==1){
+            chatRoomRepository.delete(chatroom);
+        }
+//        else{
+//            throw new IllegalArgumentException("존재하지 않는 채팅방 입니다.");
+//        }
+    }
 }
