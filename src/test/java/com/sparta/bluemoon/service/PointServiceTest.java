@@ -99,6 +99,4 @@ class PointServiceTest {
         assertThat(user.getPoint().getCommentCount()).isEqualTo(4);
         assertThat(user.getPoint().getLottoCount()).isEqualTo(1);
     }
-
-
 }

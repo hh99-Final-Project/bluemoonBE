@@ -140,7 +140,7 @@ public class ChatRoomService {
             lastMessage = "채팅방이 생성 되었습니다.";
             lastTime = LocalDateTime.now();
         } else {
-            lastMessage = Messages.get(0).getContent();
+            lastMessage = Messages.get(0).getMessage();
             lastTime = Messages.get(0).getCreatedAt();
         }
         long dayBeforeTime = ChronoUnit.MINUTES.between(lastTime, LocalDateTime.now());
