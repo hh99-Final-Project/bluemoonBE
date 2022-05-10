@@ -64,7 +64,7 @@ public class ChatRoomController {
     }
 
     //이전 채팅 메시지 불러오기
-    @GetMapping("api/rooms/{roomId}")
+    @GetMapping("api/roomsMessages/{roomId}")
     public List<ChatMessage> getPreviousChatMessage(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         ChatRoom chatroom = chatRoomRepository.findByChatRoomUuid(roomId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 채팅방입니다.")
