@@ -39,6 +39,7 @@ public class ChatRoomService {
             ChatRoomUserRequestDto requestDto,
             UserDetailsImpl userDetails) {
 
+        System.out.println("여기3");
         //상대방 방도 생성>상대방 찾기
 
         User anotherUser = userRepository.findById(requestDto.getUserId()).orElseThrow(
@@ -47,6 +48,7 @@ public class ChatRoomService {
 
         //roomHashCode 만들기
         int roomHashCode = createRoomHashCode(userDetails, anotherUser);
+        System.out.println(roomHashCode);
 
         //방 존재 확인 함수
         existRoom(roomHashCode, userDetails, anotherUser);
@@ -54,7 +56,8 @@ public class ChatRoomService {
         //방 먼저 생성
         ChatRoom room = new ChatRoom(roomHashCode);
         chatRoomRepository.save(room);
-
+        System.out.println("서비스"+room.getId());
+        System.out.println("서비스"+room);
 
         //내 방
         ChatRoomUser chatRoomUser = new ChatRoomUser(userDetails.getUser(), anotherUser, room);
@@ -155,7 +158,7 @@ public class ChatRoomService {
     //채팅방 삭제
     public void deleteChatRoom(ChatRoom chatroom, User user) {
         if (chatroom.getChatRoomUsers().size()!=1) {
-            chatRoomUserRepository.deleteByChatRoomAndAndUser(chatroom, user);
+            chatRoomUserRepository.deleteByChatRoomAndUser(chatroom, user);
         } else if (chatroom.getChatRoomUsers().size()==1){
             chatRoomRepository.delete(chatroom);
         }

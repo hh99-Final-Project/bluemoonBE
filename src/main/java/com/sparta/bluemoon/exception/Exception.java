@@ -1,5 +1,4 @@
 package com.sparta.bluemoon.exception;
-
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
@@ -12,3 +11,16 @@ public class Exception {
     private HttpStatus httpStatus;
     private boolean isAlreadyLogined;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

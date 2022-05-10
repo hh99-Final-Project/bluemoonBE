@@ -3,6 +3,7 @@ package com.sparta.bluemoon.controller;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatMessageDto;
 import com.sparta.bluemoon.dto.request.ChatMessageEnterDto;
+import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.security.jwt.JwtDecoder;
@@ -13,6 +14,9 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
+
+import static com.sparta.bluemoon.exception.ErrorCode.NOT_FOUND_USER;
+import static com.sparta.bluemoon.exception.ErrorCode.NOT_FOUND_USER_IN_CHAT;
 
 @RequiredArgsConstructor
 @Controller
@@ -31,7 +35,7 @@ public class ChatController {
     public void enter(ChatMessageEnterDto chatMessageEnterDto, @Header("token") String token) {
         String username = jwtDecoder.decodeUsername(token);
         User user = userRepository.findByUsername(username).orElseThrow(
-            () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
+                () -> new CustomException(NOT_FOUND_USER_IN_CHAT)
         );
 
         chatService.enter(user.getId(), chatMessageEnterDto.getRoomId());

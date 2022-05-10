@@ -10,6 +10,7 @@ import com.sparta.bluemoon.dto.response.MainPostForAnonymousResponseDto;
 import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
 import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
 import com.sparta.bluemoon.dto.response.PostResponseDto;
+import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.CommentQuerydslRepository;
 import com.sparta.bluemoon.dto.response.*;
 import com.sparta.bluemoon.repository.CommentRepository;
@@ -29,6 +30,9 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import static com.sparta.bluemoon.exception.ErrorCode.CANNOT_DELETE_NOT_EXSIST_POST;
+import static com.sparta.bluemoon.exception.ErrorCode.NOT_FOUND_USER;
 
 @Service
 @RequiredArgsConstructor
@@ -91,12 +95,14 @@ public class PostService {
     // 게시글(다이어리) 삭제
     public void delete(String postId, User user) {
         Post post = postRepository.findByPostUuid(postId).orElseThrow(
-            () -> new IllegalArgumentException("존재하지 않는 게시글입니다.")
+                () -> new CustomException(CANNOT_DELETE_NOT_EXSIST_POST)
         );
 
         if (!user.getId().equals(post.getUser().getId())) {
             throw new IllegalArgumentException("게시글 작성자 만이 게시글을 삭제할 수 있습니다.");
         }
+
+
 
         postRepository.delete(post);
     }

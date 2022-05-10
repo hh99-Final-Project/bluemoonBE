@@ -11,7 +11,6 @@ import lombok.Setter;
 
 public class ChatRoomUserRequestDto {
 
-    private String roomId;
     private Long userId;// 상대방
 
 

@@ -4,6 +4,7 @@ import com.sparta.bluemoon.domain.ChatMessage;
 import com.sparta.bluemoon.domain.ChatRoom;
 import com.sparta.bluemoon.dto.ChatRoomResponseDto;
 import com.sparta.bluemoon.dto.request.ChatRoomUserRequestDto;
+import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.RedisRepository;
 import com.sparta.bluemoon.repository.ChatMessageRepository;
 import com.sparta.bluemoon.repository.ChatRoomRepository;
@@ -15,6 +16,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.sparta.bluemoon.exception.ErrorCode.CANNOT_FOUND_CHATROOM;
+import static com.sparta.bluemoon.exception.ErrorCode.FORBIDDEN_CHATROOM;
 
 
 @RequiredArgsConstructor
@@ -31,16 +35,22 @@ public class ChatRoomController {
     public String createChatRoom(
             @RequestBody ChatRoomUserRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        chatRoomService.createChatRoom(requestDto, userDetails);
+
+        System.out.println("여기1");
+       // chatRoomService.createChatRoom(requestDto, userDetails);
+
+        String ChatRoomUuid = chatRoomService.createChatRoom(requestDto, userDetails);
+        System.out.println("여기2");
+        System.out.println("chatroom"+ ChatRoomUuid);
 
         Long chatPartnerUserId = requestDto.getUserId();
         Long myUserId = userDetails.getUser().getId();
-        String roomId = requestDto.getRoomId();
 
         // redis repository에 채팅방에 존재하는 사람 마다 안 읽은 메세지의 갯수 초기화
-        redisRepository.initChatRoomMessageInfo(roomId, myUserId);
-        redisRepository.initChatRoomMessageInfo(roomId, chatPartnerUserId);
-        return chatRoomService.createChatRoom(requestDto, userDetails);
+        redisRepository.initChatRoomMessageInfo(ChatRoomUuid, myUserId);
+        redisRepository.initChatRoomMessageInfo(ChatRoomUuid, chatPartnerUserId);
+
+       return ChatRoomUuid;
     }
 
     //내가 가진 채팅방 조회
@@ -57,7 +67,7 @@ public class ChatRoomController {
         //roonId=uuid
         //방번호랑 나간 사람
         ChatRoom chatroom = chatRoomRepository.findByChatRoomUuid(roomId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 채팅방입니다.")
+                () -> new CustomException(CANNOT_FOUND_CHATROOM)
         );
 
         chatRoomService.deleteChatRoom(chatroom, userDetails.getUser());
@@ -67,11 +77,11 @@ public class ChatRoomController {
     @GetMapping("api/rooms/{roomId}")
     public List<ChatMessage> getPreviousChatMessage(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         ChatRoom chatroom = chatRoomRepository.findByChatRoomUuid(roomId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 채팅방입니다.")
+                () -> new CustomException(CANNOT_FOUND_CHATROOM)
         );
         //혹시 채팅방 이용자가 아닌데 들어온다면,
         if(!chatroom.getChatRoomUsers().contains(userDetails.getUser())){
-            throw new IllegalArgumentException("접근 불가능한 채팅방 입니다.");
+            throw new CustomException(FORBIDDEN_CHATROOM);
         }
         return chatMessageRepository.findAllByChatRoomOrderByCreatedAtAsc(chatroom);
     }

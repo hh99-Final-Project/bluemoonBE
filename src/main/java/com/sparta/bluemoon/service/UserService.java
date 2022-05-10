@@ -4,12 +4,15 @@ import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.request.NicknameSignupRequestDto;
 import com.sparta.bluemoon.dto.response.UserInfoDto;
+import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.PointRepository;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.sparta.bluemoon.exception.ErrorCode.NOT_FOUND_USER;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +34,7 @@ public class UserService {
     @Transactional
     public void signupNickname(NicknameSignupRequestDto nicknameSignupRequestDto, UserDetailsImpl userDetails) {
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 유저가 존재하지 않습니다.")
+                () -> new CustomException(NOT_FOUND_USER)
         );
         user.changeNickname(nicknameSignupRequestDto.getNickname());
 
