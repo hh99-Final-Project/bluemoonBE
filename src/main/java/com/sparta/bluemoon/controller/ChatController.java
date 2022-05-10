@@ -4,7 +4,6 @@ import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatMessageDto;
 import com.sparta.bluemoon.dto.request.ChatMessageEnterDto;
 import com.sparta.bluemoon.repository.UserRepository;
-import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.security.jwt.JwtDecoder;
 import com.sparta.bluemoon.service.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class ChatController {
      */
     @MessageMapping("/chat/enter")
     public void enter(ChatMessageEnterDto chatMessageEnterDto, @Header("token") String token) {
-        String username = jwtDecoder.decodeUsername(token);
+        String username = jwtDecoder.decodeUsername(token.substring(7));
         User user = userRepository.findByUsername(username).orElseThrow(
             () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
         );
@@ -44,7 +43,7 @@ public class ChatController {
      */
     @MessageMapping("/chat/message")
     public void message(ChatMessageDto chatMessageDto, @Header("token") String token) {
-        String username = jwtDecoder.decodeUsername(token);
+        String username = jwtDecoder.decodeUsername(token.substring(7));
         User user = userRepository.findByUsername(username).orElseThrow(
             () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
         );
@@ -55,7 +54,7 @@ public class ChatController {
     //알람
     @MessageMapping("/chat/alarm")
     public void alarm(ChatMessageDto chatMessageDto, @Header("token") String token){
-        String username = jwtDecoder.decodeUsername(token);
+        String username = jwtDecoder.decodeUsername(token.substring(7));
         User user = userRepository.findByUsername(username).orElseThrow(
             () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
         );
