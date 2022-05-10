@@ -162,6 +162,7 @@ public class ChatRoomService {
 
 
     //채팅방 삭제
+    @Transactional
     public void deleteChatRoom(ChatRoom chatroom, User user) {
         if (chatroom.getChatRoomUsers().size()!=1) {
             chatRoomUserRepository.deleteByChatRoomAndUser(chatroom, user);
