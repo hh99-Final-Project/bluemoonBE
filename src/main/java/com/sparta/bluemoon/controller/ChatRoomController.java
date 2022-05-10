@@ -33,14 +33,13 @@ public class ChatRoomController {
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         System.out.println("HIHIHI");
         String chatRoomUuid = chatRoomService.createChatRoom(requestDto, userDetails);
-
-        Long chatPartnerUserId = requestDto.getUserId();
-        Long myUserId = userDetails.getUser().getId();
-
-
-        // redis repository에 채팅방에 존재하는 사람 마다 안 읽은 메세지의 갯수 초기화
-        redisRepository.initChatRoomMessageInfo(chatRoomUuid, myUserId);
-        redisRepository.initChatRoomMessageInfo(chatRoomUuid, chatPartnerUserId);
+//        Long chatPartnerUserId = requestDto.getUserId();
+//        Long myUserId = userDetails.getUser().getId();
+//
+//
+//        // redis repository에 채팅방에 존재하는 사람 마다 안 읽은 메세지의 갯수 초기화
+//        redisRepository.initChatRoomMessageInfo(chatRoomUuid, myUserId);
+//        redisRepository.initChatRoomMessageInfo(chatRoomUuid, chatPartnerUserId);
         return chatRoomUuid;
     }
 
