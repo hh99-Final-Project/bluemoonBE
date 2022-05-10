@@ -155,7 +155,7 @@ public class ChatRoomService {
     //채팅방 삭제
     public void deleteChatRoom(ChatRoom chatroom, User user) {
         if (chatroom.getChatRoomUsers().size()!=1) {
-            chatRoomUserRepository.deleteByChatRoomAndAndUser(chatroom, user);
+            chatRoomUserRepository.deleteByChatRoomAndUser(chatroom, user);
         } else if (chatroom.getChatRoomUsers().size()==1){
             chatRoomRepository.delete(chatroom);
         }

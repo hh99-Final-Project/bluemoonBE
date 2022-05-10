@@ -1,17 +1,11 @@
 package com.sparta.bluemoon.service;
 
-import com.sparta.bluemoon.repository.RedisRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import com.sparta.bluemoon.domain.Alarm;
 import com.sparta.bluemoon.domain.ChatMessage;
 import com.sparta.bluemoon.domain.ChatRoom;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatMessageDto;
-import com.sparta.bluemoon.repository.AlarmRepository;
-import com.sparta.bluemoon.repository.ChatMessageRepository;
-import com.sparta.bluemoon.repository.ChatRoomRepository;
-import com.sparta.bluemoon.repository.UserRepository;
+import com.sparta.bluemoon.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -30,7 +24,6 @@ public class ChatService {
     private final RedisTemplate redisTemplate;
     private final ChannelTopic channelTopic;
     private final ChatMessageRepository chatMessageRepository;
-    private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final AlarmRepository alarmRepository;
 
@@ -41,7 +34,7 @@ public class ChatService {
         redisRepository.initChatRoomMessageInfo(roomId, userId);
     }
 
-    //채팅팅
+    //채팅
    public void sendMessage(ChatMessageDto chatMessageDto, User user) {
         ChatRoom chatRoom = chatRoomRepository.findByChatRoomUuid(chatMessageDto.getRoomId()).orElseThrow(
                 () -> new IllegalArgumentException("채팅방이 존재하지 않습니다.")
@@ -64,7 +57,7 @@ public class ChatService {
         Long id = alarm.getId();
         String topic = channelTopic.getTopic();
         String createdAt = getCurrentTime();
-        chatMessageDto.setId(id);
+        chatMessageDto.setMessageId(id);
         chatMessageDto.setCreatedAt(createdAt);
         chatMessageDto.setType(ChatMessageDto.MessageType.ENTER);
 
@@ -92,9 +85,8 @@ public class ChatService {
                 .getChatRoomMessageCount(roomId, otherUserId);
             String topic = channelTopic.getTopic();
 
-            User otherUser = userRepository.findById(otherUserId).get();
             ChatMessageDto chatMessageDto1 = new ChatMessageDto(chatMessageDto,
-                String.format("안 읽은 메세지의 갯수는 %s개 입니다.", unReadMessageCount), otherUser.getUsername());
+                String.format("안 읽은 메세지의 갯수는 %s개 입니다.", unReadMessageCount));
 
             redisTemplate.convertAndSend(topic, chatMessageDto1);
         }
