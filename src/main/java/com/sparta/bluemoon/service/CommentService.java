@@ -37,7 +37,7 @@ public class CommentService {
     @Transactional
     public CommentResponseDto saveComment(CommentRequestDto requestDto, User user, String voiceUrl) {
         Post post= postRepository.findByPostUuid(requestDto.getPostUuid()).orElseThrow(
-                () -> new CustomException(DOESNT_EXSIST_POST_FOR_WRITE)
+                () -> new CustomException(DOESNT_EXIST_POST_FOR_WRITE)
         );
 
         // 상위 댓글 정보 추출
@@ -71,7 +71,7 @@ public class CommentService {
     @Transactional
     public void deleteComment(String commentUuid, UserDetailsImpl userDetails) {
         Comment comment = commentRepository.findByCommentUuid(commentUuid).orElseThrow(
-            () -> new CustomException(DOESNT_EXSIST_POST_FOR_DELETE)
+            () -> new CustomException(DOESNT_EXIST_POST_FOR_DELETE)
         );
 
         if (!comment.getUser().getId().equals(userDetails.getUser().getId())){

@@ -55,7 +55,7 @@ public class PostService {
     //게시글 1개 상세 조회
     public PostResponseDto getOnePost(String postId, UserDetailsImpl userDetails) {
         Post post = postRepository.findByPostUuid(postId).orElseThrow(
-            () -> new CustomException(CANNOT_FIND_POST_NOT_EXSIST)
+            () -> new CustomException(CANNOT_FIND_POST_NOT_EXIST)
         );
         // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
         List<CommentDto> newCommentList = getCommentDtos(userDetails, post);
@@ -88,7 +88,7 @@ public class PostService {
     // 게시글(다이어리) 삭제
     public void delete(String postId, User user) {
         Post post = postRepository.findByPostUuid(postId).orElseThrow(
-                () -> new CustomException(CANNOT_DELETE_NOT_EXSIST_POST)
+                () -> new CustomException(CANNOT_DELETE_NOT_EXIST_POST)
         );
 
         if (!user.getId().equals(post.getUser().getId())) {
@@ -192,7 +192,7 @@ public class PostService {
     // 비 로그인한 유저를 위해 main post를 보여주기
     public MainPostForAnonymousResponseDto getMainPost() {
         Post post = postRepository.findById(MAIN_POST_INDEX_FOR_ANONYMOUS).orElseThrow(
-            () -> new CustomException(DOESNT_EXSIST_MAIN_POST_FOR_ANONYMOUS)
+            () -> new CustomException(DOESNT_EXIST_MAIN_POST_FOR_ANONYMOUS)
         );
 
         return new MainPostForAnonymousResponseDto(post);
@@ -201,7 +201,7 @@ public class PostService {
     // 비 로그인한 유저를 위해 detail main post를 보여주기
     public PostResponseDto getMainDetailPost() {
         Post post = postRepository.findById(MAIN_POST_INDEX_FOR_ANONYMOUS).orElseThrow(
-            () -> new CustomException(DOESNT_EXSIST_POST_FOR_ANONYMOUS)
+            () -> new CustomException(DOESNT_EXIST_POST_FOR_ANONYMOUS)
         );
 
         // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환

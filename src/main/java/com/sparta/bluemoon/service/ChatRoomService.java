@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.sparta.bluemoon.exception.ErrorCode.NOT_FOUND_ANOTHER_USER;
-import static com.sparta.bluemoon.exception.ErrorCode.ROOM_ALREADY_EXSIST;
+import static com.sparta.bluemoon.exception.ErrorCode.ROOM_ALREADY_EXIST;
 
 @RequiredArgsConstructor
 @Service
@@ -96,7 +96,7 @@ public class ChatRoomService {
         if (chatRoom != null) {
             List<ChatRoomUser> chatRoomUser = chatRoom.getChatRoomUsers();
             if (chatRoomUser.size() == 2) {
-                throw new CustomException(ROOM_ALREADY_EXSIST);
+                throw new CustomException(ROOM_ALREADY_EXIST);
             } else if (chatRoomUser.size() == 1) {
                 //나만 있을 때
                 if (chatRoomUser.get(0).getUser().equals(userDetails.getUser())) {
