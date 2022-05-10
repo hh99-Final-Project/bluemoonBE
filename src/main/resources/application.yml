@@ -2,7 +2,5 @@ spring:
   profiles:
     active: local
 
-jasypt:
-  encryptor:
-    bean: jasyptStringEncryptor
+
 
