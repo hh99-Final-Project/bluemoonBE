@@ -37,8 +37,3 @@ out/
 .vscode/
 
 #custom
-application.properties
-application.yml
-application-alpha.yml
-application-local.yml
-aws.yml
