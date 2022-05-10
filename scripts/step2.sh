@@ -19,8 +19,8 @@ sudo docker pull lion8548/spring-cicd
 # 도커 run
 echo 'run docker!!!!!!!!!!!!!!!!!'
 sudo docker run -it --name ${TARGET_PORT} -d -p ${TARGET_PORT}:8080 -e active=${TARGET_PORT} lion8548/spring-cicd:latest
+echo "sudo docker run -it --name ${TARGET_PORT} -d -p ${TARGET_PORT}:8080 -e active=${TARGET_PORT} lion8548/spring-cicd:latest"
 echo 'good!!!!!!!!!!!!!!!!!'
-
 
 echo "> Start health check of WAS at 'http://127.0.0.1:${TARGET_PORT}' ..."
 
@@ -28,7 +28,7 @@ for RETRY_COUNT in 1 2 3 4 5 6 7 8 9 10
 
 do
   echo "> #${RETRY_COUNT} trying..."
-  RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:${TARGET_PORT}/)
+  RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:${TARGET_PORT}/api/health)
 
   if [ ${RESPONSE_CODE} -eq 200 ]; then
     echo "> New WAS successfully running"
