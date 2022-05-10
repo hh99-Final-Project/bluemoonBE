@@ -21,7 +21,6 @@ echo 'run docker!!!!!!!!!!!!!!!!!'
 sudo docker run -it --name ${TARGET_PORT} -d -p ${TARGET_PORT}:8080 -e active=${TARGET_PORT} lion8548/spring-cicd:latest
 echo 'good!!!!!!!!!!!!!!!!!'
 
-
 echo "> Start health check of WAS at 'http://127.0.0.1:${TARGET_PORT}' ..."
 
 for RETRY_COUNT in 1 2 3 4 5 6 7 8 9 10
