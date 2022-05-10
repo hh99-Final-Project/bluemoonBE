@@ -4,6 +4,7 @@ import com.sparta.bluemoon.domain.ChatMessage;
 import com.sparta.bluemoon.domain.ChatRoom;
 import com.sparta.bluemoon.dto.ChatRoomResponseDto;
 import com.sparta.bluemoon.dto.request.ChatRoomUserRequestDto;
+import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.RedisRepository;
 import com.sparta.bluemoon.repository.ChatMessageRepository;
 import com.sparta.bluemoon.repository.ChatRoomRepository;
@@ -15,6 +16,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.sparta.bluemoon.exception.ErrorCode.CANNOT_FOUND_CHATROOM;
+import static com.sparta.bluemoon.exception.ErrorCode.FORBIDDEN_CHATROOM;
 
 
 @RequiredArgsConstructor
@@ -41,6 +45,7 @@ public class ChatRoomController {
 //        redisRepository.initChatRoomMessageInfo(chatRoomUuid, myUserId);
 //        redisRepository.initChatRoomMessageInfo(chatRoomUuid, chatPartnerUserId);
         return chatRoomUuid;
+
     }
 
     //내가 가진 채팅방 조회
@@ -57,21 +62,23 @@ public class ChatRoomController {
         //roonId=uuid
         //방번호랑 나간 사람
         ChatRoom chatroom = chatRoomRepository.findByChatRoomUuid(roomId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 채팅방입니다.")
+                () -> new CustomException(CANNOT_FOUND_CHATROOM)
         );
 
         chatRoomService.deleteChatRoom(chatroom, userDetails.getUser());
     }
 
     //이전 채팅 메시지 불러오기
-    @GetMapping("api/roomsMessages/{roomId}")
+
+    @GetMapping("api/rooms/{roomId}/messages")
+
     public List<ChatMessage> getPreviousChatMessage(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         ChatRoom chatroom = chatRoomRepository.findByChatRoomUuid(roomId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 채팅방입니다.")
+                () -> new CustomException(CANNOT_FOUND_CHATROOM)
         );
         //혹시 채팅방 이용자가 아닌데 들어온다면,
         if(!chatroom.getChatRoomUsers().contains(userDetails.getUser())){
-            throw new IllegalArgumentException("접근 불가능한 채팅방 입니다.");
+            throw new CustomException(FORBIDDEN_CHATROOM);
         }
         return chatMessageRepository.findAllByChatRoomOrderByCreatedAtAsc(chatroom);
     }

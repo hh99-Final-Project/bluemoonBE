@@ -10,6 +10,7 @@ import com.sparta.bluemoon.dto.response.MainPostForAnonymousResponseDto;
 import com.sparta.bluemoon.dto.response.PostMyPageResponseDto;
 import com.sparta.bluemoon.dto.response.PostOtherOnePostResponseDto;
 import com.sparta.bluemoon.dto.response.PostResponseDto;
+import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.CommentQuerydslRepository;
 import com.sparta.bluemoon.dto.response.*;
 import com.sparta.bluemoon.repository.CommentRepository;
@@ -29,6 +30,8 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+
+import static com.sparta.bluemoon.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +55,7 @@ public class PostService {
     //게시글 1개 상세 조회
     public PostResponseDto getOnePost(String postId, UserDetailsImpl userDetails) {
         Post post = postRepository.findByPostUuid(postId).orElseThrow(
-            () -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다.")
+            () -> new CustomException(CANNOT_FIND_POST_NOT_EXSIST)
         );
         // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
         List<CommentDto> newCommentList = getCommentDtos(userDetails, post);
@@ -85,12 +88,14 @@ public class PostService {
     // 게시글(다이어리) 삭제
     public void delete(String postId, User user) {
         Post post = postRepository.findByPostUuid(postId).orElseThrow(
-            () -> new IllegalArgumentException("존재하지 않는 게시글입니다.")
+                () -> new CustomException(CANNOT_DELETE_NOT_EXSIST_POST)
         );
 
         if (!user.getId().equals(post.getUser().getId())) {
-            throw new IllegalArgumentException("게시글 작성자 만이 게시글을 삭제할 수 있습니다.");
+            throw new CustomException(ONLY_CAN_DELETE_POST_WRITER);
         }
+
+
 
         postRepository.delete(post);
     }
@@ -187,7 +192,7 @@ public class PostService {
     // 비 로그인한 유저를 위해 main post를 보여주기
     public MainPostForAnonymousResponseDto getMainPost() {
         Post post = postRepository.findById(MAIN_POST_INDEX_FOR_ANONYMOUS).orElseThrow(
-            () -> new IllegalArgumentException("main 게시글이 존재하지 않습니다.")
+            () -> new CustomException(DOESNT_EXSIST_MAIN_POST_FOR_ANONYMOUS)
         );
 
         return new MainPostForAnonymousResponseDto(post);
@@ -196,7 +201,7 @@ public class PostService {
     // 비 로그인한 유저를 위해 detail main post를 보여주기
     public PostResponseDto getMainDetailPost() {
         Post post = postRepository.findById(MAIN_POST_INDEX_FOR_ANONYMOUS).orElseThrow(
-            () -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다.")
+            () -> new CustomException(DOESNT_EXSIST_POST_FOR_ANONYMOUS)
         );
 
         // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환

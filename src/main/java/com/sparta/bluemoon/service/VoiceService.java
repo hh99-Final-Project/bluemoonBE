@@ -3,6 +3,7 @@ package com.sparta.bluemoon.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.sparta.bluemoon.exception.ErrorCode.VOICE_FILE_INVALID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,7 +34,7 @@ public class VoiceService {
     public String upload(MultipartFile file, String dirName) throws IOException {
 
         File uploadFile = convert(file)  // 파일 변환할 수 없으면 에러
-                .orElseThrow(() -> new IllegalArgumentException("잘못된 파일 형식입니다."));
+                .orElseThrow(() -> new CustomException(VOICE_FILE_INVALID));
 
         return upload(uploadFile, dirName);
 

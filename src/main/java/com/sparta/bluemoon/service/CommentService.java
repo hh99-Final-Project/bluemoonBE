@@ -7,6 +7,7 @@ import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.request.CommentRequestDto;
 import com.sparta.bluemoon.dto.response.CommentResponseDto;
+import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.CommentRepository;
 import com.sparta.bluemoon.repository.PointRepository;
 import com.sparta.bluemoon.repository.PostRepository;
@@ -21,6 +22,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import static com.sparta.bluemoon.exception.ErrorCode.*;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -33,9 +36,8 @@ public class CommentService {
     //댓글 저장
     @Transactional
     public CommentResponseDto saveComment(CommentRequestDto requestDto, User user, String voiceUrl) {
-        System.out.println("NNNNDFJKSLDFSDF");
         Post post= postRepository.findByPostUuid(requestDto.getPostUuid()).orElseThrow(
-                () -> new IllegalArgumentException("해당하는 게시글이 존재하지 않습니다.")
+                () -> new CustomException(DOESNT_EXSIST_POST_FOR_WRITE)
         );
 
         // 상위 댓글 정보 추출
@@ -69,11 +71,11 @@ public class CommentService {
     @Transactional
     public void deleteComment(String commentUuid, UserDetailsImpl userDetails) {
         Comment comment = commentRepository.findByCommentUuid(commentUuid).orElseThrow(
-            () -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다.")
+            () -> new CustomException(DOESNT_EXSIST_POST_FOR_DELETE)
         );
 
         if (!comment.getUser().getId().equals(userDetails.getUser().getId())){
-            throw new IllegalArgumentException("글을 작성한 유저만 삭제할 수 있습니다.");
+            throw new CustomException(ONLY_CAN_DELETE_COMMENT_WRITER);
         }
         System.out.println(comment.getCommentUuid());
         System.out.println(comment.getChildren().size());

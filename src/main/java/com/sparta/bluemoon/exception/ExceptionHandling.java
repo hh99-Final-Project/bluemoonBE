@@ -4,18 +4,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public class ExceptionHandling {
+public class ExceptionHandling{
 
-    @ExceptionHandler(value = {IllegalArgumentException.class})
-    public ResponseEntity<Object> IllegalArgumentExceptionHandle(IllegalArgumentException except) {
-
-        Exception exception = new Exception();
-        exception.setErrorMessage(except.getMessage());
-        exception.setHttpStatus(HttpStatus.BAD_REQUEST);
-
-        return new ResponseEntity(exception, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(value = { CustomException.class })
+    protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
+        return ErrorResponse.toResponseEntity(e.getErrorCode());
     }
 
 }
