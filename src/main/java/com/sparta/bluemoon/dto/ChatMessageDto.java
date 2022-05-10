@@ -13,17 +13,23 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ChatMessageDto implements Serializable {
 
-//    // 메시지 타입 : 입장, 채팅
+    // 메시지 타입 : 입장, 채팅
     public enum MessageType {
         ENTER, TALK
     }
-    private Long id;
+    private Long messageId;
     private MessageType type; // 메시지 타입
     private String roomId; // 공통으로 만들어진 방 번호
-    private Long userId; // type = talk 면 발신인 id, enter면 수신인 id
+    private Long otherUserId; // 상대방
     private String title;
     private String postUuid;
     private String message; // 메시지
     private String createdAt;
 
+    public ChatMessageDto(ChatMessageDto chatMessageDto, String message) {
+        this.type = MessageType.ENTER; // 메시지 타입
+        this.roomId = chatMessageDto.roomId; // 방 이름
+        this.otherUserId = chatMessageDto.otherUserId; // 상대방 prvateKey
+        this.message = message; // 메시지
+    }
 }

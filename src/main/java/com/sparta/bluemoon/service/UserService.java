@@ -1,11 +1,9 @@
 package com.sparta.bluemoon.service;
 
-import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.request.NicknameSignupRequestDto;
 import com.sparta.bluemoon.dto.response.UserInfoDto;
 import com.sparta.bluemoon.exception.CustomException;
-import com.sparta.bluemoon.repository.PointRepository;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +17,6 @@ import static com.sparta.bluemoon.exception.ErrorCode.NOT_FOUND_USER;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PointRepository pointRepository;
 
     public boolean isDuplicated(String nickname) {
         return !userRepository.existsByNickname(nickname);

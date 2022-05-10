@@ -1,17 +1,11 @@
 package com.sparta.bluemoon.service;
 
-import com.sparta.bluemoon.repository.RedisRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import com.sparta.bluemoon.domain.Alarm;
 import com.sparta.bluemoon.domain.ChatMessage;
 import com.sparta.bluemoon.domain.ChatRoom;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatMessageDto;
-import com.sparta.bluemoon.repository.AlarmRepository;
-import com.sparta.bluemoon.repository.ChatMessageRepository;
-import com.sparta.bluemoon.repository.ChatRoomRepository;
-import com.sparta.bluemoon.repository.UserRepository;
+import com.sparta.bluemoon.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -30,7 +24,6 @@ public class ChatService {
     private final RedisTemplate redisTemplate;
     private final ChannelTopic channelTopic;
     private final ChatMessageRepository chatMessageRepository;
-    private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final AlarmRepository alarmRepository;
 
@@ -41,10 +34,8 @@ public class ChatService {
         redisRepository.initChatRoomMessageInfo(roomId, userId);
     }
 
-    //채팅팅
-   public void sendMessage(ChatMessageDto chatMessageDto) {
-        User user = userRepository.findById(chatMessageDto.getUserId()).orElseThrow(
-                () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
+    //채팅
+   public void sendMessage(ChatMessageDto chatMessageDto, User user) {
         ChatRoom chatRoom = chatRoomRepository.findByChatRoomUuid(chatMessageDto.getRoomId()).orElseThrow(
                 () -> new IllegalArgumentException("채팅방이 존재하지 않습니다.")
         );
@@ -59,16 +50,14 @@ public class ChatService {
         redisTemplate.convertAndSend(topic, chatMessageDto);
     }
     //알람
-    public void sendAlarm(ChatMessageDto chatMessageDto) {
-       User user = userRepository.findById(chatMessageDto.getUserId()).orElseThrow(
-               () -> new IllegalArgumentException("해당 유저는 존재하지 않습니다."));
+    public void sendAlarm(ChatMessageDto chatMessageDto, User user) {
         Alarm alarm = new Alarm(chatMessageDto, user);
         alarmRepository.save(alarm);
 
         Long id = alarm.getId();
         String topic = channelTopic.getTopic();
         String createdAt = getCurrentTime();
-        chatMessageDto.setId(id);
+        chatMessageDto.setMessageId(id);
         chatMessageDto.setCreatedAt(createdAt);
         chatMessageDto.setType(ChatMessageDto.MessageType.ENTER);
 
@@ -83,5 +72,23 @@ public class ChatService {
         Date date = cal.getTime();
         sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
         return sdf.format(date);
+    }
+
+    public void updateUnReadMessageCount(ChatMessageDto chatMessageDto) {
+        Long otherUserId = chatMessageDto.getOtherUserId();
+        String roomId = chatMessageDto.getRoomId();
+        // 상대방이 채팅방에 들어가 있지 않거나 들어가 있어도 나와 같은 대화방이 아닌 경우 안 읽은 메세지 처리를 할 것이다.
+        if (!redisRepository.existChatRoomUserInfo(otherUserId) || !redisRepository.getUserEnterRoomId(otherUserId).equals(roomId)) {
+
+            redisRepository.addChatRoomMessageCount(roomId, otherUserId);
+            int unReadMessageCount = redisRepository
+                .getChatRoomMessageCount(roomId, otherUserId);
+            String topic = channelTopic.getTopic();
+
+            ChatMessageDto chatMessageDto1 = new ChatMessageDto(chatMessageDto,
+                String.format("안 읽은 메세지의 갯수는 %s개 입니다.", unReadMessageCount));
+
+            redisTemplate.convertAndSend(topic, chatMessageDto1);
+        }
     }
 }

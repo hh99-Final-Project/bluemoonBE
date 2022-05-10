@@ -5,13 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-@AllArgsConstructor
+
 @Getter
 @Setter
 
 public class ChatRoomUserRequestDto {
 
     private Long userId;// 상대방
-
-
 }

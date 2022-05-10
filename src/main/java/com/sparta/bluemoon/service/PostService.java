@@ -71,21 +71,15 @@ public class PostService {
         Post post = new Post(postCreateRequestDto, voiceUrl, user);
         postRepository.save(post);
 
-        try {
-            int userPoint = user.getPoint().getMyPoint();
-            Point point = pointRepository.findByUser(user);
-            if(point.getPostCount()!=0) {
-                userPoint = pointService.pointChange(point, "POST_POINT");
-            }
-            //TODO: 임의로 음성녹음 파일 추가
-            return new PostCreateResponseDto(voiceUrl, userPoint);
-        }catch(Exception e){
-            throw new IllegalArgumentException("에러발생");
+        int userPoint = user.getPoint().getMyPoint();
+        Point point = pointRepository.findByUser(user);
+        if (point.getPostCount() != 0) {
+            userPoint = pointService.pointChange(point, "POST_POINT");
         }
+        //TODO: 임의로 음성녹음 파일 추가
+        return new PostCreateResponseDto(voiceUrl, userPoint);
+
     }
-
-
-
 
     public void createWithoutVoice(PostCreateRequestDto postCreateRequestDto, User user) {
         Post post = new Post(postCreateRequestDto, user);
