@@ -29,18 +29,19 @@ public class ChatRoomController {
     //방생성
     @PostMapping ("/api/rooms")
     public String createChatRoom(
-            @RequestBody ChatRoomUserRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        chatRoomService.createChatRoom(requestDto, userDetails);
-
-        Long chatPartnerUserId = requestDto.getUserId();
-        Long myUserId = userDetails.getUser().getId();
-        String roomId = requestDto.getRoomId();
-
-        // redis repository에 채팅방에 존재하는 사람 마다 안 읽은 메세지의 갯수 초기화
-        redisRepository.initChatRoomMessageInfo(roomId, myUserId);
-        redisRepository.initChatRoomMessageInfo(roomId, chatPartnerUserId);
-        return chatRoomService.createChatRoom(requestDto, userDetails);
+        @RequestBody ChatRoomUserRequestDto requestDto,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        System.out.println("HIHIHI");
+        String chatRoomUuid = chatRoomService.createChatRoom(requestDto, userDetails);
+//
+//        Long chatPartnerUserId = requestDto.getUserId();
+//        Long myUserId = userDetails.getUser().getId();
+//        String roomId = requestDto.getRoomId();
+//
+//        // redis repository에 채팅방에 존재하는 사람 마다 안 읽은 메세지의 갯수 초기화
+//        redisRepository.initChatRoomMessageInfo(roomId, myUserId);
+//        redisRepository.initChatRoomMessageInfo(roomId, chatPartnerUserId);
+        return chatRoomUuid;
     }
 
     //내가 가진 채팅방 조회
