@@ -19,6 +19,7 @@ sudo docker pull lion8548/spring-cicd
 # 도커 run
 echo 'run docker!!!!!!!!!!!!!!!!!'
 sudo docker run -it --name ${TARGET_PORT} -d -p ${TARGET_PORT}:8080 -e active=${TARGET_PORT} lion8548/spring-cicd:latest
+echo "sudo docker run -it --name ${TARGET_PORT} -d -p ${TARGET_PORT}:8080 -e active=${TARGET_PORT} lion8548/spring-cicd:latest"
 echo 'good!!!!!!!!!!!!!!!!!'
 
 echo "> Start health check of WAS at 'http://127.0.0.1:${TARGET_PORT}' ..."
