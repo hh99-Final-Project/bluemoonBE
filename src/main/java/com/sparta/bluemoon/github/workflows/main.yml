@@ -1,0 +1,63 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+# Repo Action 페이지에 나타날 이름
+name: Spring Boot & Gradle CI/CD
+
+# Event Trigger
+# master branch에 push 또는 pull request가 발생할 경우 동작
+# branch 단위 외에도, tag나 cron 식 등을 사용할 수 있음
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    # 실행 환경 지정
+    runs-on: ubuntu-latest
+
+    # Task의 sequence를 명시한다.
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Build
+      - name: Build with Gradle
+        run: ./gradlew clean build
+
+      - name: Make zip file
+        run: zip -r ./$GITHUB_SHA.zip .
+        shell: bash
+
+      # 도커 파일 생성
+      - name: Docker build
+        run: |
+          docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
+          docker build -t spring-cicd .
+          docker tag spring-cicd ${{ secrets.USERNAME }}/spring-cicd:latest
+          docker push ${{ secrets.USERNAME }}/spring-cicd:latest
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # upload
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://hanghae99mini/spring-cicd/$GITHUB_SHA.zip
+
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name spring-cicd --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=hanghae99mini,bundleType=zip,key=spring-cicd/$GITHUB_SHA.zip
+
+
