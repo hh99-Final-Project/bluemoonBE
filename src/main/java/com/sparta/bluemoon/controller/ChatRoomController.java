@@ -69,7 +69,7 @@ public class ChatRoomController {
     }
 
     //이전 채팅 메시지 불러오기
-    @GetMapping("api/rooms/{roomId}")
+    @GetMapping("api/rooms/{roomId}/messages")
     public List<ChatMessage> getPreviousChatMessage(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         ChatRoom chatroom = chatRoomRepository.findByChatRoomUuid(roomId).orElseThrow(
                 () -> new CustomException(CANNOT_FOUND_CHATROOM)

@@ -6,6 +6,7 @@ import com.sparta.bluemoon.domain.ChatRoomUser;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatRoomResponseDto;
 import com.sparta.bluemoon.dto.request.ChatRoomUserRequestDto;
+import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.ChatMessageRepository;
 import com.sparta.bluemoon.repository.ChatRoomRepository;
 import com.sparta.bluemoon.repository.ChatRoomUserRepository;
@@ -23,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+
+import static com.sparta.bluemoon.exception.ErrorCode.NOT_FOUND_ANOTHER_USER;
+import static com.sparta.bluemoon.exception.ErrorCode.ROOM_ALREADY_EXSIST;
 
 @RequiredArgsConstructor
 @Service
@@ -43,7 +47,7 @@ public class ChatRoomService {
         //상대방 방도 생성>상대방 찾기
 
         User anotherUser = userRepository.findById(requestDto.getUserId()).orElseThrow(
-                () -> new IllegalArgumentException("상대방이 존재하지 않습니다.")
+                () -> new CustomException(NOT_FOUND_ANOTHER_USER)
         );
 
         //roomHashCode 만들기
@@ -92,7 +96,7 @@ public class ChatRoomService {
         if (chatRoom != null) {
             List<ChatRoomUser> chatRoomUser = chatRoom.getChatRoomUsers();
             if (chatRoomUser.size() == 2) {
-                throw new IllegalArgumentException("이미 존재하는 방입니다.");
+                throw new CustomException(ROOM_ALREADY_EXSIST);
             } else if (chatRoomUser.size() == 1) {
                 //나만 있을 때
                 if (chatRoomUser.get(0).getUser().equals(userDetails.getUser())) {
