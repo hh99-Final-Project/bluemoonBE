@@ -1,4 +1,4 @@
-package com.sparta.util;
+package com.sparta.bluemoon.util;
 
 import org.springframework.stereotype.Component;
 

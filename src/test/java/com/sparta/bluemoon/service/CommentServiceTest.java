@@ -1,7 +1,5 @@
 package com.sparta.bluemoon.service;
 
-import static org.assertj.core.api.Assertions.*;
-
 import com.sparta.bluemoon.domain.Comment;
 import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.Post;
@@ -12,16 +10,18 @@ import com.sparta.bluemoon.repository.CommentRepository;
 import com.sparta.bluemoon.repository.PointRepository;
 import com.sparta.bluemoon.repository.PostRepository;
 import com.sparta.bluemoon.repository.UserRepository;
-import java.util.List;
-import java.util.Optional;
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CommentServiceTest {
 
     @Autowired

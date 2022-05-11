@@ -58,12 +58,14 @@ dependencies {
 
 	// query log 남기기
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
+
+	// jasypt
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
 
 //querydsl 추가 시작
 def querydslDir = "$buildDir/generated/querydsl"
@@ -81,3 +83,7 @@ compileQuerydsl {
 	options.annotationProcessorPath = configurations.querydsl
 }
 //querydsl 추가 끝
+
+jar {
+	enabled = false
+}

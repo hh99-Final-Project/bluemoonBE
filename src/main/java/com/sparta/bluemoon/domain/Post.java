@@ -26,6 +26,8 @@ public class Post extends Timestamped {
 
     //게시글 음성파일
     private String voiceUrl;
+    //녹음 파일 시간
+    private String timer;
 
     private boolean isShow;
 
@@ -43,6 +45,7 @@ public class Post extends Timestamped {
     public Post(PostCreateRequestDto requestDto, String voiceUrl, User user) {
         this.title = (requestDto == null ? "" : requestDto.getTitle());
         this.content = (requestDto == null ? "" : requestDto.getContent());
+        this.timer = (requestDto == null ? "" : requestDto.getTimer());
         this.voiceUrl = voiceUrl;
         this.user = user;
     }

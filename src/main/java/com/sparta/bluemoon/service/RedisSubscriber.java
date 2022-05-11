@@ -2,6 +2,8 @@ package com.sparta.bluemoon.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.bluemoon.dto.ChatMessageDto;
+import com.sparta.bluemoon.dto.response.AlarmResponseDto;
+import com.sparta.bluemoon.dto.response.MessageResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -25,19 +27,24 @@ public class RedisSubscriber implements MessageListener {
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
-            System.out.println("om message에서 잡아서 진행합니다");
+            System.out.println("onmessage에서 잡아서 진행합니다");
             // redis에서 발행된 데이터를 받아 deserialize
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
             // ChatMessageDto 객채로 맵핑
             ChatMessageDto roomMessage = objectMapper.readValue(publishMessage, ChatMessageDto.class);
+
             // Websocket 구독자에게 채팅 메시지 Send
 
+            //알람메세지
             if (roomMessage.getType().equals(ChatMessageDto.MessageType.ENTER)) {
                 System.out.println("Enter에 걸린게 맞나요?");
-                messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getOtherUserId(), roomMessage);
+                AlarmResponseDto alarmResponseDto = new AlarmResponseDto(roomMessage);
+                messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getOtherUserId(), alarmResponseDto);
+            //채팅 메세지
             } else {
                 System.out.println("아니요 ENTER에 걸리지 않았습니다.");
-                messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getRoomId(), roomMessage);
+                MessageResponseDto messageResponseDto = new MessageResponseDto(roomMessage);
+                messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getRoomId(), messageResponseDto);
             }
         } catch (Exception e) {
             log.error(e.getMessage());
