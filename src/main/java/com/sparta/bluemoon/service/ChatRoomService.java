@@ -12,7 +12,7 @@ import com.sparta.bluemoon.repository.ChatRoomRepository;
 import com.sparta.bluemoon.repository.ChatRoomUserRepository;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
-import com.sparta.util.Calculator;
+import com.sparta.bluemoon.util.Calculator;
 import java.time.temporal.ChronoUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
