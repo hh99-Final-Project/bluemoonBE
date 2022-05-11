@@ -15,7 +15,7 @@ public class Alarm extends Timestamped{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
+    private String title; //어느 게시글에 댓글을 달았는지 확인하기 위해
 
     private String message;
 

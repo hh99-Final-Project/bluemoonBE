@@ -1,12 +1,12 @@
 package com.sparta.bluemoon.dto.request;
 
+
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+public class ChatRoomOtherUserInfoRequestDto {
 
-public class ChatRoomUserRequestDto {
-
-    private Long userId;// 상대방
+    private String roomUuid;
 }
