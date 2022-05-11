@@ -32,6 +32,7 @@ echo "start check code deploy env3"
 echo "${password}"
 echo "finish check code deploy env3"
 
+
 echo 'run docker!!!!!!!!!!!!!!!!!'
 sudo docker run -it --name ${TARGET_PORT} -d -p ${TARGET_PORT}:8080 -e active=${TARGET_PORT} lion8548/spring-cicd:latest
 echo "sudo docker run -it --name ${TARGET_PORT} -d -p ${TARGET_PORT}:8080 -e active=${TARGET_PORT} lion8548/spring-cicd:latest"
