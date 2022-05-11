@@ -59,5 +59,3 @@ jobs:
 
       - name: Code Deploy
         run: aws deploy create-deployment --application-name spring-cicd --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=hanghae99mini,bundleType=zip,key=spring-cicd/$GITHUB_SHA.zip
-
-
