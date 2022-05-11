@@ -14,5 +14,6 @@ public class CommentRequestDto {
     private String postUuid;
     private String content;
     private String parentUuid;
+    private String timer;
     private boolean isLock;
 }

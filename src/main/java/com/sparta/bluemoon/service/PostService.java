@@ -95,8 +95,6 @@ public class PostService {
             throw new CustomException(ONLY_CAN_DELETE_POST_WRITER);
         }
 
-
-
         postRepository.delete(post);
     }
 

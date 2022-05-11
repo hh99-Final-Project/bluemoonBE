@@ -17,14 +17,16 @@ public class ChatMessageDto implements Serializable {
     public enum MessageType {
         ENTER, TALK
     }
+
     private Long messageId;
     private MessageType type; // 메시지 타입
     private String roomId; // 공통으로 만들어진 방 번호
     private Long otherUserId; // 상대방
-    private String title;
-    private String postUuid;
+    private String title;    //게시글 제목
+    private String postUuid; //게시글 uuid
     private String message; // 메시지
     private String createdAt;
+    private Long userId;
 
     public ChatMessageDto(ChatMessageDto chatMessageDto, String message) {
         this.type = MessageType.ENTER; // 메시지 타입

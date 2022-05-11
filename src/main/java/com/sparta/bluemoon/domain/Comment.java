@@ -34,6 +34,8 @@ public class Comment extends Timestamped {
     private boolean isLock;
     //댓글 음성파일
     private String voiceUrl;
+    //녹음 파일 시간
+    private String timer;
 
     //commentId 대체할 UUID 생성
     @Column(unique = true)
@@ -65,6 +67,7 @@ public class Comment extends Timestamped {
         this.post = post;
         this.user = user;
         this.voiceUrl = voiceUrl;
+        this.timer = (commentRequestDto == null ? "" : commentRequestDto.getTimer());
         this.isShow = true;
         this.isLock = commentRequestDto.isLock();
         this.parent = parentComment;

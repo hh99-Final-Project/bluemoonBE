@@ -23,6 +23,9 @@ public class PostOtherOnePostResponseDto {
     // 게시글 내용
     private String content;
 
+    //게시글 녹음 시간
+    private String timer;
+
     // 게시글 작성 시간
     private LocalDateTime createdAt;
 
@@ -32,6 +35,7 @@ public class PostOtherOnePostResponseDto {
         this.userId = post.getUser().getId();
         this.title = post.getTitle();
         this.content = post.getContent();
+        this.timer = post.getTimer();
         this.createdAt = post.getCreatedAt();
     }
 }

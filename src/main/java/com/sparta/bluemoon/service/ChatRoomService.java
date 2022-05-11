@@ -5,30 +5,31 @@ import com.sparta.bluemoon.domain.ChatRoom;
 import com.sparta.bluemoon.domain.ChatRoomUser;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatRoomResponseDto;
+import com.sparta.bluemoon.dto.request.ChatRoomOtherUserInfoRequestDto;
 import com.sparta.bluemoon.dto.request.ChatRoomUserRequestDto;
+import com.sparta.bluemoon.dto.response.ChatRoomOtherUserInfoResponseDto;
 import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.ChatMessageRepository;
 import com.sparta.bluemoon.repository.ChatRoomRepository;
 import com.sparta.bluemoon.repository.ChatRoomUserRepository;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
-import com.sparta.util.Calculator;
+import com.sparta.bluemoon.util.Calculator;
 import java.time.temporal.ChronoUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import static com.sparta.bluemoon.exception.ErrorCode.NOT_FOUND_ANOTHER_USER;
-import static com.sparta.bluemoon.exception.ErrorCode.ROOM_ALREADY_EXIST;
+import static com.sparta.bluemoon.exception.ErrorCode.*;
 
 @RequiredArgsConstructor
 @Service
@@ -44,10 +45,8 @@ public class ChatRoomService {
     public String createChatRoom (
             ChatRoomUserRequestDto requestDto,
             UserDetailsImpl userDetails) {
-
-        System.out.println("여기3");
         //상대방 방도 생성>상대방 찾기
-
+        if(requestDto.getUserId().equals(userDetails.getUser().getId())) throw  new CustomException(CANNOT_MAKE_ROOM_ALONE);
         User anotherUser = userRepository.findById(requestDto.getUserId()).orElseThrow(
                 () -> new CustomException(NOT_FOUND_ANOTHER_USER)
         );
@@ -162,6 +161,7 @@ public class ChatRoomService {
 
 
     //채팅방 삭제
+    @Transactional
     public void deleteChatRoom(ChatRoom chatroom, User user) {
         if (chatroom.getChatRoomUsers().size()!=1) {
             chatRoomUserRepository.deleteByChatRoomAndUser(chatroom, user);
@@ -171,5 +171,36 @@ public class ChatRoomService {
 //        else{
 //            throw new IllegalArgumentException("존재하지 않는 채팅방 입니다.");
 //        }
+    }
+    //채팅방 입장시 상대 유저 정보 조회
+    public ChatRoomOtherUserInfoResponseDto getOtherUserInfo(
+            ChatRoomOtherUserInfoRequestDto chatRoomOtherUserInfoRequestDto,
+            UserDetailsImpl userDetails
+    ){
+        User myUser = userDetails.getUser();
+        User otherUser = new User();
+        String uuid = chatRoomOtherUserInfoRequestDto.getRoomUuid();
+        List<ChatRoomUser> users = chatRoomRepository.findByChatRoomUuid(uuid).get().getChatRoomUsers();
+        for(ChatRoomUser user : users){
+            if(!user.getUser().equals(myUser)) {
+                otherUser = user.getUser();
+            }
+        }
+        return new ChatRoomOtherUserInfoResponseDto(otherUser);
+    }
+
+    //채팅방 이전 대화내용 불러오기
+    public List<ChatMessage> getPreviousChatMessage(String roomId, UserDetailsImpl userDetails) {
+        ChatRoom chatroom = chatRoomRepository.findByChatRoomUuid(roomId).orElseThrow(
+                () -> new CustomException(CANNOT_FOUND_CHATROOM)
+        );
+        List<ChatRoomUser> chatRoomUsers = chatroom.getChatRoomUsers();
+        //혹시 채팅방 이용자가 아닌데 들어온다면,
+        for(ChatRoomUser chatroomUser:chatRoomUsers){
+            if(chatroomUser.getUser().equals(userDetails.getUser())) {
+                return chatMessageRepository.findAllByChatRoomOrderByCreatedAtAsc(chatroom);
+            }
+        }
+        throw new CustomException(FORBIDDEN_CHATROOM);
     }
 }
