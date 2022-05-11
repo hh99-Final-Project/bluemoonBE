@@ -13,6 +13,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -52,7 +54,15 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
         String tokenPayload = request.getHeader("Authorization");
         if (tokenPayload == null) {
 
-            response.sendRedirect("/user/loginView");
+//            response.sendRedirect("/user/loginView");
+            ObjectMapper mapper = new ObjectMapper();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8"); // HelloData 객체
+            Exception exception = new Exception();
+            exception.setHttpStatus(HttpStatus.BAD_REQUEST);
+            exception.setErrorMessage("혜미님 잘 가나요?");
+            String result = mapper.writeValueAsString(exception);
+            response.getWriter().print(result);
             return null;
         }
         String nowToken = extractor.extract(tokenPayload, request);
@@ -72,7 +82,7 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
             exception.setAlreadyLogined(true);
             String result = mapper.writeValueAsString(exception);
             response.getWriter().print(result);
-            throw new RuntimeException("에러111111111111111111");
+            return null;
         }
         return super
                 .getAuthenticationManager()
