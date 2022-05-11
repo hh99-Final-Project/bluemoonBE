@@ -15,6 +15,9 @@ jobs:
   build:
     # 실행 환경 지정
     runs-on: ubuntu-latest
+    env:
+      JASYPT_ENCRYPTOR_PASSWORD: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
+      JASYPT_ENCRYPTOR_REPEAT: ${{ secrets.JASYPT_ENCRYPTOR_REPEAT }}
 
     # Task의 sequence를 명시한다.
     steps:
