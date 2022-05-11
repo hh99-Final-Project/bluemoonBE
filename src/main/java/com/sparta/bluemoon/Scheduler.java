@@ -1,5 +1,6 @@
 package com.sparta.bluemoon;
 
+import com.sparta.bluemoon.service.LotService;
 import com.sparta.bluemoon.service.PointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 public class Scheduler {
 
     private final PointService pointService;
+    private final LotService lotService;
 
 
     // 초, 분, 시, 일, 월, 주 순서
@@ -19,6 +21,8 @@ public class Scheduler {
         //TimeUnit.SECONDS.sleep(1);
         // 저장된 모든 유저 포인트 조회
 
+        lotService.bananaCount=5;
         pointService.countReset();
+
     }
 }
