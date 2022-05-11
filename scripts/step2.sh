@@ -30,7 +30,6 @@ repeat=$(aws ssm get-parameters --region ap-northeast-2 --names JASYPT_ENCRYPTOR
 echo "${repeat}"
 echo "finish check code deploy env3"
 
-
 echo 'run docker!!!!!!!!!!!!!!!!!'
 #sudo docker run -it --name ${TARGET_PORT} -d -p ${TARGET_PORT}:8080 -e active=${TARGET_PORT} lion8548/spring-cicd:latest
 sudo docker run -it --name ${TARGET_PORT} -d -p ${TARGET_PORT}:8080 -e active=${TARGET_PORT} -e JASYPT_ENCRYPTOR_PASSWORD=${password:1:${#password}-1} -e JASYPT_ENCRYPTOR_REPEAT=${repeat:1:${#repeat}-1} lion8548/spring-cicd:latest
