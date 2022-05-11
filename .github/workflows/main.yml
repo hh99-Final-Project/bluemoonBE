@@ -19,7 +19,6 @@ jobs:
       JASYPT_ENCRYPTOR_PASSWORD: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
       JASYPT_ENCRYPTOR_REPEAT: ${{ secrets.JASYPT_ENCRYPTOR_REPEAT }}
 
-
     # Task의 sequence를 명시한다.
     steps:
       - uses: actions/checkout@v2
