@@ -33,6 +33,7 @@ public class UserController {
     //로그인한 유저에 닉네임 정보 입력하기
     @PostMapping("/api/user/nickname")
     public void signupNickname(@RequestBody NicknameSignupRequestDto nicknameSignupRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+
         userService.signupNickname(nicknameSignupRequestDto, userDetails);
     }
 

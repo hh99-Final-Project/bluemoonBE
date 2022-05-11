@@ -1,7 +1,5 @@
 package com.sparta.bluemoon.dto.response;
 
-import com.sparta.bluemoon.dto.request.CommentRequestDto;
-import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.Getter;
 import lombok.Setter;
 

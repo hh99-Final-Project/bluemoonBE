@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Getter
+
 public class Point {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

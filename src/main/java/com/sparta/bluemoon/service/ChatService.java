@@ -46,6 +46,7 @@ public class ChatService {
         String createdAt = getCurrentTime();
         chatMessageDto.setCreatedAt(createdAt);
         chatMessageDto.setType(ChatMessageDto.MessageType.TALK);
+        chatMessageDto.setUserId(user.getId());
 
         redisTemplate.convertAndSend(topic, chatMessageDto);
     }
@@ -67,7 +68,7 @@ public class ChatService {
 
     //현재시간 추출 메소드
     private String getCurrentTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yy:MM:dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
         sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
