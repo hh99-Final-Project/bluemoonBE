@@ -174,11 +174,12 @@ public class ChatRoomService {
     //채팅방 입장시 상대 유저 정보 조회
     public ChatRoomOtherUserInfoResponseDto getOtherUserInfo(String roomId, UserDetailsImpl userDetails){
         User myUser = userDetails.getUser();
-        User otherUser = new User();
         List<ChatRoomUser> users = chatRoomRepository.findByChatRoomUuid(roomId).get().getChatRoomUsers();
         for(ChatRoomUser user : users){
-            if(!user.getUser().equals(myUser)) {
-               otherUser = user.getUser();
+            if(!user.getUser().getId().equals(myUser.getId())) {
+                System.out.println(user.getUser().getId());
+                System.out.println(myUser.getId());
+               User otherUser = user.getUser();
                return new ChatRoomOtherUserInfoResponseDto(otherUser);
             }
         }
@@ -194,6 +195,8 @@ public class ChatRoomService {
         //혹시 채팅방 이용자가 아닌데 들어온다면,
         for(ChatRoomUser chatroomUser:chatRoomUsers){
             if(chatroomUser.getUser().getId().equals(userDetails.getUser().getId())) {
+                System.out.println(chatroomUser.getUser().getId());
+                System.out.println(userDetails.getUser().getId());
                 return chatMessageRepository.findAllByChatRoomOrderByCreatedAtAsc(chatroom);
             }
         }
