@@ -5,7 +5,6 @@ import com.sparta.bluemoon.domain.ChatRoom;
 import com.sparta.bluemoon.domain.ChatRoomUser;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatRoomResponseDto;
-import com.sparta.bluemoon.dto.request.ChatRoomOtherUserInfoRequestDto;
 import com.sparta.bluemoon.dto.request.ChatRoomUserRequestDto;
 import com.sparta.bluemoon.dto.response.ChatRoomOtherUserInfoResponseDto;
 import com.sparta.bluemoon.exception.CustomException;
@@ -173,20 +172,17 @@ public class ChatRoomService {
 //        }
     }
     //채팅방 입장시 상대 유저 정보 조회
-    public ChatRoomOtherUserInfoResponseDto getOtherUserInfo(
-            ChatRoomOtherUserInfoRequestDto chatRoomOtherUserInfoRequestDto,
-            UserDetailsImpl userDetails
-    ){
+    public ChatRoomOtherUserInfoResponseDto getOtherUserInfo(String roomId, UserDetailsImpl userDetails){
         User myUser = userDetails.getUser();
         User otherUser = new User();
-        String uuid = chatRoomOtherUserInfoRequestDto.getRoomUuid();
-        List<ChatRoomUser> users = chatRoomRepository.findByChatRoomUuid(uuid).get().getChatRoomUsers();
+        List<ChatRoomUser> users = chatRoomRepository.findByChatRoomUuid(roomId).get().getChatRoomUsers();
         for(ChatRoomUser user : users){
             if(!user.getUser().equals(myUser)) {
-                otherUser = user.getUser();
+               otherUser = user.getUser();
+               return new ChatRoomOtherUserInfoResponseDto(otherUser);
             }
         }
-        return new ChatRoomOtherUserInfoResponseDto(otherUser);
+        throw new CustomException(DOESNT_EXIST_OTHER_USER);
     }
 
     //채팅방 이전 대화내용 불러오기
@@ -197,7 +193,7 @@ public class ChatRoomService {
         List<ChatRoomUser> chatRoomUsers = chatroom.getChatRoomUsers();
         //혹시 채팅방 이용자가 아닌데 들어온다면,
         for(ChatRoomUser chatroomUser:chatRoomUsers){
-            if(chatroomUser.getUser().equals(userDetails.getUser())) {
+            if(chatroomUser.getUser().getId().equals(userDetails.getUser().getId())) {
                 return chatMessageRepository.findAllByChatRoomOrderByCreatedAtAsc(chatroom);
             }
         }

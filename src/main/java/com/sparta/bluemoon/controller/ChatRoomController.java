@@ -3,7 +3,6 @@ package com.sparta.bluemoon.controller;
 import com.sparta.bluemoon.domain.ChatMessage;
 import com.sparta.bluemoon.domain.ChatRoom;
 import com.sparta.bluemoon.dto.ChatRoomResponseDto;
-import com.sparta.bluemoon.dto.request.ChatRoomOtherUserInfoRequestDto;
 import com.sparta.bluemoon.dto.request.ChatRoomUserRequestDto;
 import com.sparta.bluemoon.dto.response.ChatRoomOtherUserInfoResponseDto;
 import com.sparta.bluemoon.exception.CustomException;
@@ -76,11 +75,11 @@ public class ChatRoomController {
     }
 
     //채팅방 입장시 상대정보 조회
-    @GetMapping("/api/rooms/otherUserInfo")
+    @GetMapping("/api/rooms/otherUserInfo/{roomId}")
     public ChatRoomOtherUserInfoResponseDto getOtherUserInfo(
-            @RequestBody ChatRoomOtherUserInfoRequestDto chatRoomOtherUserInfoRequestDto,
+            @PathVariable String roomId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        return chatRoomService.getOtherUserInfo(chatRoomOtherUserInfoRequestDto, userDetails);
+        return chatRoomService.getOtherUserInfo(roomId, userDetails);
     }
 }
