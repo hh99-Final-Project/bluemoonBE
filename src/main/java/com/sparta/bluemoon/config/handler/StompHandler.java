@@ -12,6 +12,8 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Component
 @RequiredArgsConstructor
 public class StompHandler implements ChannelInterceptor {
@@ -19,7 +21,6 @@ public class StompHandler implements ChannelInterceptor {
     private final RedisRepository redisRepository;
     private final JwtDecoder jwtDecoder;
     private final UserRepository userRepository;
-
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
     @Override
@@ -30,10 +31,15 @@ public class StompHandler implements ChannelInterceptor {
         if (StompCommand.CONNECT == accessor.getCommand()) {
             // toDo : 모든 화면에서 socket이 뚫려 있기 때문에 대화방에서 온 connect라는 것을 알 수 있는 것이 있어야 한다.
             String type = accessor.getFirstNativeHeader("type");
-            if (type.equals("CHAT")) {
+            System.out.println("소켓열결입니다1111111111111111111111111111111111111111111111111111111");
+            System.out.println(type);
+            if (type !=null && type.equals("CHAT")) {
                 // 사용자 확인
-                jwtToken = accessor.getFirstNativeHeader("token");
-                String username = jwtDecoder.decodeUsername(jwtToken);
+                System.out.println(accessor.getFirstNativeHeader("token"));
+                jwtToken = Objects.requireNonNull(accessor.getFirstNativeHeader("token")).substring(7);
+                System.out.println(jwtToken);
+
+                String username = jwtDecoder.decodeUsername(jwtToken) ;
                 User user = userRepository.findByUsername(username).orElseThrow(
                     () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
                 );
