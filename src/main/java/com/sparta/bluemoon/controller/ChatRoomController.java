@@ -1,9 +1,9 @@
 package com.sparta.bluemoon.controller;
 
-import com.sparta.bluemoon.domain.ChatMessage;
 import com.sparta.bluemoon.domain.ChatRoom;
 import com.sparta.bluemoon.dto.ChatRoomResponseDto;
 import com.sparta.bluemoon.dto.request.ChatRoomUserRequestDto;
+import com.sparta.bluemoon.dto.response.ChatMessageTestDto;
 import com.sparta.bluemoon.dto.response.ChatRoomOtherUserInfoResponseDto;
 import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.ChatRoomRepository;
@@ -67,8 +67,7 @@ public class ChatRoomController {
 
     //이전 채팅 메시지 불러오기
     @GetMapping("/api/rooms/{roomId}/messages")
-    public List<ChatMessage> getPreviousChatMessage(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-
+    public List<ChatMessageTestDto> getPreviousChatMessage(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return chatRoomService.getPreviousChatMessage(roomId, userDetails);
     }
 
