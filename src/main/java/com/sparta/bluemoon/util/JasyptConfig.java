@@ -30,6 +30,7 @@ public class JasyptConfig {
 		config.setIvGeneratorClassName("org.jasypt.iv.NoIvGenerator");
 		config.setStringOutputType("base64"); //인코딩 방식
 
+
 		encryptor.setConfig(config);
 
 		return encryptor;
