@@ -10,6 +10,9 @@ public enum ErrorCode {
 
     //USER
     NOT_FOUND_USER(HttpStatus.NOT_FOUND.value(), "U001", "해당 유저를 찾을 수 없습니다."),
+    NOT_FOUND_RECOMMENDER(HttpStatus.NOT_FOUND.value(), "U002", "해당 추천인을 찾을 수 없습니다."),
+    CANNOT_RECOMMEND_YOURSELF(HttpStatus.BAD_REQUEST.value(), "V001","자신의 닉네임은 적을 수 없습니다."),
+
 
     //CHAT-USER
     NOT_FOUND_USER_IN_CHAT(HttpStatus.NOT_FOUND.value(), "CU001","해당 유저를 찾을 수 없습니다."),
