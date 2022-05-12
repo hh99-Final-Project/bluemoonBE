@@ -38,7 +38,7 @@ public enum ErrorCode {
     VOICE_FILE_INVALID(HttpStatus.BAD_REQUEST.value(), "V001","잘못된 파일 형식입니다."),
 
     //LOTTO
-    CANNOT_LOT(HttpStatus.BAD_REQUEST.value(), "L001","추첨할 수 없습니다.")
+    CANNOT_LOT(HttpStatus.BAD_REQUEST.value(), "L001","추첨할 수 없습니다."),
     ;
 
     private final int httpStatus;
