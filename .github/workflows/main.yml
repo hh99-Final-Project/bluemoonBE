@@ -54,5 +54,6 @@ jobs:
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://hanghae99mini/spring-cicd/$GITHUB_SHA.zip
 
+
       - name: Code Deploy
         run: aws deploy create-deployment --application-name spring-cicd --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=hanghae99mini,bundleType=zip,key=spring-cicd/$GITHUB_SHA.zip
