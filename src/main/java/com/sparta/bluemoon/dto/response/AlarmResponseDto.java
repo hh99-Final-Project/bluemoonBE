@@ -13,12 +13,15 @@ public class AlarmResponseDto {
     private String createdAt;
     private Long otherUserId;
     private Long messageId;
+    private String type;
 
     public AlarmResponseDto(ChatMessageDto roomMessage) {
+        this.type = "ALARM";
         this.postUuid = roomMessage.getPostUuid();
         this.message = roomMessage.getMessage();
         this.createdAt = roomMessage.getCreatedAt();
         this.otherUserId = roomMessage.getOtherUserId();
         this.messageId = roomMessage.getMessageId();
+
     }
 }
