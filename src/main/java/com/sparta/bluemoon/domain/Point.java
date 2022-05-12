@@ -40,6 +40,10 @@ public class Point {
         this.lottoCount = lottoCount;
     }
 
+    public void eventPoint(int point) {
+        this.myPoint = point;
+    }
+
     public void resetCount() {
         this.postCount = 1;
         this.commentCount = 5;
