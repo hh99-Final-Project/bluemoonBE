@@ -121,7 +121,8 @@ public class KakaoLoginService {
 
     private User registerKakaoUserIfNeeded(String email) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
-        User kakaoUser = userRepository.findByUsername(email)
+        String kakao = "kakao";
+        User kakaoUser = userRepository.findByUsernameAndType(email, kakao)
             .orElse(null);
         if (kakaoUser == null) {
             // 회원가입
@@ -129,9 +130,10 @@ public class KakaoLoginService {
             // password: random UUID
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
+            String type = "kakao";
 
             String nickname = "";
-            kakaoUser = new User(email, encodedPassword, nickname);
+            kakaoUser = new User(email, encodedPassword, nickname, type);
             userRepository.save(kakaoUser);
 
             // 사용자 포인트 부여

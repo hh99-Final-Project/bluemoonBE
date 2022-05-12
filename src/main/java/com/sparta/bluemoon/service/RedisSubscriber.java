@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.bluemoon.dto.ChatMessageDto;
 import com.sparta.bluemoon.dto.response.AlarmResponseDto;
 import com.sparta.bluemoon.dto.response.MessageResponseDto;
+import com.sparta.bluemoon.dto.response.UnreadMessageCount;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -40,9 +41,14 @@ public class RedisSubscriber implements MessageListener {
                 System.out.println("Enter에 걸린게 맞나요?");
                 AlarmResponseDto alarmResponseDto = new AlarmResponseDto(roomMessage);
                 messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getOtherUserId(), alarmResponseDto);
+            //안읽은 메세지
+            }else if(roomMessage.getType().equals(ChatMessageDto.MessageType.UNREAD_MESSAGE_COUNT)){
+                System.out.println("UNREAD_MESSAGE_COUNT에 걸린게 맞나요?");
+                UnreadMessageCount unreadMessageCount = new UnreadMessageCount(roomMessage);
+                messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getOtherUserId(), unreadMessageCount);
             //채팅 메세지
-            } else {
-                System.out.println("아니요 ENTER에 걸리지 않았습니다.");
+            }else {
+                System.out.println("아니요 걸리지 않았습니다.");
                 MessageResponseDto messageResponseDto = new MessageResponseDto(roomMessage);
                 messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getRoomId(), messageResponseDto);
             }

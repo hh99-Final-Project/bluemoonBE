@@ -52,8 +52,8 @@ jobs:
 
       # upload
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://hanghae99mini/spring-cicd/$GITHUB_SHA.zip
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://${{ secrets.AWS_S3_BUCKET_NAME }}/spring-cicd/$GITHUB_SHA.zip
 
 
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name spring-cicd --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=hanghae99mini,bundleType=zip,key=spring-cicd/$GITHUB_SHA.zip
+        run: aws deploy create-deployment --application-name ${{ secrets.AWS_DEPLOY_APP_NAME }} --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=${{ secrets.AWS_S3_BUCKET_NAME }},bundleType=zip,key=spring-cicd/$GITHUB_SHA.zip

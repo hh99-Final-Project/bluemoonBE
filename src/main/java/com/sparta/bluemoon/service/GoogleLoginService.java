@@ -63,7 +63,7 @@ public class GoogleLoginService {
 //            String jwtToken = getAccessToken(authCode);
             System.out.println("jwtToken = " + jwtToken);
             String email = getGoogleUserInfo(jwtToken);
-            User googleUser = registerKakaoUserIfNeeded(email);
+            User googleUser = registerGoogleUserIfNeeded(email);
             return forceLogin(googleUser);
 
         } catch (Exception e) {
@@ -92,17 +92,19 @@ public class GoogleLoginService {
             .body(new SocialLoginResponseDto(googleUser));
     }
 
-    private User registerKakaoUserIfNeeded(String email) {
-        User googleUser = userRepository.findByUsername(email).orElse(null);
+    private User registerGoogleUserIfNeeded(String email) {
+        String google = "google";
+        User googleUser = userRepository.findByUsernameAndType(email, google).orElse(null);
 
         if (googleUser == null) {
 
             // password: random UUID
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
+            String type = "google";
 
             String nickname = "";
-            googleUser = new User(email, encodedPassword, nickname);
+            googleUser = new User(email, encodedPassword, nickname, type);
             userRepository.save(googleUser);
 
             // 사용자 포인트 부여

@@ -6,6 +6,7 @@ import com.sparta.bluemoon.domain.ChatRoomUser;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatRoomResponseDto;
 import com.sparta.bluemoon.dto.request.ChatRoomUserRequestDto;
+import com.sparta.bluemoon.dto.response.ChatMessageTestDto;
 import com.sparta.bluemoon.dto.response.ChatRoomOtherUserInfoResponseDto;
 import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.ChatMessageRepository;
@@ -187,7 +188,7 @@ public class ChatRoomService {
     }
 
     //채팅방 이전 대화내용 불러오기
-    public List<ChatMessage> getPreviousChatMessage(String roomId, UserDetailsImpl userDetails) {
+    public List<ChatMessageTestDto> getPreviousChatMessage(String roomId, UserDetailsImpl userDetails) {
         ChatRoom chatroom = chatRoomRepository.findByChatRoomUuid(roomId).orElseThrow(
                 () -> new CustomException(CANNOT_FOUND_CHATROOM)
         );
@@ -197,7 +198,12 @@ public class ChatRoomService {
             if(chatroomUser.getUser().getId().equals(userDetails.getUser().getId())) {
                 System.out.println(chatroomUser.getUser().getId());
                 System.out.println(userDetails.getUser().getId());
-                return chatMessageRepository.findAllByChatRoomOrderByCreatedAtAsc(chatroom);
+                List<ChatMessage> chatMessages = chatMessageRepository.findAllByChatRoomOrderByCreatedAtAsc(chatroom);
+                List<ChatMessageTestDto> chatMessageTestDtos = new ArrayList<>();
+                for(ChatMessage chatMessage : chatMessages){
+                    chatMessageTestDtos.add(new ChatMessageTestDto(chatMessage));
+                }
+               return chatMessageTestDtos;
             }
         }
         throw new CustomException(FORBIDDEN_CHATROOM);
