@@ -43,6 +43,7 @@
 //        User user = new User("email", "password", "nickname");
 //        userRepository.save(user);
 //
+
 //        int mypoint = 0;
 //        int postCount = 1;
 //        int commentCount = 5;

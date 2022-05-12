@@ -4,7 +4,6 @@ import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.repository.RedisRepository;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.jwt.JwtDecoder;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -59,7 +58,6 @@ public class StompHandler implements ChannelInterceptor {
 
                 redisRepository.deleteMyInfo(sessionId);
             }
-
         }
         return message;
     }

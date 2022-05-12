@@ -80,6 +80,7 @@ public class ChatRoomController {
             @PathVariable String roomId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
+        System.out.println(roomId);
         return chatRoomService.getOtherUserInfo(roomId, userDetails);
     }
 }
