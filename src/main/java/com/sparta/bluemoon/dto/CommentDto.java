@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 public class CommentDto {
 
+    private Long userId;
     private String commentUuid;
     private String nickname;
     private String content;
@@ -22,6 +23,7 @@ public class CommentDto {
     private List<CommentDto> children = new ArrayList<>();
 
     public CommentDto(Comment comment) {
+        this.userId = comment.getUser().getId();
         this.commentUuid = comment.getCommentUuid();
         this.nickname = comment.getUser().getNickname();
         this.content = comment.getContent();

@@ -23,6 +23,7 @@ public class PostResponseDto {
     private String voiceUrl;
     private String timer;
     private LocalDateTime createdAt;
+    private boolean isLock;
     private boolean isShow;
 
     public PostResponseDto(Post post, List<CommentDto> commentList) {

@@ -68,7 +68,7 @@ public class Comment extends Timestamped {
         this.user = user;
         this.voiceUrl = voiceUrl;
         this.timer = (commentRequestDto == null ? "" : commentRequestDto.getTimer());
-        this.isShow = true;
+        this.isShow = false;
         this.isLock = commentRequestDto.isLock();
         this.parent = parentComment;
         if (this.parent != null) {
