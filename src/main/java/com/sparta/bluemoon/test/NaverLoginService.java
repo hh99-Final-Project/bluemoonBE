@@ -96,7 +96,7 @@ public class NaverLoginService {
             String encodedPassword = passwordEncoder.encode(password);
 
             String nickname = "";
-            naverUser = new User(email, encodedPassword, nickname);
+            naverUser = new User(email, nickname, encodedPassword);
             userRepository.save(naverUser);
 
             // 사용자 포인트 부여
@@ -135,6 +135,8 @@ public class NaverLoginService {
    //    String nickname = jsonNode.get("response").get("nickname").asText();
         String email = jsonNode.get("response").get("email").asText();
         String name = jsonNode.get("response").get("name").asText();
+
+        System.out.println("id   " + id + "email   " + email + "name   " + name);
 
         return email;
     }
