@@ -23,6 +23,9 @@ public class PostOtherOnePostResponseDto {
     // 게시글 내용
     private String content;
 
+    //voice 파일
+    private String voiceUrl;
+
     //게시글 녹음 시간
     private String timer;
 
@@ -35,6 +38,7 @@ public class PostOtherOnePostResponseDto {
         this.userId = post.getUser().getId();
         this.title = post.getTitle();
         this.content = post.getContent();
+        this.voiceUrl = post.getVoiceUrl();
         this.timer = post.getTimer();
         this.createdAt = post.getCreatedAt();
     }
