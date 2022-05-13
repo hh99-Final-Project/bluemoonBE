@@ -56,7 +56,13 @@ public class ChatRoomService {
         System.out.println(roomHashCode);
 
         //방 존재 확인 함수
-        existRoom(roomHashCode, userDetails, anotherUser);
+        if(existRoom(roomHashCode, userDetails, anotherUser)){
+            ChatRoom existChatRoom = chatRoomRepository.findByRoomHashCode(roomHashCode).orElseThrow(
+                    ()-> new CustomException(UNKNOWN_CHATROOM)
+            );
+            return existChatRoom.getChatRoomUuid();
+        }
+
 
         //방 먼저 생성
         ChatRoom room = new ChatRoom(roomHashCode);
@@ -87,18 +93,18 @@ public class ChatRoomService {
     }
 
     //이미 방이 존재할 때
-    public void existRoom(
+    public boolean existRoom(
             int roomUsers,
             UserDetailsImpl userDetails,
             User anotherUser) {
 
         ChatRoom chatRoom = chatRoomRepository.findByRoomHashCode(roomUsers).orElse(null);
 
+        //방이 존재 할 때
         if (chatRoom != null) {
             List<ChatRoomUser> chatRoomUser = chatRoom.getChatRoomUsers();
-            if (chatRoomUser.size() == 2) {
-                throw new CustomException(ROOM_ALREADY_EXIST);
-            } else if (chatRoomUser.size() == 1) {
+
+            if (chatRoomUser.size() == 1) {
                 //나만 있을 때
                 if (chatRoomUser.get(0).getUser().equals(userDetails.getUser())) {
                     ChatRoomUser user = new ChatRoomUser(anotherUser, userDetails.getUser(), chatRoom);
@@ -109,7 +115,9 @@ public class ChatRoomService {
                     chatRoomUserRepository.save(user);
                 }
             }
+            return true;
         }
+        return false;
     }
 
 
