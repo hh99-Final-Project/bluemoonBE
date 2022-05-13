@@ -53,6 +53,7 @@ public class RedisConfig {
         return new MessageListenerAdapter(subscriber, "sendMessage");
     }
 
+
     /**
      * 단일 Topic 사용을 위한 Bean 설정
      * 사실 중요한 부분인지 모르겠음
