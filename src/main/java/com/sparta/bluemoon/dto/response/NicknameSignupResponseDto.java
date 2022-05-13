@@ -6,10 +6,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class NicknameSIgnupResponseDto {
+public class NicknameSignupResponseDto {
     private int myPoint;
 
-    public NicknameSIgnupResponseDto(Point userPoint) {
+    public NicknameSignupResponseDto(Point userPoint) {
         this.myPoint= userPoint.getMyPoint();
     }
 }
