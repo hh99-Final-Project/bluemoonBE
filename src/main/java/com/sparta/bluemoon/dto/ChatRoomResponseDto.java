@@ -19,10 +19,10 @@ public class ChatRoomResponseDto implements Comparable<ChatRoomResponseDto> {
     private String dayBefore;
     private int unreadCount;
 
-    public ChatRoomResponseDto(String roomName, String roomUuid, String lastMessage,
+    public ChatRoomResponseDto(String roomName, String roomId, String lastMessage,
         LocalDateTime lastTime, String dayBefore, int unReadMessageCount) {
         this.roomName = roomName;
-        this.chatRoomUuid=roomUuid;
+        this.chatRoomUuid=roomId;
         this.lastMessage=lastMessage;
         this.createAt=lastTime;
         this.dayBefore = dayBefore;
