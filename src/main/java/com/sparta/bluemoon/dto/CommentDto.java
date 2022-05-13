@@ -28,6 +28,7 @@ public class CommentDto {
         this.createdAt = comment.getCreatedAt();
         this.voiceUrl = comment.getVoiceUrl();
         this.timer = comment.getTimer();
+        this.isLock = comment.isLock();
         //댓글 작성자이면 false를 보내줌
         this.isShow = comment.isShow();
     }

@@ -3,7 +3,7 @@ package com.sparta.bluemoon.service;
 import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.request.NicknameSignupRequestDto;
-import com.sparta.bluemoon.dto.response.NicknameSIgnupResponseDto;
+import com.sparta.bluemoon.dto.response.NicknameSignupResponseDto;
 import com.sparta.bluemoon.dto.response.UserInfoDto;
 import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.UserRepository;
@@ -31,7 +31,7 @@ public class UserService {
 
     //로그인한 유저에 닉네임 정보 입력하기
     @Transactional
-    public NicknameSIgnupResponseDto signupNickname(NicknameSignupRequestDto nicknameSignupRequestDto, UserDetailsImpl userDetails) {
+    public NicknameSignupResponseDto signupNickname(NicknameSignupRequestDto nicknameSignupRequestDto, UserDetailsImpl userDetails) {
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new CustomException(NOT_FOUND_USER)
         );
@@ -44,7 +44,7 @@ public class UserService {
 
     //추천인 입력
     @Transactional
-    public NicknameSIgnupResponseDto getEventPoint(NicknameSignupRequestDto nicknameSignupRequestDto, User user) {
+    public NicknameSignupResponseDto getEventPoint(NicknameSignupRequestDto nicknameSignupRequestDto, User user) {
         //추천인을 적었다면
         if (nicknameSignupRequestDto.getRecommender() != null) {
             User recommender = userRepository.findByNickname(nicknameSignupRequestDto.getRecommender()).orElseThrow(
@@ -61,6 +61,6 @@ public class UserService {
             userPoint.eventPoint(userPoint.getMyPoint() + 500);
             recommenderPoint.eventPoint(recommenderPoint.getMyPoint() + 1000);
         }
-        return new NicknameSIgnupResponseDto(user.getPoint());
+        return new NicknameSignupResponseDto(user.getPoint());
     }
 }
