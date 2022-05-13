@@ -30,6 +30,21 @@ public class RedisRepository {
     // USER_INFO, sessionId, userId
     private HashOperations<String, String, Long> hashOpsUserInfo;
 
+    @Resource(name = "redisTemplate")
+    private HashOperations<String, Long, Long> test;
+
+    public void putTest() {
+        test.put("test", 1L, 1L);
+    }
+
+    public void getTest() {
+        test.get("test", 1L);
+    }
+
+    public void delTest() {
+        test.delete("test", 1L);
+    }
+
     // step1
     // 유저가 입장한 채팅방ID와 유저 세션ID 맵핑 정보 저장
     public void userEnterRoomInfo(Long userId, String roomId) {

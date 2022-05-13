@@ -164,6 +164,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // CICD health check
         skipPathList.add("GET,/api/health");
+        // CICD health check
+        skipPathList.add("GET,/test/**");
 
         skipPathList.add("GET,/");
         skipPathList.add("POST,/");

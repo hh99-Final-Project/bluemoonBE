@@ -27,6 +27,8 @@ public class User {
 
     private String password;
 
+    private String type;
+
     @Column(length = 1000)
     private String token;
 
@@ -35,12 +37,18 @@ public class User {
     private Point point;
 
 
-    public User(String email, String password, String nickname) {
+    public User(String email, String password, String nickname, String type) {
         this.username = email;
         this.password = password;
         this.nickname = nickname;
+        this.type = type;
     }
 
+    public User(String username, String nickname, String password) {
+        this.username = username;
+        this.nickname = nickname;
+        this.password = password;
+    }
 
     public void changeNickname(String nickname){
         this.nickname = nickname;

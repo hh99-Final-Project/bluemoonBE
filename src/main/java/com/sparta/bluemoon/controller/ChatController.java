@@ -2,7 +2,6 @@ package com.sparta.bluemoon.controller;
 
 import com.sparta.bluemoon.domain.User;
 import com.sparta.bluemoon.dto.ChatMessageDto;
-import com.sparta.bluemoon.dto.request.ChatMessageEnterDto;
 import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.jwt.JwtDecoder;
@@ -14,7 +13,6 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
-import static com.sparta.bluemoon.exception.ErrorCode.NOT_FOUND_USER;
 import static com.sparta.bluemoon.exception.ErrorCode.NOT_FOUND_USER_IN_CHAT;
 
 @RequiredArgsConstructor
@@ -31,15 +29,17 @@ public class ChatController {
      * 채팅방에 입장했을 경우
      */
     @MessageMapping("/chat/enter")
-    public void enter(ChatMessageEnterDto chatMessageEnterDto, @Header("token") String token) {
+    public void enter(ChatMessageDto chatMessageDto, @Header("token") String token) {
         String username = jwtDecoder.decodeUsername(token.substring(7));
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(NOT_FOUND_USER_IN_CHAT)
         );
-
-        chatService.enter(user.getId(), chatMessageEnterDto.getRoomId());
-        String topic = channelTopic.getTopic();
-        redisTemplate.convertAndSend(topic, chatMessageEnterDto);
+        System.out.println("챗엔터!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(user.getId());
+        System.out.println(chatMessageDto.getRoomId());
+        chatService.enter(user.getId(), chatMessageDto.getRoomId());
+//        String topic = channelTopic.getTopic();
+//        redisTemplate.convertAndSend(topic, chatMessageDto);
     }
 
     /**

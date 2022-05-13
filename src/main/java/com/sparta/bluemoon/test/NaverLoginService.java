@@ -132,7 +132,7 @@ public class NaverLoginService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         String id = jsonNode.get("response").get("id").asText();
-        String nickname = jsonNode.get("response").get("nickname").asText();
+   //    String nickname = jsonNode.get("response").get("nickname").asText();
         String email = jsonNode.get("response").get("email").asText();
         String name = jsonNode.get("response").get("name").asText();
 

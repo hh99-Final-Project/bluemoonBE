@@ -160,13 +160,10 @@ public class PostService {
 
         List<CommentDto> result = new ArrayList<>();
         Map<String, CommentDto> map = new HashMap<>();
-        comments.stream().forEach(c -> {
+        comments.forEach(c -> {
             CommentDto dto = new CommentDto(c);
             if (c.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(user.getId())) {
                 dto.setShow(true);
-                if(dto.isLock()){
-                    dto.setLock(false);
-                }
             }
 
             map.put(dto.getCommentUuid(), dto);
