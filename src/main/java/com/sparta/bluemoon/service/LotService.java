@@ -1,17 +1,23 @@
 package com.sparta.bluemoon.service;
 
+import com.sparta.bluemoon.domain.Lot;
 import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.User;
+import com.sparta.bluemoon.dto.request.PersonalInfoRequestDto;
 import com.sparta.bluemoon.dto.response.LotResponseDto;
 import com.sparta.bluemoon.exception.CustomException;
+import com.sparta.bluemoon.repository.LotRepository;
 import com.sparta.bluemoon.repository.PointRepository;
+import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
-import static com.sparta.bluemoon.exception.ErrorCode.CANNOT_LOT;
+import static com.sparta.bluemoon.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +25,7 @@ public class LotService {
 
     private final PointService pointService;
     private final PointRepository pointRepository;
+    private final LotRepository lotRepository;
 
     public int bananaCount = 5;
    //판단
@@ -32,7 +39,7 @@ public class LotService {
         if (point.getLottoCount() != 0 && point.getMyPoint() >= 1000) {
             //포인트 변경,카운트 감소
             userPoint = pointService.pointChange(point, "LOTTO_POINT");
-            result = getLotResult();
+            result = getLotResult(user);
         }
         //TODO:EXCEPTION만들기
         else {
@@ -45,7 +52,7 @@ public class LotService {
 
 
     //룰렛돌리기
-    public boolean getLotResult() {
+    public boolean getLotResult(User user) {
         System.out.println(bananaCount);
         if(bananaCount>0){
             Random r = new Random();
@@ -59,12 +66,29 @@ public class LotService {
             if (temp >= 0 && temp < 10) {
                 result = true;
                 bananaCount--;
+                Lot lot = new Lot(user);
+                lotRepository.save(lot);
             }
 
             return result;
         } else {
             System.out.println("바나나 없음");
             return false;
+        }
+    }
+
+    @Transactional
+    public void writePersonalInfo(UserDetailsImpl userDetails, PersonalInfoRequestDto requestDto){
+        String nickname = requestDto.getNickname();
+        if(!userDetails.getUser().getNickname().equals(nickname)){
+            throw new CustomException(DOESNT_WRITE_OTHER_NICKNAME);
+        }
+
+        List<Lot> winners = lotRepository.findByNicknameAndPersonalInfo(nickname,false);
+        if(winners.isEmpty()){
+            throw new CustomException(NO_WINNER);
+        } else{
+            winners.get(0).updateInfo(requestDto.getPhoneNumber());
         }
     }
 }
