@@ -1,19 +1,16 @@
 package com.sparta.bluemoon.security.jwt;
 
-import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.*;
-import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.CLAIM_EXPIRED_DATE;
-import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.CLAIM_NICKNAME;
-import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.CLAIM_USER_NAME;
-import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.JWT_SECRET;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
-import java.util.Date;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import java.util.Date;
+import java.util.Optional;
+
+import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.*;
 
 @Component
 public class JwtDecoder {
