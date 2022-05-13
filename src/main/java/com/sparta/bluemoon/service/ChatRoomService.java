@@ -12,6 +12,7 @@ import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.ChatMessageRepository;
 import com.sparta.bluemoon.repository.ChatRoomRepository;
 import com.sparta.bluemoon.repository.ChatRoomUserRepository;
+import com.sparta.bluemoon.repository.RedisRepository;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.util.Calculator;
@@ -40,6 +41,7 @@ public class ChatRoomService {
     private final UserRepository userRepository;
     private final ChatRoomUserRepository chatRoomUserRepository;
     private final ChatMessageRepository chatMessageRepository;
+    private final RedisRepository redisRepository;
 
     //채팅방 생성
     public String createChatRoom (
@@ -117,7 +119,6 @@ public class ChatRoomService {
     //채팅방 조회
     public List<ChatRoomResponseDto> getChatRoom(UserDetailsImpl userDetails, int page) {
         //user로 챗룸 유저를 찾고>>챗룸 유저에서 채팅방을 찾는다
-        //마자
         //마지막나온 메시지 ,내용 ,시간
         int display = 5;
         Pageable pageable = PageRequest.of(page,display);
@@ -140,8 +141,8 @@ public class ChatRoomService {
 
     public ChatRoomResponseDto createChatRoomDto(ChatRoomUser chatRoomUser) {
         String roomName = chatRoomUser.getName();
-        String roomId = chatRoomUser.getChatRoom().getChatRoomUuid();
-        System.out.println(roomId);
+        String roomUuid = chatRoomUser.getChatRoom().getChatRoomUuid();
+
         String lastMessage;
         LocalDateTime lastTime;
         //마지막
@@ -154,9 +155,12 @@ public class ChatRoomService {
             lastMessage = Messages.get(0).getMessage();
             lastTime = Messages.get(0).getCreatedAt();
         }
+
+        int unReadMessageCount = redisRepository
+            .getChatRoomMessageCount(roomUuid, chatRoomUser.getId());
         long dayBeforeTime = ChronoUnit.MINUTES.between(lastTime, LocalDateTime.now());
         String dayBefore = Calculator.time(dayBeforeTime);
-        return new ChatRoomResponseDto(roomName, roomId, lastMessage, lastTime, dayBefore);
+        return new ChatRoomResponseDto(roomName, roomUuid, lastMessage, lastTime, dayBefore, unReadMessageCount);
     }
 
 
