@@ -31,8 +31,6 @@ public class StompHandler implements ChannelInterceptor {
         if (StompCommand.CONNECT == accessor.getCommand()) {
             // toDo : 모든 화면에서 socket이 뚫려 있기 때문에 대화방에서 온 connect라는 것을 알 수 있는 것이 있어야 한다.
             String type = accessor.getFirstNativeHeader("type");
-            System.out.println("소켓열결입니다1111111111111111111111111111111111111111111111111111111");
-            System.out.println(type);
             if (type !=null && type.equals("CHAT")) {
                 // 사용자 확인
                 System.out.println(accessor.getFirstNativeHeader("token"));

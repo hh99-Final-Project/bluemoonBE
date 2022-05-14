@@ -76,15 +76,12 @@ public class ChatService {
         return sdf.format(date);
     }
 
+    //안읽은 메세지 업데이트
     public void updateUnReadMessageCount(ChatMessageDto chatMessageDto) {
         Long otherUserId = chatMessageDto.getOtherUserId();
         String roomId = chatMessageDto.getRoomId();
         // 상대방이 채팅방에 들어가 있지 않거나 들어가 있어도 나와 같은 대화방이 아닌 경우 안 읽은 메세지 처리를 할 것이다.
         if (!redisRepository.existChatRoomUserInfo(otherUserId) || !redisRepository.getUserEnterRoomId(otherUserId).equals(roomId)) {
-            System.out.println("업데이트리드메세지카운트!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-            System.out.println(otherUserId);
-            System.out.println(redisRepository.getUserEnterRoomId(otherUserId));
-            System.out.println(roomId);
 
             redisRepository.addChatRoomMessageCount(roomId, otherUserId);
             int unReadMessageCount = redisRepository

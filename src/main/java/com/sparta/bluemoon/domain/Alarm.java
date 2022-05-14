@@ -17,6 +17,8 @@ public class Alarm extends Timestamped{
 
     private String title; //어느 게시글에 댓글을 달았는지 확인하기 위해
 
+    private String postUuid;
+
     private String message;
 
     @ManyToOne
@@ -25,6 +27,7 @@ public class Alarm extends Timestamped{
     public Alarm(ChatMessageDto chatMessageDto, User user) {
         this.title = chatMessageDto.getTitle();
         this.message = chatMessageDto.getMessage();
+        this.postUuid = chatMessageDto.getPostUuid();
         this.user = user;
     }
 }

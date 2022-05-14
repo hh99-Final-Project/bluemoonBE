@@ -134,9 +134,7 @@ public class ChatRoomService {
         Page<ChatRoomUser> chatRoomUsers = chatRoomUserRepository.findAllByUser(userDetails.getUser(),pageable);
 
         //TODO:챗 유저로 받아야하나??chatRoomUsers.getContent();
-
         for (ChatRoomUser chatRoomUser : chatRoomUsers) {
-            ChatRoom chatRoom = chatRoomUser.getChatRoom();
             ChatRoomResponseDto responseDto = createChatRoomDto(chatRoomUser);
             responseDtos.add(responseDto);
 
@@ -164,8 +162,7 @@ public class ChatRoomService {
             lastTime = Messages.get(0).getCreatedAt();
         }
 
-        int unReadMessageCount = redisRepository
-            .getChatRoomMessageCount(roomUuid, chatRoomUser.getId());
+        int unReadMessageCount = redisRepository.getChatRoomMessageCount(roomUuid, chatRoomUser.getUser().getId());
         long dayBeforeTime = ChronoUnit.MINUTES.between(lastTime, LocalDateTime.now());
         String dayBefore = Calculator.time(dayBeforeTime);
         return new ChatRoomResponseDto(roomName, roomUuid, lastMessage, lastTime, dayBefore, unReadMessageCount);
@@ -190,8 +187,6 @@ public class ChatRoomService {
         List<ChatRoomUser> users = chatRoomRepository.findByChatRoomUuid(roomId).get().getChatRoomUsers();
         for(ChatRoomUser user : users){
             if(!user.getUser().getId().equals(myUser.getId())) {
-                System.out.println(user.getUser().getId());
-                System.out.println(myUser.getId());
                User otherUser = user.getUser();
                return new ChatRoomOtherUserInfoResponseDto(otherUser);
             }
@@ -208,8 +203,6 @@ public class ChatRoomService {
         //혹시 채팅방 이용자가 아닌데 들어온다면,
         for(ChatRoomUser chatroomUser:chatRoomUsers){
             if(chatroomUser.getUser().getId().equals(userDetails.getUser().getId())) {
-                System.out.println(chatroomUser.getUser().getId());
-                System.out.println(userDetails.getUser().getId());
                 List<ChatMessage> chatMessages = chatMessageRepository.findAllByChatRoomOrderByCreatedAtAsc(chatroom);
                 List<ChatMessageTestDto> chatMessageTestDtos = new ArrayList<>();
                 for(ChatMessage chatMessage : chatMessages){
