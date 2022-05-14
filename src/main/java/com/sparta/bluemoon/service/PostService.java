@@ -168,7 +168,7 @@ public class PostService {
 
             map.put(dto.getCommentUuid(), dto);
             if(c.getParent() != null) {
-                map.get(c.getParent().getId()).getChildren().add(dto);
+                map.get(c.getParent().getCommentUuid()).getChildren().add(dto);
             } else {
                 result.add(dto);
             }
