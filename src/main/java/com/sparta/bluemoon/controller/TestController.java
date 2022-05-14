@@ -1,5 +1,8 @@
 package com.sparta.bluemoon.controller;
 
+import static com.sparta.bluemoon.exception.ErrorCode.DOESNT_EXIST_POST_FOR_ANONYMOUS;
+
+import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +16,9 @@ public class TestController {
 
     @GetMapping("/test/get")
     public void getTest() {
-        redisRepository.getTest();
+        System.out.println("HIHIHI");
+        throw new CustomException(DOESNT_EXIST_POST_FOR_ANONYMOUS);
+//        redisRepository.getTest();
     }
 
     @GetMapping("/test/put")
