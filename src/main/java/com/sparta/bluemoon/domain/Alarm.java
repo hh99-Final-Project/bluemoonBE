@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class Alarm extends Timestamped{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String title; //어느 게시글에 댓글을 달았는지 확인하기 위해

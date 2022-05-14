@@ -16,7 +16,7 @@ import java.util.Map;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     // 카카오, 구글 이메일

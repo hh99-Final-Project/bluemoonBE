@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Post extends Timestamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     // 게시글 제목

@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class ChatRoomUser extends Timestamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     // 채팅방 주인
