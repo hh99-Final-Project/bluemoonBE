@@ -26,7 +26,7 @@ public enum ErrorCode {
 
     //CHATROOM
     NOT_FOUND_ANOTHER_USER(HttpStatus.NOT_FOUND.value(), "R001","해당하는 게시글이 존재하지 않습니다."),
-    ROOM_ALREADY_EXIST(HttpStatus.BAD_REQUEST.value(), "R002","이미 존재하는 방입니다."),
+    UNKNOWN_CHATROOM(HttpStatus.BAD_REQUEST.value(), "R002","알 수 없는 채팅방 입니다."),
     CANNOT_FOUND_CHATROOM(HttpStatus.NOT_FOUND.value(), "R003","존재하지 않는 채팅방입니다."),
     FORBIDDEN_CHATROOM(HttpStatus.FORBIDDEN.value(), "R004","접근 불가능한 채팅방 입니다."),
     CANNOT_MAKE_ROOM_ALONE(HttpStatus.BAD_REQUEST.value(), "R005","자기자신에게 채팅을 신청할 수 없습니다"),
@@ -41,9 +41,12 @@ public enum ErrorCode {
     VOICE_FILE_INVALID(HttpStatus.BAD_REQUEST.value(), "V001","잘못된 파일 형식입니다."),
 
     //LOTTO
-    CANNOT_LOT(HttpStatus.BAD_REQUEST.value(), "L001","추첨할 수 없습니다."),
-    DOESNT_WRITE_OTHER_NICKNAME(HttpStatus.BAD_REQUEST.value(), "L002","본인의 닉네임을 입력해주세요"),
-    NO_WINNER(HttpStatus.FORBIDDEN.value(), "L003","당첨자가 아닙니다."),
+
+    LACK_OF_LOTTO_COUNT(HttpStatus.BAD_REQUEST.value(), "L001","오늘 참여가능 횟수 부족"),
+    LACK_OF_POINT(HttpStatus.BAD_REQUEST.value(), "L002","포인트 부족"),
+    CANNOT_LOT(HttpStatus.BAD_REQUEST.value(), "L003","추첨할 수 없습니다."),
+    DOESNT_WRITE_OTHER_NICKNAME(HttpStatus.BAD_REQUEST.value(), "L004","본인의 닉네임을 입력해주세요"),
+    NO_WINNER(HttpStatus.FORBIDDEN.value(), "L005","당첨자가 아닙니다."),
 
     ;
 

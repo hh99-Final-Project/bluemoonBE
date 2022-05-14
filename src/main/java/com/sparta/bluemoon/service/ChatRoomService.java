@@ -12,6 +12,7 @@ import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.repository.ChatMessageRepository;
 import com.sparta.bluemoon.repository.ChatRoomRepository;
 import com.sparta.bluemoon.repository.ChatRoomUserRepository;
+import com.sparta.bluemoon.repository.RedisRepository;
 import com.sparta.bluemoon.repository.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.util.Calculator;
@@ -40,6 +41,7 @@ public class ChatRoomService {
     private final UserRepository userRepository;
     private final ChatRoomUserRepository chatRoomUserRepository;
     private final ChatMessageRepository chatMessageRepository;
+    private final RedisRepository redisRepository;
 
     //채팅방 생성
     public String createChatRoom (
@@ -56,7 +58,13 @@ public class ChatRoomService {
         System.out.println(roomHashCode);
 
         //방 존재 확인 함수
-        existRoom(roomHashCode, userDetails, anotherUser);
+        if(existRoom(roomHashCode, userDetails, anotherUser)){
+            ChatRoom existChatRoom = chatRoomRepository.findByRoomHashCode(roomHashCode).orElseThrow(
+                    ()-> new CustomException(UNKNOWN_CHATROOM)
+            );
+            return existChatRoom.getChatRoomUuid();
+        }
+
 
         //방 먼저 생성
         ChatRoom room = new ChatRoom(roomHashCode);
@@ -87,18 +95,18 @@ public class ChatRoomService {
     }
 
     //이미 방이 존재할 때
-    public void existRoom(
+    public boolean existRoom(
             int roomUsers,
             UserDetailsImpl userDetails,
             User anotherUser) {
 
         ChatRoom chatRoom = chatRoomRepository.findByRoomHashCode(roomUsers).orElse(null);
 
+        //방이 존재 할 때
         if (chatRoom != null) {
             List<ChatRoomUser> chatRoomUser = chatRoom.getChatRoomUsers();
-            if (chatRoomUser.size() == 2) {
-                throw new CustomException(ROOM_ALREADY_EXIST);
-            } else if (chatRoomUser.size() == 1) {
+
+            if (chatRoomUser.size() == 1) {
                 //나만 있을 때
                 if (chatRoomUser.get(0).getUser().equals(userDetails.getUser())) {
                     ChatRoomUser user = new ChatRoomUser(anotherUser, userDetails.getUser(), chatRoom);
@@ -109,7 +117,9 @@ public class ChatRoomService {
                     chatRoomUserRepository.save(user);
                 }
             }
+            return true;
         }
+        return false;
     }
 
 
@@ -117,7 +127,6 @@ public class ChatRoomService {
     //채팅방 조회
     public List<ChatRoomResponseDto> getChatRoom(UserDetailsImpl userDetails, int page) {
         //user로 챗룸 유저를 찾고>>챗룸 유저에서 채팅방을 찾는다
-        //마자
         //마지막나온 메시지 ,내용 ,시간
         int display = 5;
         Pageable pageable = PageRequest.of(page,display);
@@ -125,9 +134,7 @@ public class ChatRoomService {
         Page<ChatRoomUser> chatRoomUsers = chatRoomUserRepository.findAllByUser(userDetails.getUser(),pageable);
 
         //TODO:챗 유저로 받아야하나??chatRoomUsers.getContent();
-
         for (ChatRoomUser chatRoomUser : chatRoomUsers) {
-            ChatRoom chatRoom = chatRoomUser.getChatRoom();
             ChatRoomResponseDto responseDto = createChatRoomDto(chatRoomUser);
             responseDtos.add(responseDto);
 
@@ -140,8 +147,8 @@ public class ChatRoomService {
 
     public ChatRoomResponseDto createChatRoomDto(ChatRoomUser chatRoomUser) {
         String roomName = chatRoomUser.getName();
-        String roomId = chatRoomUser.getChatRoom().getChatRoomUuid();
-        System.out.println(roomId);
+        String roomUuid = chatRoomUser.getChatRoom().getChatRoomUuid();
+
         String lastMessage;
         LocalDateTime lastTime;
         //마지막
@@ -154,9 +161,11 @@ public class ChatRoomService {
             lastMessage = Messages.get(0).getMessage();
             lastTime = Messages.get(0).getCreatedAt();
         }
+
+        int unReadMessageCount = redisRepository.getChatRoomMessageCount(roomUuid, chatRoomUser.getUser().getId());
         long dayBeforeTime = ChronoUnit.MINUTES.between(lastTime, LocalDateTime.now());
         String dayBefore = Calculator.time(dayBeforeTime);
-        return new ChatRoomResponseDto(roomName, roomId, lastMessage, lastTime, dayBefore);
+        return new ChatRoomResponseDto(roomName, roomUuid, lastMessage, lastTime, dayBefore, unReadMessageCount);
     }
 
 
@@ -178,8 +187,6 @@ public class ChatRoomService {
         List<ChatRoomUser> users = chatRoomRepository.findByChatRoomUuid(roomId).get().getChatRoomUsers();
         for(ChatRoomUser user : users){
             if(!user.getUser().getId().equals(myUser.getId())) {
-                System.out.println(user.getUser().getId());
-                System.out.println(myUser.getId());
                User otherUser = user.getUser();
                return new ChatRoomOtherUserInfoResponseDto(otherUser);
             }
@@ -196,8 +203,6 @@ public class ChatRoomService {
         //혹시 채팅방 이용자가 아닌데 들어온다면,
         for(ChatRoomUser chatroomUser:chatRoomUsers){
             if(chatroomUser.getUser().getId().equals(userDetails.getUser().getId())) {
-                System.out.println(chatroomUser.getUser().getId());
-                System.out.println(userDetails.getUser().getId());
                 List<ChatMessage> chatMessages = chatMessageRepository.findAllByChatRoomOrderByCreatedAtAsc(chatroom);
                 List<ChatMessageTestDto> chatMessageTestDtos = new ArrayList<>();
                 for(ChatMessage chatMessage : chatMessages){
