@@ -1,26 +1,19 @@
 package com.sparta.bluemoon.service;
 
-import com.sparta.bluemoon.domain.Lot;
-import com.sparta.bluemoon.domain.Point;
-import com.sparta.bluemoon.domain.User;
-import com.sparta.bluemoon.dto.request.PersonalInfoRequestDto;
-import com.sparta.bluemoon.dto.response.LotResponseDto;
-import com.sparta.bluemoon.exception.CustomException;
-import com.sparta.bluemoon.exception.ErrorCode;
-import com.sparta.bluemoon.repository.LotRepository;
-import com.sparta.bluemoon.repository.PointRepository;
-import com.sparta.bluemoon.repository.UserRepository;
-import org.hamcrest.CoreMatchers;
+import com.sparta.bluemoon.lot.*;
+import com.sparta.bluemoon.lot.requestDto.PersonalInfoRequestDto;
+import com.sparta.bluemoon.lot.responseDto.LotResponseDto;
+import com.sparta.bluemoon.point.Point;
+import com.sparta.bluemoon.point.PointService;
+import com.sparta.bluemoon.user.User;
+import com.sparta.bluemoon.point.PointRepository;
+import com.sparta.bluemoon.user.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-import org.yaml.snakeyaml.emitter.Emitter;
 
 import java.util.List;
 
-import static com.sparta.bluemoon.exception.ErrorCode.LACK_OF_POINT;
-import static com.sparta.bluemoon.exception.ErrorCode.NO_WINNER;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

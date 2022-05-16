@@ -1,11 +1,12 @@
 package com.sparta.bluemoon.service;
 
-import com.sparta.bluemoon.domain.Point;
-import com.sparta.bluemoon.domain.User;
-import com.sparta.bluemoon.dto.response.UserInfoDto;
-import com.sparta.bluemoon.repository.PointRepository;
-import com.sparta.bluemoon.repository.UserRepository;
+import com.sparta.bluemoon.point.Point;
+import com.sparta.bluemoon.user.User;
+import com.sparta.bluemoon.user.responseDto.UserInfoDto;
+import com.sparta.bluemoon.point.PointRepository;
+import com.sparta.bluemoon.user.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
+import com.sparta.bluemoon.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

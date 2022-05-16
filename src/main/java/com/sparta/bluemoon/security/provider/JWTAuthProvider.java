@@ -1,7 +1,7 @@
 package com.sparta.bluemoon.security.provider;
 
-import com.sparta.bluemoon.domain.User;
-import com.sparta.bluemoon.repository.UserRepository;
+import com.sparta.bluemoon.user.User;
+import com.sparta.bluemoon.user.UserRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.security.jwt.JwtDecoder;
 import com.sparta.bluemoon.security.jwt.JwtPreProcessingToken;

@@ -1,14 +1,17 @@
 package com.sparta.bluemoon.service;
 
 import static org.assertj.core.api.Assertions.*;
-import com.sparta.bluemoon.domain.Point;
-import com.sparta.bluemoon.domain.Post;
-import com.sparta.bluemoon.domain.User;
-import com.sparta.bluemoon.dto.request.CommentRequestDto;
-import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
-import com.sparta.bluemoon.repository.PointRepository;
-import com.sparta.bluemoon.repository.PostRepository;
-import com.sparta.bluemoon.repository.UserRepository;
+
+import com.sparta.bluemoon.comment.CommentService;
+import com.sparta.bluemoon.point.Point;
+import com.sparta.bluemoon.post.Post;
+import com.sparta.bluemoon.user.User;
+import com.sparta.bluemoon.comment.requestDto.CommentRequestDto;
+import com.sparta.bluemoon.post.PostService;
+import com.sparta.bluemoon.post.requestDto.PostCreateRequestDto;
+import com.sparta.bluemoon.point.PointRepository;
+import com.sparta.bluemoon.post.PostRepository;
+import com.sparta.bluemoon.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;

@@ -1,11 +1,12 @@
 package com.sparta.bluemoon.service;
 
-import com.sparta.bluemoon.domain.Alarm;
-import com.sparta.bluemoon.domain.User;
-import com.sparta.bluemoon.dto.ChatMessageDto;
-import com.sparta.bluemoon.dto.response.AlarmDto;
-import com.sparta.bluemoon.repository.AlarmRepository;
-import com.sparta.bluemoon.repository.UserRepository;
+import com.sparta.bluemoon.chat.Alarm;
+import com.sparta.bluemoon.chat.AlarmService;
+import com.sparta.bluemoon.user.User;
+import com.sparta.bluemoon.chat.requestDto.ChatMessageDto;
+import com.sparta.bluemoon.chat.responseDto.AlarmDto;
+import com.sparta.bluemoon.chat.AlarmRepository;
+import com.sparta.bluemoon.user.UserRepository;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
