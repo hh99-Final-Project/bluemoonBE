@@ -8,6 +8,7 @@ import com.sparta.bluemoon.repository.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import com.sparta.bluemoon.dto.request.CommentRequestDto;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
 import com.sparta.bluemoon.dto.response.MainPostForAnonymousResponseDto;
@@ -20,7 +21,9 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 
 
 
@@ -97,6 +100,7 @@ class PostServiceTest {
         );
 
         System.out.println(user1.getPoint().getMyPoint());
+
         //when 게시글 작성하면
         postService.create(requestDto,"",user1);
 
@@ -108,7 +112,6 @@ class PostServiceTest {
         assertEquals(post.getUser().getPoint().getMyPoint(),500);
         assertEquals(post.getUser().getPoint().getPostCount(),0);
     }
-
     @Order(3)
     @DisplayName("포스트 삭제")
     void delete() {
@@ -232,6 +235,7 @@ class PostServiceTest {
         assertEquals(postResponseDto.getComments().get(0).getVoiceUrl(), "voiceurl");
         assertEquals(postResponseDto.getComments().get(0).getNickname(), "김승민");
         assertEquals(postResponseDto.getComments().get(0).getUserId(), 1L);
+
 
 
     }

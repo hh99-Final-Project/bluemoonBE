@@ -78,7 +78,6 @@ public class PostService {
         }
         //TODO: 임의로 음성녹음 파일 추가
         return new PostCreateResponseDto(voiceUrl, userPoint);
-
     }
 
     public void createWithoutVoice(PostCreateRequestDto postCreateRequestDto, User user) {

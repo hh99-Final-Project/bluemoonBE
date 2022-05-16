@@ -30,7 +30,9 @@ class UserServiceTest {
     @Test
     @DisplayName("유저 저장하기")
     void saveUser() {
+
         User user = new User("1234", "가나다라", "123456");
+
         userRepository.save(user);
 
         int mypoint = 0;
