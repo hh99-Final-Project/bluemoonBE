@@ -2,23 +2,21 @@ package com.sparta.bluemoon.service;
 
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.bluemoon.domain.Comment;
-import com.sparta.bluemoon.domain.Point;
-import com.sparta.bluemoon.domain.Post;
-import com.sparta.bluemoon.domain.QComment;
-import com.sparta.bluemoon.domain.User;
-import com.sparta.bluemoon.dto.request.CommentRequestDto;
-import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
-import com.sparta.bluemoon.dto.response.CommentResponseDto;
-import com.sparta.bluemoon.repository.CommentQuerydslRepository;
+import com.sparta.bluemoon.comment.Comment;
+import com.sparta.bluemoon.comment.CommentService;
+import com.sparta.bluemoon.point.Point;
+import com.sparta.bluemoon.post.Post;
+import com.sparta.bluemoon.user.User;
+import com.sparta.bluemoon.comment.requestDto.CommentRequestDto;
+import com.sparta.bluemoon.post.PostService;
+import com.sparta.bluemoon.post.requestDto.PostCreateRequestDto;
 
-import com.sparta.bluemoon.repository.CommentRepository;
-import com.sparta.bluemoon.repository.PointRepository;
-import com.sparta.bluemoon.repository.PostRepository;
-import com.sparta.bluemoon.repository.UserRepository;
+import com.sparta.bluemoon.comment.CommentRepository;
+import com.sparta.bluemoon.point.PointRepository;
+import com.sparta.bluemoon.post.PostRepository;
+import com.sparta.bluemoon.user.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-import static com.sparta.bluemoon.domain.QComment.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

@@ -1,8 +1,8 @@
 package com.sparta.bluemoon.config.handler;
 
-import com.sparta.bluemoon.domain.User;
-import com.sparta.bluemoon.repository.RedisRepository;
-import com.sparta.bluemoon.repository.UserRepository;
+import com.sparta.bluemoon.user.User;
+import com.sparta.bluemoon.chat.RedisRepository;
+import com.sparta.bluemoon.user.UserRepository;
 import com.sparta.bluemoon.security.jwt.JwtDecoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;

@@ -1,6 +1,6 @@
 package com.sparta.bluemoon.security;
 
-import com.sparta.bluemoon.domain.User;
+import com.sparta.bluemoon.user.User;
 import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
