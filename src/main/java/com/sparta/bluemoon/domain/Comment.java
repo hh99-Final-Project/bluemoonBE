@@ -78,8 +78,6 @@ public class Comment extends Timestamped {
     }
 
     public void changeDeletedStatus(DeleteStatus type) {
-        System.out.println(this.isDeleted);
         this.isDeleted = type;
-        System.out.println(this.isDeleted);
     }
 }

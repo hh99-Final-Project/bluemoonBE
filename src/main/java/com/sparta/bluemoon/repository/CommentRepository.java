@@ -6,6 +6,7 @@ import com.sparta.bluemoon.domain.Comment;
 import com.sparta.bluemoon.domain.Post;
 import javax.persistence.EntityManager;
 import com.sparta.bluemoon.domain.User;
+import javax.swing.text.AbstractDocument.Content;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
@@ -20,4 +21,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     void deleteByCommentUuid(String commentId);
 
+    List<Comment> findByContent(String content);
 }

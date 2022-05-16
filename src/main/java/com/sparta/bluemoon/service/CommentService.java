@@ -44,7 +44,6 @@ public class CommentService {
         Comment parentComment = commentRepository
             .findByCommentUuid(requestDto.getParentUuid()).orElse(null);
 
-
         Comment comment = new Comment(requestDto, user, post, voiceUrl, parentComment);
         commentRepository.save(comment);
 
@@ -59,9 +58,7 @@ public class CommentService {
         Point point = pointRepository.findByUser(user);
 
         if((userComments.size()==1)&&(point.getCommentCount()!=0)){
-            System.out.println("HI");
             userPoint = pointService.pointChange(point,"COMMENT_POINT");
-            System.out.println(userPoint);
         }
 
         return new CommentResponseDto(requestDto, user, dateResult, userPoint);
