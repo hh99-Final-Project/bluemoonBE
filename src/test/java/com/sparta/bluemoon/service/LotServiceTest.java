@@ -14,16 +14,19 @@ import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import org.yaml.snakeyaml.emitter.Emitter;
 
 import java.util.List;
 
+import static com.sparta.bluemoon.exception.ErrorCode.LACK_OF_POINT;
 import static com.sparta.bluemoon.exception.ErrorCode.NO_WINNER;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LotServiceTest {
+
 
     @Autowired
     PointService pointService;
@@ -35,6 +38,7 @@ class LotServiceTest {
     UserRepository userRepository;
     @Autowired
     LotService lotService;
+
 
    // @BeforeEach
    @Test
@@ -82,6 +86,7 @@ class LotServiceTest {
     }
 
 
+
     @Test
     @Order(3)
     @DisplayName("당첨 시 개인 정보 저장")
@@ -104,6 +109,7 @@ class LotServiceTest {
         assertEquals(lots.get(0).getNickname(),personalInfoRequestDto.getNickname());
         assertEquals(lots.get(0).getPhoneNumber(),personalInfoRequestDto.getPhoneNumber());
 
-
     }
 }
+
+
