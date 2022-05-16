@@ -1,5 +1,6 @@
 package com.sparta.bluemoon.service;
 
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.bluemoon.domain.Comment;
 import com.sparta.bluemoon.domain.Point;
@@ -10,10 +11,12 @@ import com.sparta.bluemoon.dto.request.CommentRequestDto;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
 import com.sparta.bluemoon.dto.response.CommentResponseDto;
 import com.sparta.bluemoon.repository.CommentQuerydslRepository;
+
 import com.sparta.bluemoon.repository.CommentRepository;
 import com.sparta.bluemoon.repository.PointRepository;
 import com.sparta.bluemoon.repository.PostRepository;
 import com.sparta.bluemoon.repository.UserRepository;
+
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
@@ -57,8 +60,6 @@ public class CommentServiceTest {
     @Autowired
     private CommentRepository commentRepository;
 
-
-
     @Test
     @Order(1)
     @DisplayName("사용자 정보 저장, 게시글 저장")
@@ -74,19 +75,22 @@ public class CommentServiceTest {
 
         Point point = new Point(mypoint, user, postCount, commentCount, lottoCount);
         pointRepository.save(point);
+
         user = userRepository.findByUsername("username").get();
+
         PostCreateRequestDto requestDto = new PostCreateRequestDto("제목","내용");
         postService.create(requestDto, "", user);
     }
 
     @Test
     @Order(2)
+
     @DisplayName("댓글 저장")
     public void save1() {
         // given
         User user = userRepository.findByUsername("username").get();
         Post post = postRepository.findByUser(user).get(0);
-        System.out.println("post.getPostUuid() = " + post.getPostUuid());
+
 
         // when
         CommentRequestDto commentRequestDto = new CommentRequestDto();
@@ -97,6 +101,7 @@ public class CommentServiceTest {
         // then
         Comment comment = commentRepository.findAllByPostAndUser(post, user).get(0);
         assertThat(comment.getContent()).isEqualTo("내용");
+
         assertThat(comment.getUser().getUsername()).isEqualTo("username");
         assertThat(comment.getUser().getNickname()).isEqualTo("nickname");
     }
@@ -127,4 +132,5 @@ public class CommentServiceTest {
         Comment childComment = commentRepository.findByContent("대댓글1").get(0);
         assertThat(childComment.getParent().getId()).isEqualTo(parentComment.getId());
     }
+
 }

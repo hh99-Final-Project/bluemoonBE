@@ -186,18 +186,14 @@ public class PostService {
 
     // 비 로그인한 유저를 위해 main post를 보여주기
     public MainPostForAnonymousResponseDto getMainPost() {
-        Post post = postRepository.findById(MAIN_POST_INDEX_FOR_ANONYMOUS).orElseThrow(
-            () -> new CustomException(DOESNT_EXIST_MAIN_POST_FOR_ANONYMOUS)
-        );
+        Post post = postRepository.findAll().get(0);
 
         return new MainPostForAnonymousResponseDto(post);
     }
 
     // 비 로그인한 유저를 위해 detail main post를 보여주기
     public PostResponseDto getMainDetailPost() {
-        Post post = postRepository.findById(MAIN_POST_INDEX_FOR_ANONYMOUS).orElseThrow(
-            () -> new CustomException(DOESNT_EXIST_POST_FOR_ANONYMOUS)
-        );
+        Post post = postRepository.findAll().get(0);
 
         // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
         List<Comment> comments = commentRepository.findAllByPost(post);
