@@ -35,7 +35,7 @@ public class Post extends Timestamped {
     @Column(unique = true)
     private String postUuid = UUID.randomUUID().toString();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne
