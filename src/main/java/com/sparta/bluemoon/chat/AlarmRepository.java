@@ -1,6 +1,5 @@
 package com.sparta.bluemoon.chat;
 
-import com.sparta.bluemoon.chat.Alarm;
 import com.sparta.bluemoon.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
