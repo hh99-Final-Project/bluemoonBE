@@ -69,8 +69,8 @@ class PostServiceTest {
 
     @Test
     @Order(1)
-    @DisplayName("포스트 생성")
-    void create() {
+    @DisplayName("유저 정보 저장")
+    public void saveUser() {
         //given
         User user = new User("123@123", "김승민", "111");
         userRepository.save(user);
@@ -83,7 +83,7 @@ class PostServiceTest {
         Point point = new Point(mypoint, user, postCount, commentCount, lottoCount);
         pointRepository.save(point);
 
-
+    }
 
 
     @Test
