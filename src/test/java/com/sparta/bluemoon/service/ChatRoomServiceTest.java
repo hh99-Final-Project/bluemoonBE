@@ -2,18 +2,16 @@ package com.sparta.bluemoon.service;
 
 import com.sparta.bluemoon.chat.ChatMessageRepository;
 import com.sparta.bluemoon.chat.RedisRepository;
-import com.sparta.bluemoon.chatRoom.*;
-import com.sparta.bluemoon.user.User;
-import com.sparta.bluemoon.chatRoom.responseDto.ChatRoomResponseDto;
+import com.sparta.bluemoon.chatRoom.ChatRoomRepository;
+import com.sparta.bluemoon.chatRoom.ChatRoomService;
+import com.sparta.bluemoon.chatRoom.ChatRoomUserRepository;
 import com.sparta.bluemoon.chatRoom.requestDto.ChatRoomUserRequestDto;
 import com.sparta.bluemoon.security.UserDetailsImpl;
+import com.sparta.bluemoon.user.User;
 import com.sparta.bluemoon.user.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
@@ -99,20 +97,6 @@ class ChatRoomServiceTest {
 
     @Test
     void getChatRoom() {
-        //given
-        User user = userRepository.findByNickname("가나다라").get();
-        int page = 0;
-        int display = 5;
-        Pageable pageable = PageRequest.of(page,display);
-
-        //when
-        ChatRoomResponseDto chatRoomResponseDto = chatRoomService.getChatRoom(new UserDetailsImpl(user), page).get(0);
-        Page<ChatRoomUser> chatRoomUser = chatRoomUserRepository.findAllByUser(user, pageable);
-        ChatRoom chatRoom = chatRoomRepository.findAll().get(0);
-
-        //then
-        assertEquals(chatRoomResponseDto.getChatRoomUuid(), chatRoom.getChatRoomUuid());
-
     }
 
     @Test

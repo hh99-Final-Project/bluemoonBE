@@ -1,9 +1,7 @@
 package com.sparta.bluemoon.chat;
 
-import com.sparta.bluemoon.chat.Alarm;
-import com.sparta.bluemoon.user.User;
 import com.sparta.bluemoon.chat.responseDto.AlarmDto;
-import com.sparta.bluemoon.chat.AlarmRepository;
+import com.sparta.bluemoon.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
