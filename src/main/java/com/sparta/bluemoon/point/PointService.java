@@ -1,7 +1,5 @@
 package com.sparta.bluemoon.point;
 
-import com.sparta.bluemoon.point.Point;
-import com.sparta.bluemoon.point.PointRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

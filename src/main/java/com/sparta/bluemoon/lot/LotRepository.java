@@ -1,6 +1,5 @@
 package com.sparta.bluemoon.lot;
 
-import com.sparta.bluemoon.lot.Lot;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

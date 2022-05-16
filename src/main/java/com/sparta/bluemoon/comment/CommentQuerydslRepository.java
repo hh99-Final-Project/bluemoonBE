@@ -1,14 +1,13 @@
 package com.sparta.bluemoon.comment;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.bluemoon.comment.Comment;
 import com.sparta.bluemoon.post.Post;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.sparta.bluemoon.domain.QComment.comment;
+import static com.sparta.bluemoon.comment.QComment.comment;
 
 @Repository
 public class CommentQuerydslRepository {

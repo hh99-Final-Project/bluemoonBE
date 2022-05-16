@@ -2,11 +2,9 @@ package com.sparta.bluemoon.chat;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service

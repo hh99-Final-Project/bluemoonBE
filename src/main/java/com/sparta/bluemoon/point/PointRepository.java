@@ -1,7 +1,6 @@
 package com.sparta.bluemoon.point;
 
 
-import com.sparta.bluemoon.point.Point;
 import com.sparta.bluemoon.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
