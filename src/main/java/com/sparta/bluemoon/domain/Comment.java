@@ -23,7 +23,7 @@ import java.util.UUID;
 public class Comment extends Timestamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     // 댓글 내용

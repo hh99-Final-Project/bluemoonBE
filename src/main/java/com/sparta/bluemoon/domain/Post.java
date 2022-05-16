@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class Post extends Timestamped {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     // 게시글 제목
@@ -35,7 +35,7 @@ public class Post extends Timestamped {
     @Column(unique = true)
     private String postUuid = UUID.randomUUID().toString();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
     @ManyToOne

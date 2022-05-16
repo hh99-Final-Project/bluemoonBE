@@ -57,6 +57,7 @@ public class PostService {
         Post post = postRepository.findByPostUuid(postId).orElseThrow(
             () -> new CustomException(CANNOT_FIND_POST_NOT_EXIST)
         );
+
         // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
         List<CommentDto> newCommentList = getCommentDtos(userDetails, post);
         //댓글 비공개 시 볼 수 있는 사람 특정
@@ -168,7 +169,7 @@ public class PostService {
 
             map.put(dto.getCommentUuid(), dto);
             if(c.getParent() != null) {
-                map.get(c.getParent().getId()).getChildren().add(dto);
+                map.get(c.getParent().getCommentUuid()).getChildren().add(dto);
             } else {
                 result.add(dto);
             }

@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 public class ChatMessage extends Timestamped{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     // 메세지 작성자

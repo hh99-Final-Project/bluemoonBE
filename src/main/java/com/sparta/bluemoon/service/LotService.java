@@ -43,7 +43,13 @@ public class LotService {
         }
         //TODO:EXCEPTION만들기
         else {
-            throw new CustomException(CANNOT_LOT);
+            if(point.getLottoCount()==0){
+                throw new CustomException(LACK_OF_LOTTO_COUNT);
+            } else if(point.getMyPoint()<1000){
+                throw new CustomException(LACK_OF_POINT);
+            }else{
+                throw new CustomException(CANNOT_LOT);
+            }
         }
 
        return new LotResponseDto(result, userPoint);

@@ -36,7 +36,6 @@ public class ChatRoomController {
         Long chatPartnerUserId = requestDto.getUserId();
         Long myUserId = userDetails.getUser().getId();
 
-
         // redis repository에 채팅방에 존재하는 사람 마다 안 읽은 메세지의 갯수 초기화
         redisRepository.initChatRoomMessageInfo(chatRoomUuid, myUserId);
         redisRepository.initChatRoomMessageInfo(chatRoomUuid, chatPartnerUserId);
@@ -54,7 +53,9 @@ public class ChatRoomController {
 
     //채팅방 삭제
 
-    @DeleteMapping("/api/rooms/{roomId}")
+
+    @DeleteMapping("api/rooms/{roomId}")
+
     public void deleteChatRoom(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         //roonId=uuid
         //방번호랑 나간 사람
