@@ -42,12 +42,30 @@ class PostServiceTest {
     PointService pointService;
 
 
-    @Test
-    @BeforeEach
-    @DisplayName("유저 정보 저장")
-    public void saveUser() {
+//    @Test
+////    @BeforeEach
+//    @DisplayName("유저 정보 저장")
+//    public void saveUser() {
+//
+//        User user = new User("123@123", "김승민", "111");
+//        userRepository.save(user);
+//
+//        int mypoint = 0;
+//        int postCount = 1;
+//        int commentCount = 5;
+//        int lottoCount = 1;
+//
+//        Point point = new Point(mypoint, user, postCount, commentCount, lottoCount);
+//        pointRepository.save(point);
+//
+//    }
 
-        User user = new User("123@123","김승민","111");
+    @Test
+    @Order(1)
+    @DisplayName("포스트 생성")
+    void create() {
+        //given
+        User user = new User("123@123", "김승민", "111");
         userRepository.save(user);
 
         int mypoint = 0;
@@ -57,24 +75,13 @@ class PostServiceTest {
 
         Point point = new Point(mypoint, user, postCount, commentCount, lottoCount);
         pointRepository.save(point);
-    }
 
-//    @Test
-//    public void users(){
-//        saveUser("123@123","1111","김승민");
-//        saveUser("456@456","2222","김승현");
-//        saveUser("789@789","3333","김아연");
-//    }
-
-    @Test
-    @Order(1)
-    @DisplayName("포스트 생성")
-    void create() {
-        //given
         PostCreateRequestDto requestDto = new PostCreateRequestDto("제목","내용");
-        User user1 = userRepository.findById(1L).orElseThrow(
+        User user1 = userRepository.findByUsername("123@123").orElseThrow(
                 ()-> new IllegalArgumentException("해당하는 유저가 존재하지 않습니다.")
         );
+
+        System.out.println(user1.getPoint().getMyPoint());
         //when 게시글 작성하면
         postService.create(requestDto,"",user1);
 
@@ -92,7 +99,7 @@ class PostServiceTest {
     @DisplayName("포스트 삭제")
     void delete() {
         //given
-        User user = userRepository.findById(1L).get();
+        User user = userRepository.findByNickname("김승민").get();
         Post post = postRepository.findByUser(user).get(0);
         String postUuid = post.getPostUuid();
 
@@ -135,7 +142,7 @@ class PostServiceTest {
     @DisplayName("게시글 1개 상세조회")
     void getOnePost() {
         //given
-        User user = userRepository.findById(1L).get();
+        User user = userRepository.findByNickname("김승민").get();
         Post post = postRepository.findByUser(user).get(0);
         String postUuid = post.getPostUuid();
         CommentRequestDto commentRequestDto = new CommentRequestDto();
