@@ -31,7 +31,8 @@ public class LotController {
     public void writePersonalInfo(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                   @RequestBody PersonalInfoRequestDto requestDto){
 
-        lotService.writePersonalInfo(userDetails, requestDto);
+
+        lotService.writePersonalInfo(userDetails.getUser(), requestDto);
 
     }
 

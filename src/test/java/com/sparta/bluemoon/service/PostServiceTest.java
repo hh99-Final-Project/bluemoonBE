@@ -3,6 +3,11 @@ package com.sparta.bluemoon.service;
 import com.sparta.bluemoon.domain.Point;
 import com.sparta.bluemoon.domain.Post;
 import com.sparta.bluemoon.domain.User;
+import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
+import com.sparta.bluemoon.repository.*;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import com.sparta.bluemoon.dto.request.CommentRequestDto;
 import com.sparta.bluemoon.dto.request.PostCreateRequestDto;
 import com.sparta.bluemoon.dto.response.MainPostForAnonymousResponseDto;
@@ -15,8 +20,8 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
+
 
 
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -42,6 +47,7 @@ class PostServiceTest {
     PointService pointService;
 
 
+
 //    @Test
 ////    @BeforeEach
 //    @DisplayName("유저 정보 저장")
@@ -60,6 +66,7 @@ class PostServiceTest {
 //
 //    }
 
+
     @Test
     @Order(1)
     @DisplayName("포스트 생성")
@@ -76,6 +83,14 @@ class PostServiceTest {
         Point point = new Point(mypoint, user, postCount, commentCount, lottoCount);
         pointRepository.save(point);
 
+
+
+
+    @Test
+    @Order(2)
+    @DisplayName("포스트 생성")
+    void create() {
+        //given
         PostCreateRequestDto requestDto = new PostCreateRequestDto("제목","내용");
         User user1 = userRepository.findByUsername("123@123").orElseThrow(
                 ()-> new IllegalArgumentException("해당하는 유저가 존재하지 않습니다.")
@@ -94,8 +109,7 @@ class PostServiceTest {
         assertEquals(post.getUser().getPoint().getPostCount(),0);
     }
 
-    @Test
-    @Order(2)
+    @Order(3)
     @DisplayName("포스트 삭제")
     void delete() {
         //given
@@ -111,7 +125,7 @@ class PostServiceTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     @DisplayName("나의 게시글 리스트 조회")
     void findOneMyPage() {
         //given
@@ -138,7 +152,7 @@ class PostServiceTest {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     @DisplayName("게시글 1개 상세조회")
     void getOnePost() {
         //given
@@ -170,7 +184,7 @@ class PostServiceTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     @DisplayName("남의 게시글 보기") //페이징 형식으로 리스트로 조회해서 1개씩 화면에 보여줌
     void findOtherUserPosts() {
         //given
@@ -191,7 +205,7 @@ class PostServiceTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     @DisplayName("비로그인 유저를 위한 main post 보여주기")
     void getMainPost() {
         //when
@@ -204,7 +218,7 @@ class PostServiceTest {
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     @DisplayName("비 로그인한 유저를 위해 detail main post 보여주기")
     void getMainDetailPost() {
         //when
@@ -218,6 +232,7 @@ class PostServiceTest {
         assertEquals(postResponseDto.getComments().get(0).getVoiceUrl(), "voiceurl");
         assertEquals(postResponseDto.getComments().get(0).getNickname(), "김승민");
         assertEquals(postResponseDto.getComments().get(0).getUserId(), 1L);
+
 
     }
 }

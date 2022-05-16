@@ -27,7 +27,8 @@ public class LotService {
     private final PointRepository pointRepository;
     private final LotRepository lotRepository;
 
-    public int bananaCount = 5;
+    public static int bananaCount = 5;
+
    //판단
    @Transactional
     public LotResponseDto doLot(User user){
@@ -84,9 +85,9 @@ public class LotService {
     }
 
     @Transactional
-    public void writePersonalInfo(UserDetailsImpl userDetails, PersonalInfoRequestDto requestDto){
+    public void writePersonalInfo(User user, PersonalInfoRequestDto requestDto){
         String nickname = requestDto.getNickname();
-        if(!userDetails.getUser().getNickname().equals(nickname)){
+        if(!user.getNickname().equals(nickname)){
             throw new CustomException(DOESNT_WRITE_OTHER_NICKNAME);
         }
 

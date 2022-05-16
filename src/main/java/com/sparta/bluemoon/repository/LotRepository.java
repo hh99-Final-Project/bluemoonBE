@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface LotRepository extends JpaRepository<Lot, Long> {
     List<Lot> findByNicknameAndPersonalInfo(String nickname, boolean personalInfo);
+
 }
