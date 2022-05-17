@@ -94,12 +94,12 @@ class LotServiceTest {
         //당첨이라고 가정
         Lot lot = new Lot(user);
         lotRepository.save(lot);
-        PersonalInfoRequestDto personalInfoRequestDto = new PersonalInfoRequestDto("TodayIsYolo","123-1234-1234");
+        PersonalInfoRequestDto personalInfoRequestDto = new PersonalInfoRequestDto("123-1234-1234",true);
         //when
         lotService.writePersonalInfo(user ,personalInfoRequestDto);
         List<Lot> lots = lotRepository.findByNicknameAndPersonalInfo("TodayIsYolo",true);
         //then
-        assertEquals(lots.get(0).getNickname(),personalInfoRequestDto.getNickname());
+
         assertEquals(lots.get(0).getPhoneNumber(),personalInfoRequestDto.getPhoneNumber());
 
     }
