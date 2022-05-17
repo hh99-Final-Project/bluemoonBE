@@ -83,16 +83,16 @@ public class LotService {
 
     @Transactional
     public void writePersonalInfo(User user, PersonalInfoRequestDto requestDto){
-        String nickname = requestDto.getNickname();
-        if(!user.getNickname().equals(nickname)){
-            throw new CustomException(DOESNT_WRITE_OTHER_NICKNAME);
-        }
-
-        List<Lot> winners = lotRepository.findByNicknameAndPersonalInfo(nickname,false);
-        if(winners.isEmpty()){
-            throw new CustomException(NO_WINNER);
-        } else{
-            winners.get(0).updateInfo(requestDto.getPhoneNumber());
-        }
+       if(!requestDto.isPersonalInfo()){
+           throw new CustomException(PERSONAL_INFO_DISAGREE);
+       } else {
+           String nickname = user.getNickname();
+           List<Lot> winners = lotRepository.findByNicknameAndPersonalInfo(nickname, false);
+           if (winners.isEmpty()) {
+               throw new CustomException(NO_WINNER);
+           } else {
+               winners.get(0).updateInfo(requestDto);
+           }
+       }
     }
 }
