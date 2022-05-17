@@ -21,9 +21,9 @@ public class JasyptConfig {
 //        String password = System.getenv("JASYPT_ENCRYPTOR_PASSWORD");
 		PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
 		SimpleStringPBEConfig config = new SimpleStringPBEConfig();
-		config.setPassword(System.getenv("JASYPT_ENCRYPTOR_PASSWORD")); // 암호화할 때 사용하는 키
+		config.setPassword("7a4e71ac-db50-4635-a4e6-9d906f97654e"); // 암호화할 때 사용하는 키
 		config.setAlgorithm("PBEWithMD5AndDES"); // 암호화 알고리즘
-		config.setKeyObtentionIterations(System.getenv("JASYPT_ENCRYPTOR_REPEAT")); // 반복할 해싱 회수
+		config.setKeyObtentionIterations(691); // 반복할 해싱 회수
 		config.setPoolSize("1"); // 인스턴스 pool
 		config.setProviderName("SunJCE");
 		config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator"); // salt 생성 클래스
