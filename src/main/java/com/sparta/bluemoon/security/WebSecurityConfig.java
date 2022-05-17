@@ -1,6 +1,6 @@
 package com.sparta.bluemoon.security;
 
-import com.sparta.bluemoon.repository.UserRepository;
+import com.sparta.bluemoon.user.UserRepository;
 import com.sparta.bluemoon.security.filter.FormLoginFilter;
 import com.sparta.bluemoon.security.filter.JwtAuthFilter;
 import com.sparta.bluemoon.security.jwt.HeaderTokenExtractor;
@@ -202,8 +202,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.addAllowedOrigin("http://localhost:3000"); // local 테스트 시
+        corsConfiguration.addAllowedOrigin("http://hanghae996th9groupinalproject.s3-website.ap-northeast-2.amazonaws.com"); // local 테스트 시
         //corsConfiguration.addAllowedOrigin(""); //배포시
-//        corsConfiguration.addAllowedOrigin("http://bluemoon-s3.s3-website.ap-northeast-2.amazonaws.com/");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addExposedHeader("Authorization");

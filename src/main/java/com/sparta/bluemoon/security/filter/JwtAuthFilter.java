@@ -1,9 +1,9 @@
 package com.sparta.bluemoon.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.bluemoon.domain.User;
+import com.sparta.bluemoon.user.User;
 import com.sparta.bluemoon.exception.Exception;
-import com.sparta.bluemoon.repository.UserRepository;
+import com.sparta.bluemoon.user.UserRepository;
 import com.sparta.bluemoon.security.jwt.HeaderTokenExtractor;
 import com.sparta.bluemoon.security.jwt.JwtDecoder;
 import com.sparta.bluemoon.security.jwt.JwtPreProcessingToken;
