@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 public class PersonalInfoRequestDto {
 
-    private String nickname;
+    //private String nickname;
     private String phoneNumber;
+    private boolean isPersonalInfo;
 }

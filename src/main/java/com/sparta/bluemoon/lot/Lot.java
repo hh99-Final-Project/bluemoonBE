@@ -1,5 +1,6 @@
 package com.sparta.bluemoon.lot;
 
+import com.sparta.bluemoon.lot.requestDto.PersonalInfoRequestDto;
 import com.sparta.bluemoon.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,8 +33,8 @@ public class Lot {
         this.personalInfo = false;
     }
 
-    public void updateInfo(String phoneNumber) {
-        this.phoneNumber=phoneNumber;
+    public void updateInfo(PersonalInfoRequestDto requestDto) {
+        this.phoneNumber=requestDto.getPhoneNumber();
         this.personalInfo=true;
     }
 }
