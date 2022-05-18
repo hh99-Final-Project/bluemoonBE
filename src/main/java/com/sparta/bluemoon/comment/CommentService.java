@@ -72,8 +72,7 @@ public class CommentService {
         if (!comment.getUser().getId().equals(userDetails.getUser().getId())){
             throw new CustomException(ONLY_CAN_DELETE_COMMENT_WRITER);
         }
-        System.out.println(comment.getCommentUuid());
-        System.out.println(comment.getChildren().size());
+
         if(comment.getChildren().size() != 0) { // 자식이 있으면 상태만 변경
             comment.changeDeletedStatus(DeleteStatus.Y);
         } else { // 삭제 가능한 조상 댓글을 구해서 삭제
