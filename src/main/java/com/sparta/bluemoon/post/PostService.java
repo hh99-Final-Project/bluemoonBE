@@ -12,6 +12,7 @@ import com.sparta.bluemoon.comment.CommentRepository;
 import com.sparta.bluemoon.point.PointRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -177,6 +178,7 @@ public class PostService {
 //            CommentDto commentDto = new CommentDto(comment);
 //            newComments.add(commentDto);
 //        }
+        Collections.reverse(result);
         return result;
     }
 
