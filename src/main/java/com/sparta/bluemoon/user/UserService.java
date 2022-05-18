@@ -46,14 +46,7 @@ public class UserService {
     @Transactional
     public NicknameSignupResponseDto getEventPoint(NicknameSignupRequestDto nicknameSignupRequestDto, User user) {
         //추천인을 적었다면
-        if (nicknameSignupRequestDto.getRecommender() != null || !Objects.equals(nicknameSignupRequestDto.getRecommender().trim(), "")) {
-            System.out.println("추천인 출력 코드입니다.");
-            System.out.println(nicknameSignupRequestDto.getRecommender());
-            System.out.println(Objects.equals(nicknameSignupRequestDto.getRecommender().trim(), ""));
-            System.out.println(nicknameSignupRequestDto.getNickname().equals(""));
-            System.out.println(nicknameSignupRequestDto.getNickname().trim().equals(""));
-            System.out.println();
-            System.out.println("추천인 출력 완료입니다.");
+        if (nicknameSignupRequestDto.getRecommender() != null && !Objects.equals(nicknameSignupRequestDto.getRecommender().trim(), "")) {
             User recommender = userRepository.findByNickname(nicknameSignupRequestDto.getRecommender()).orElseThrow(
                     () -> new CustomException(NOT_FOUND_RECOMMENDER)
             );
