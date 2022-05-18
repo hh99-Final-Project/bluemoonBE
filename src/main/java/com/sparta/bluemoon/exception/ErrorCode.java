@@ -47,6 +47,7 @@ public enum ErrorCode {
     CANNOT_LOT(HttpStatus.BAD_REQUEST.value(), "L003","추첨할 수 없습니다."),
     PERSONAL_INFO_DISAGREE(HttpStatus.BAD_REQUEST.value(), "L004","개인정보 수집 동의 필요"),
     NO_WINNER(HttpStatus.FORBIDDEN.value(), "L005","당첨자가 아닙니다."),
+    WRONG_FORMAT(HttpStatus.BAD_REQUEST.value(), "L006","잘못된 전화번호 형식 입니다."),
 
 
     ;
