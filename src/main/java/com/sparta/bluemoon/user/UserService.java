@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 import static com.sparta.bluemoon.exception.ErrorCode.*;
 
 @Service
@@ -44,7 +46,7 @@ public class UserService {
     @Transactional
     public NicknameSignupResponseDto getEventPoint(NicknameSignupRequestDto nicknameSignupRequestDto, User user) {
         //추천인을 적었다면
-        if (nicknameSignupRequestDto.getRecommender() != null) {
+        if (nicknameSignupRequestDto.getRecommender() != null || !Objects.equals(nicknameSignupRequestDto.getRecommender().trim(), "")) {
             User recommender = userRepository.findByNickname(nicknameSignupRequestDto.getRecommender()).orElseThrow(
                     () -> new CustomException(NOT_FOUND_RECOMMENDER)
             );

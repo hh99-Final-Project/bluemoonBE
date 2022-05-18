@@ -34,6 +34,7 @@ public class LotService {
         int userPoint;
         boolean result;
 
+
         if (point.getLottoCount() != 0 && point.getMyPoint() >= 1000) {
             //포인트 변경,카운트 감소
             userPoint = pointService.pointChange(point, "LOTTO_POINT");
@@ -81,13 +82,19 @@ public class LotService {
         }
     }
 
+    //개인 정보 입력
     @Transactional
     public void writePersonalInfo(User user, PersonalInfoRequestDto requestDto){
+       String checkPhoneNumber = "^01(?:0|1|[6-9])(\\d{3}\\d{4})(\\d{4})$";
        if(!requestDto.isPersonalInfo()){
            throw new CustomException(PERSONAL_INFO_DISAGREE);
        } else {
            String nickname = user.getNickname();
            List<Lot> winners = lotRepository.findByNicknameAndPersonalInfo(nickname, false);
+           if(!requestDto.getPhoneNumber().matches(checkPhoneNumber)){
+               throw new CustomException(WRONG_FORMAT);
+           }
+
            if (winners.isEmpty()) {
                throw new CustomException(NO_WINNER);
            } else {
