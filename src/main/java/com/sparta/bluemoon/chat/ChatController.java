@@ -1,10 +1,10 @@
 package com.sparta.bluemoon.chat;
 
-import com.sparta.bluemoon.user.User;
 import com.sparta.bluemoon.chat.requestDto.ChatMessageDto;
 import com.sparta.bluemoon.exception.CustomException;
-import com.sparta.bluemoon.user.UserRepository;
 import com.sparta.bluemoon.security.jwt.JwtDecoder;
+import com.sparta.bluemoon.user.User;
+import com.sparta.bluemoon.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
