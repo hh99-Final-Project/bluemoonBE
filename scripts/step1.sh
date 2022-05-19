@@ -26,6 +26,8 @@ else
   echo "> docker stop ${TARGET_PORT}"
   sudo docker stop ${TARGET_PORT}
   echo "> docker rm ${TARGET_PORT}"
-  sudo docker rm ${TARGET_PORT}    # 컨테이너 이름을 지정해서 사용하기 때문에.. 꼭 컨테이너 삭제도 같이 해주셔야 합니다. (나중에 다시 띄울거기 때문에..)
+  # 컨테이너 이름을 지정해서 사용하기 때문에.. 꼭 컨테이너 삭제도 같이 해주셔야 합니다.
+  # (나중에 다시 띄울거기 때문에..)
+  sudo docker rm ${TARGET_PORT}
   sleep 5
 fi
