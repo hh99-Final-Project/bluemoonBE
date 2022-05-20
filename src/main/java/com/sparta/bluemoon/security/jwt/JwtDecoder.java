@@ -30,8 +30,6 @@ public class JwtDecoder {
         Date now = new Date();
         if (expiredDate.before(now)) {
             throw new IllegalArgumentException("만료된 액세스 토큰 입니다.");
-           // throw new CustomException(TOKEN_IS_EXPIRED);
-            //TODO:익셉션 터뜨릴 방법 찾아보기
         }
 
         String username = decodedJWT

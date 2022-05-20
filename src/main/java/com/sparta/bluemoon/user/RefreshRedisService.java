@@ -17,8 +17,7 @@ public class RefreshRedisService {
     // 키-벨류 설정
     public void setValues(String token, String userId){
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-//        values.set(name, age);
-        values.set(token, userId);  // 3일 뒤 메모리에서 삭제된다.
+        values.set(token, userId);
     }
 
     // 키값으로 벨류 가져오기

@@ -40,29 +40,10 @@ public class GoogleLoginService {
     private final RefreshRedisService refreshRedisService;
     private final JwtDecoder jwtDecoder;
 
-    // token을 얻기 위한 code 요청
-    public ResponseEntity<Object> requestAuthCodeFromGoogle() {
-        String authUrl = configUtils.googleInitUrl();
-        URI redirectUri = null;
-        try {
-            redirectUri = new URI(authUrl);
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setLocation(redirectUri);
-            return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
-        return ResponseEntity.badRequest().build();
-    }
-
-    // 얻은 code를 이용하여 token 요청
     // token을 이용하여 사용자 정보 획득
     public ResponseEntity login(String jwtToken) {
         // HTTP 통신을 위해 RestTemplate 활용
         try {
-//            String jwtToken = getAccessToken(authCode);
-            System.out.println("jwtToken = " + jwtToken);
             String email = getGoogleUserInfo(jwtToken);
             User googleUser = registerGoogleUserIfNeeded(email);
             return forceLogin(googleUser);
@@ -126,7 +107,6 @@ public class GoogleLoginService {
     }
 
     private String getGoogleUserInfo(String jwtToken) throws JsonProcessingException {
-        RestTemplate restTemplate = new RestTemplate();
         // JWT Token을 전달해 JWT 저장된 사용자 정보 확인
         String requestUrl = UriComponentsBuilder.fromHttpUrl(configUtils.getGoogleAuthUrl() + "/tokeninfo").
             queryParam("id_token", jwtToken).toUriString();
@@ -149,35 +129,5 @@ public class GoogleLoginService {
         String email = jsonNode.get("email").asText();
 
         return email;
-
-
-
     }
-
-    private String getAccessToken(String authCode) throws JsonProcessingException {
-        RestTemplate restTemplate = new RestTemplate();
-        GoogleLoginRequest requestParams = GoogleLoginRequest.builder()
-            .clientId(configUtils.getGoogleClientId())
-            .clientSecret(configUtils.getGoogleSecret())
-            .code(authCode)
-            .redirectUri(configUtils.getGoogleRedirectUri())
-            .grantType("authorization_code")
-            .build();
-
-        // Http Header 설정
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<GoogleLoginRequest> httpRequestEntity = new HttpEntity<>(requestParams, headers);
-        ResponseEntity<String> apiResponseJson = restTemplate.postForEntity(configUtils.getGoogleAuthUrl() + "/token", httpRequestEntity, String.class);
-
-        // ObjectMapper를 통해 String to Object로 변환
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL); // NULL이 아닌 값만 응답받기(NULL인 경우는 생략)
-        GoogleLoginResponse googleLoginResponse = objectMapper.readValue(apiResponseJson.getBody(), new TypeReference<GoogleLoginResponse>() {});
-
-        // 사용자의 정보는 JWT Token으로 저장되어 있고, Id_Token에 값을 저장한다.
-        return googleLoginResponse.getIdToken();
-    }
-
 }

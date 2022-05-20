@@ -17,8 +17,6 @@ import static com.sparta.bluemoon.exception.ErrorCode.NOT_FOUND_USER_IN_CHAT;
 @RequiredArgsConstructor
 @Controller
 public class ChatController {
-    private final RedisTemplate redisTemplate;
-    private final ChannelTopic channelTopic;
     private final ChatService chatService;
     private final JwtDecoder jwtDecoder;
     private final UserRepository userRepository;
@@ -33,12 +31,8 @@ public class ChatController {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(NOT_FOUND_USER_IN_CHAT)
         );
-        System.out.println("챗엔터!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        System.out.println(user.getId());
-        System.out.println(chatMessageDto.getRoomId());
+
         chatService.enter(user.getId(), chatMessageDto.getRoomId());
-//        String topic = channelTopic.getTopic();
-//        redisTemplate.convertAndSend(topic, chatMessageDto);
     }
 
     /**

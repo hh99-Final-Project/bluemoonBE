@@ -1,10 +1,14 @@
 package com.sparta.bluemoon.chat;
 
+import static com.sparta.bluemoon.exception.ErrorCode.INVALID_MESSAGE;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.bluemoon.chat.requestDto.ChatMessageDto;
+import com.sparta.bluemoon.chat.requestDto.ChatMessageDto.MessageType;
 import com.sparta.bluemoon.chat.responseDto.AlarmResponseDto;
 import com.sparta.bluemoon.chat.responseDto.MessageResponseDto;
 import com.sparta.bluemoon.chat.responseDto.UnreadMessageCount;
+import com.sparta.bluemoon.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -28,7 +32,6 @@ public class RedisSubscriber implements MessageListener {
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
-            System.out.println("onmessage에서 잡아서 진행합니다");
             // redis에서 발행된 데이터를 받아 deserialize
             String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
             // ChatMessageDto 객채로 맵핑
@@ -36,24 +39,21 @@ public class RedisSubscriber implements MessageListener {
 
             // Websocket 구독자에게 채팅 메시지 Send
 
-            //알람메세지
-            if (roomMessage.getType().equals(ChatMessageDto.MessageType.ENTER)) {
-                System.out.println("Enter에 걸린게 맞나요?");
+            // 댓글 작성시 알람 메세지 (종 모양 알람 메세지)
+            if (roomMessage.getType().equals(MessageType.COMMENT_ALARM)) {
                 AlarmResponseDto alarmResponseDto = new AlarmResponseDto(roomMessage);
                 messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getOtherUserId(), alarmResponseDto);
-            //안읽은 메세지
-            }else if(roomMessage.getType().equals(ChatMessageDto.MessageType.UNREAD_MESSAGE_COUNT)){
-                System.out.println("UNREAD_MESSAGE_COUNT에 걸린게 맞나요?");
+            // 안읽은 메세지 알람 표시 (별 모양)
+            } else if (roomMessage.getType().equals(MessageType.UNREAD_MESSAGE_COUNT_ALARM)) {
                 UnreadMessageCount unreadMessageCount = new UnreadMessageCount(roomMessage);
                 messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getOtherUserId(), unreadMessageCount);
             //채팅 메세지
-            }else {
-                System.out.println("아니요 걸리지 않았습니다.");
+            } else {
                 MessageResponseDto messageResponseDto = new MessageResponseDto(roomMessage);
                 messagingTemplate.convertAndSend("/sub/chat/room/" + roomMessage.getRoomId(), messageResponseDto);
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+            throw new CustomException(INVALID_MESSAGE);
         }
     }
 }

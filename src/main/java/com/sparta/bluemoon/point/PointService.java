@@ -10,6 +10,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PointService {
     private final PointRepository pointRepository;
+
     //포인트 주기
     @Transactional
     public int pointChange(Point point, String state){
@@ -19,17 +20,17 @@ public class PointService {
         int commentCount = point.getCommentCount();
         int lottoCount = point.getLottoCount();
 
-        if(state=="POST_POINT"){
+        if(state.equals("POST_POINT")){
             myPoint+=500;
             postCount--;
         }
 
-        else if(state=="COMMENT_POINT"){
+        else if(state.equals("COMMENT_POINT")){
             myPoint+=100;
             commentCount--;
         }
 
-        else if(state=="LOTTO_POINT"){
+        else if(state.equals("LOTTO_POINT")){
             myPoint-=1000;
             lottoCount--;
         }
@@ -52,19 +53,5 @@ public class PointService {
             point.resetCount();
         }
     }
-
-
-//    //추첨 돌렸을 때
-//    @Transactional
-//    public void lotto(User user){
-//        int point = user.getPoint();
-//
-//        if(point<1000){
-//            throw new IllegalArgumentException("1000 포인트 부터 추첨할 수 있습니다.");
-//        }
-//        // 추첨 과정
-//
-//    }
-
 }
 
