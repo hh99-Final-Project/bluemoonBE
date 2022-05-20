@@ -9,6 +9,7 @@
   <!--  %highlight(%-5level) : 로그 레벨 -->
   <!--  %boldWhite([%C.%M:%yellow(%L)]) : 클래스 메서드 실행라인 -->
   <!--  로그 등록한 메세지 개행 라인 -->
+  <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
   <property name="LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}:%-4relative] %red([%thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
 
   <!-- 로깅 전략 -->
