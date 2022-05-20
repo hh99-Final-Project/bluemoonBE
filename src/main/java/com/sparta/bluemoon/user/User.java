@@ -27,8 +27,8 @@ public class User {
 
     private String type;
 
-    @Column(length = 1000)
-    private String token;
+//    @Column(length = 1000)
+//    private String token;
 
     //포인트
     @OneToOne(mappedBy = "user")
@@ -52,7 +52,5 @@ public class User {
         this.nickname = nickname;
     }
 
-    public void registToken(String token){
-        this.token = token;
-    }
+
 }

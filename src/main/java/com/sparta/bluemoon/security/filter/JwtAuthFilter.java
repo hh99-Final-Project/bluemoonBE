@@ -1,6 +1,8 @@
 package com.sparta.bluemoon.security.filter;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.user.User;
 import com.sparta.bluemoon.exception.Exception;
 import com.sparta.bluemoon.user.UserRepository;
@@ -8,6 +10,7 @@ import com.sparta.bluemoon.security.jwt.HeaderTokenExtractor;
 import com.sparta.bluemoon.security.jwt.JwtDecoder;
 import com.sparta.bluemoon.security.jwt.JwtPreProcessingToken;
 import java.io.IOException;
+import java.util.Date;
 import javax.servlet.FilterChain;
 
 import javax.servlet.ServletException;
@@ -22,6 +25,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import static com.sparta.bluemoon.exception.ErrorCode.DONT_USE_THIS_TOKEN;
+import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.CLAIM_EXPIRED_DATE;
+
+//jwt 유효성 인증
 /**
  * Token 을 내려주는 Filter 가 아닌  client 에서 받아지는 Token 을 서버 사이드에서 검증하는 클레스 SecurityContextHolder 보관소에 해당
  * Token 값의 인증 상태를 보관 하고 필요할때 마다 인증 확인 후 권한 상태 확인 하는 기능
@@ -63,7 +70,7 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
             response.setCharacterEncoding("utf-8"); // HelloData 객체
             Exception exception = new Exception();
             exception.setHttpStatus(HttpStatus.BAD_REQUEST);
-            exception.setErrorMessage("혜미님 잘 가나요?");
+            exception.setErrorMessage("토큰이 없습니다.");
             String result = mapper.writeValueAsString(exception);
             response.getWriter().print(result);
             return null;
@@ -74,26 +81,35 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
         String nowToken = extractor.extract(tokenPayload, request);
         JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(
                 extractor.extract(tokenPayload, request));
+//////////////////////////////
 
-        String username = jwtDecoder.decodeUsername(nowToken);
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("해당 유저가 없습니다")
-        );
-        if(!user.getToken().equals(nowToken)){
+        DecodedJWT decodedJWT = jwtDecoder.isValidToken(nowToken)
+                .orElseThrow(() -> new CustomException(DONT_USE_THIS_TOKEN));
+
+        Date expiredDate = decodedJWT
+                .getClaim(CLAIM_EXPIRED_DATE)
+                .asDate();
+
+        if(expiredDate.before(new Date())){
 
             ObjectMapper mapper = new ObjectMapper();
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8"); // HelloData 객체
             Exception exception = new Exception();
-            exception.setAlreadyLogined(true);
+            exception.setHttpStatus(HttpStatus.BAD_REQUEST);
+            exception.setErrorMessage("만료된 토큰입니다.");
+            //alreadylogin?????
             String result = mapper.writeValueAsString(exception);
             response.getWriter().print(result);
             return null;
+
         }
+        /////////////////////////////////////////
         return super
                 .getAuthenticationManager()
                 .authenticate(jwtToken);
     }
+
 
     @Override
     protected void successfulAuthentication(

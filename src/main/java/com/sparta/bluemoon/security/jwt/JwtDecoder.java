@@ -18,6 +18,7 @@ public class JwtDecoder {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+
     public String decodeUsername(String token) {
         DecodedJWT decodedJWT = isValidToken(token)
                 .orElseThrow(() -> new IllegalArgumentException("유효한 토큰이 아닙니다."));
@@ -28,7 +29,9 @@ public class JwtDecoder {
 
         Date now = new Date();
         if (expiredDate.before(now)) {
-            throw new IllegalArgumentException("유효한 토큰이 아닙니다.");
+            throw new IllegalArgumentException("만료된 액세스 토큰 입니다.");
+           // throw new CustomException(TOKEN_IS_EXPIRED);
+            //TODO:익셉션 터뜨릴 방법 찾아보기
         }
 
         String username = decodedJWT
@@ -38,28 +41,9 @@ public class JwtDecoder {
         return username;
     }
 
-    public String decodeNickname(String token) {
-        DecodedJWT decodedJWT = isValidToken(token)
-                .orElseThrow(() -> new IllegalArgumentException("유효한 토큰이 아닙니다."));
-
-        Date expiredDate = decodedJWT
-                .getClaim(CLAIM_EXPIRED_DATE)
-                .asDate();
-
-        Date now = new Date();
-        if (expiredDate.before(now)) {
-            throw new IllegalArgumentException("유효한 토큰이 아닙니다.");
-        }
-
-        String nickname = decodedJWT
-                .getClaim(CLAIM_NICKNAME)
-                .asString();
-
-        return nickname;
-    }
 
 
-    private Optional<DecodedJWT> isValidToken(String token) {
+    public Optional<DecodedJWT> isValidToken(String token) {
         DecodedJWT jwt = null;
 
         try {

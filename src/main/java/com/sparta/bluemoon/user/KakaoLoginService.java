@@ -31,6 +31,8 @@ public class KakaoLoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final PointRepository pointRepository;
+    private final RefreshRedisService refreshRedisService;
+
 
     public ResponseEntity<Object> requestAuthCodeFromKakao() {
         String authUrl = configUtils.kakaoInitUrl();
@@ -153,16 +155,24 @@ public class KakaoLoginService {
 
         //처음 로그인한 유저는 nickname에 빈값을 반환
 
-
         // Token 생성
-        final String token = JwtTokenUtils.generateJwtToken(userDetails);
+        final String token = JwtTokenUtils.generateAccessToken(userDetails);
+        final String refreshToken = JwtTokenUtils.generaterefreshToken(userDetails);
         System.out.println("token = " + token);
-        kakaoUser.registToken(token);
+
         userRepository.save(kakaoUser);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization","Bearer "+token);
+        headers.set("RefreshToken","Bearer "+refreshToken);
+
+        //redis에저장
+        refreshRedisService.setValues(refreshToken,String.valueOf(kakaoUser.getId()));
+
         return ResponseEntity.ok()
             .headers(headers)
             .body(new SocialLoginResponseDto(kakaoUser));
+
     }
+
+
 }

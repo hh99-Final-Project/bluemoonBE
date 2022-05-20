@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.sparta.bluemoon.config.GoogleConfigUtils;
 import com.sparta.bluemoon.point.Point;
+import com.sparta.bluemoon.security.jwt.JwtDecoder;
 import com.sparta.bluemoon.user.requestDto.GoogleLoginRequest;
 import com.sparta.bluemoon.user.responseDto.GoogleLoginResponse;
 import com.sparta.bluemoon.user.responseDto.SocialLoginResponseDto;
@@ -36,6 +37,8 @@ public class GoogleLoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final PointRepository pointRepository;
+    private final RefreshRedisService refreshRedisService;
+    private final JwtDecoder jwtDecoder;
 
     // token을 얻기 위한 code 요청
     public ResponseEntity<Object> requestAuthCodeFromGoogle() {
@@ -76,19 +79,25 @@ public class GoogleLoginService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
-        // Token 생성
-        final String token = JwtTokenUtils.generateJwtToken(userDetails);
+        // Token 생성//리프레시 토큰도 생성
+        final String token = JwtTokenUtils.generateAccessToken(userDetails);
+        final String refreshToken = JwtTokenUtils.generaterefreshToken(userDetails);
         System.out.println("token = " + token);
 
-        googleUser.registToken(token);
         userRepository.save(googleUser);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization","Bearer "+token);
+        headers.set("RefreshToken","Bearer "+refreshToken);
+
+        //redis에저장
+        refreshRedisService.setValues(refreshToken,String.valueOf(googleUser.getId()));
 
         return ResponseEntity.ok()
             .headers(headers)
             .body(new SocialLoginResponseDto(googleUser));
     }
+
+
 
     private User registerGoogleUserIfNeeded(String email) {
         String google = "google";
