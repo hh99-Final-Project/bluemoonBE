@@ -19,17 +19,17 @@ public class PointService {
         int commentCount = point.getCommentCount();
         int lottoCount = point.getLottoCount();
 
-        if(state=="POST_POINT"){
+        if(state.equals("POST_POINT")){
             myPoint+=500;
             postCount--;
         }
 
-        else if(state=="COMMENT_POINT"){
+        else if(state.equals("COMMENT_POINT")){
             myPoint+=100;
             commentCount--;
         }
 
-        else if(state=="LOTTO_POINT"){
+        else if(state.equals("LOTTO_POINT")){
             myPoint-=1000;
             lottoCount--;
         }

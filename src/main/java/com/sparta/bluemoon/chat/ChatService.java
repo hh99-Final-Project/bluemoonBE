@@ -1,5 +1,6 @@
 package com.sparta.bluemoon.chat;
 
+import com.sparta.bluemoon.chat.requestDto.ChatMessageDto.MessageType;
 import com.sparta.bluemoon.chatRoom.ChatRoomRepository;
 import com.sparta.bluemoon.chatRoom.ChatRoom;
 import com.sparta.bluemoon.user.User;
@@ -13,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +28,6 @@ public class ChatService {
     private final AlarmRepository alarmRepository;
 
     public void enter(Long userId, String roomId) {
-        System.out.println("엔터@2222222222222222222222222222222222222222222222222222222222222222222222");
         // 채팅방 입장 정보 저장
         redisRepository.userEnterRoomInfo(userId, roomId);
         // 채팅방의 안 읽은 메세지의 수 초기화
@@ -34,7 +35,8 @@ public class ChatService {
     }
 
     //채팅
-   public void sendMessage(ChatMessageDto chatMessageDto, User user) {
+    @Transactional
+    public void sendMessage(ChatMessageDto chatMessageDto, User user) {
         ChatRoom chatRoom = chatRoomRepository.findByChatRoomUuid(chatMessageDto.getRoomId()).orElseThrow(
                 () -> new IllegalArgumentException("채팅방이 존재하지 않습니다.")
         );
@@ -45,6 +47,7 @@ public class ChatService {
         String createdAt = getCurrentTime();
         chatMessageDto.setCreatedAt(createdAt);
         chatMessageDto.setType(ChatMessageDto.MessageType.TALK);
+        // front에서 요청해서 진행한 작업 나의 userId 넣어주기
         chatMessageDto.setUserId(user.getId());
 
         redisTemplate.convertAndSend(topic, chatMessageDto);
@@ -59,7 +62,7 @@ public class ChatService {
         String createdAt = getCurrentTime();
         chatMessageDto.setMessageId(id);
         chatMessageDto.setCreatedAt(createdAt);
-        chatMessageDto.setType(ChatMessageDto.MessageType.ENTER);
+        chatMessageDto.setType(MessageType.COMMENT_ALARM);
 
         redisTemplate.convertAndSend(topic, chatMessageDto);
 
@@ -75,9 +78,9 @@ public class ChatService {
     }
 
     //안읽은 메세지 업데이트
-    public void updateUnReadMessageCount(ChatMessageDto chatMessageDto) {
-        Long otherUserId = chatMessageDto.getOtherUserId();
-        String roomId = chatMessageDto.getRoomId();
+    public void updateUnReadMessageCount(ChatMessageDto requestChatMessageDto) {
+        Long otherUserId = requestChatMessageDto.getOtherUserId();
+        String roomId = requestChatMessageDto.getRoomId();
         // 상대방이 채팅방에 들어가 있지 않거나 들어가 있어도 나와 같은 대화방이 아닌 경우 안 읽은 메세지 처리를 할 것이다.
         if (!redisRepository.existChatRoomUserInfo(otherUserId) || !redisRepository.getUserEnterRoomId(otherUserId).equals(roomId)) {
 
@@ -86,9 +89,9 @@ public class ChatService {
                 .getChatRoomMessageCount(roomId, otherUserId);
             String topic = channelTopic.getTopic();
 
-            ChatMessageDto chatMessageDto1 = new ChatMessageDto(chatMessageDto, unReadMessageCount);
+            ChatMessageDto responseChatMessageDto = new ChatMessageDto(requestChatMessageDto, unReadMessageCount);
 
-            redisTemplate.convertAndSend(topic, chatMessageDto1);
+            redisTemplate.convertAndSend(topic, responseChatMessageDto);
         }
     }
 }
