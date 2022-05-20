@@ -18,7 +18,7 @@ public class Point {
 
     private int myPoint;
 
-    @OneToOne//조인 컬럼..?
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 

@@ -1,6 +1,5 @@
 package com.sparta.bluemoon.user;
 
-import com.sparta.bluemoon.user.requestDto.RefreshTokenDto;
 import com.sparta.bluemoon.user.requestDto.SocialLoginRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,21 +13,9 @@ public class GoogleLoginController {
 
     private final GoogleLoginService googleLoginService;
 
-//    @GetMapping(value = "/login")
-//    public ResponseEntity<Object> requestAuthCodeFromGoogle() {
-//        return googleLoginService.requestAuthCodeFromGoogle();
-//    }
-
-//    @GetMapping(value = "/login/redirect")
-//    public ResponseEntity redirectGoogleLogin(
-//            @RequestParam(value = "code") String authCode
-//    ) {
-//        return googleLoginService.login(authCode);
-//    }
     //tokenId를 받아야함.
     @PostMapping(value = "/api/login/google")
     public ResponseEntity googleLogin(@RequestBody SocialLoginRequestDto socialLoginRequestDto) {
-        System.out.println(socialLoginRequestDto.getJwtToken());
         return googleLoginService.login(socialLoginRequestDto.getJwtToken());
     }
 

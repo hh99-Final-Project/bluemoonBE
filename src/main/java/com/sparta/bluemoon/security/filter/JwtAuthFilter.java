@@ -1,6 +1,7 @@
 package com.sparta.bluemoon.security.filter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.user.User;
@@ -62,25 +63,15 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
         if (tokenPayload == null) {
             System.out.println("tokenpayload null????????");
-            System.out.println(tokenPayload);
 
-//            response.sendRedirect("/user/loginView");
-            ObjectMapper mapper = new ObjectMapper();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("utf-8"); // HelloData 객체
-            Exception exception = new Exception();
-            exception.setHttpStatus(HttpStatus.BAD_REQUEST);
-            exception.setErrorMessage("토큰이 없습니다.");
-            String result = mapper.writeValueAsString(exception);
-            response.getWriter().print(result);
+            putErrorMessage(response, "토큰이 없습니다.");
             return null;
         }
-
-        System.out.println("tokenPayload = " + tokenPayload);
 
         String nowToken = extractor.extract(tokenPayload, request);
         JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(
                 extractor.extract(tokenPayload, request));
+
 //////////////////////////////
 
         DecodedJWT decodedJWT = jwtDecoder.isValidToken(nowToken)
@@ -91,25 +82,28 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
                 .asDate();
 
         if(expiredDate.before(new Date())){
-
-            ObjectMapper mapper = new ObjectMapper();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("utf-8"); // HelloData 객체
-            Exception exception = new Exception();
-            exception.setHttpStatus(HttpStatus.BAD_REQUEST);
-            exception.setErrorMessage("만료된 토큰입니다.");
-            //alreadylogin?????
-            String result = mapper.writeValueAsString(exception);
-            response.getWriter().print(result);
+            putErrorMessage(response, "만료된 토큰입니다.");
             return null;
 
         }
+
         /////////////////////////////////////////
+
         return super
                 .getAuthenticationManager()
                 .authenticate(jwtToken);
     }
 
+    private void putErrorMessage(HttpServletResponse response, String errorMessage) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8"); // HelloData 객체
+        Exception exception = new Exception();
+        exception.setHttpStatus(HttpStatus.BAD_REQUEST);
+        exception.setErrorMessage(errorMessage);
+        String result = mapper.writeValueAsString(exception);
+        response.getWriter().print(result);
+    }
 
     @Override
     protected void successfulAuthentication(
