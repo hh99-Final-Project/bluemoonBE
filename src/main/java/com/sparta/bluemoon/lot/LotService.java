@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import static com.sparta.bluemoon.exception.ErrorCode.*;
 
@@ -85,13 +86,13 @@ public class LotService {
     //개인 정보 입력
     @Transactional
     public void writePersonalInfo(User user, PersonalInfoRequestDto requestDto){
-       String checkPhoneNumber = "^01(?:0|1|[6-9])(\\d{3}\\d{4})(\\d{4})$";
+       String checkPhoneNumber = "^01(?:0|1|[6-9])(\\d{3}|\\d{4})(\\d{4})$";
        if(!requestDto.isPersonalInfo()){
            throw new CustomException(PERSONAL_INFO_DISAGREE);
        } else {
            String nickname = user.getNickname();
            List<Lot> winners = lotRepository.findByNicknameAndPersonalInfo(nickname, false);
-           if(!requestDto.getPhoneNumber().matches(checkPhoneNumber)){
+           if(!Pattern.matches(checkPhoneNumber,requestDto.getPhoneNumber())){
                throw new CustomException(WRONG_FORMAT);
            }
 

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.bluemoon.point.Point;
+import com.sparta.bluemoon.user.RefreshRedisService;
+import com.sparta.bluemoon.security.jwt.JwtDecoder;
 import com.sparta.bluemoon.user.User;
 import com.sparta.bluemoon.user.responseDto.SocialLoginResponseDto;
 import com.sparta.bluemoon.point.PointRepository;
@@ -35,6 +37,8 @@ public class NaverLoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final PointRepository pointRepository;
+    private final RefreshRedisService refreshRedisService;
+    private final JwtDecoder jwtDecoder;
 
     public ResponseEntity<Object> requestAuthCodeFromNaver() {
         String authUrl = configUtils.naverInitUrl();
@@ -74,15 +78,22 @@ public class NaverLoginService {
 
 
         // Token 생성
-        final String token = JwtTokenUtils.generateJwtToken(userDetails);
+        final String token = JwtTokenUtils.generateAccessToken(userDetails);
+        final String refreshToken = JwtTokenUtils.generaterefreshToken(userDetails);
         System.out.println("token = " + token);
-        naverUser.registToken(token);
+        System.out.println("refresh_token = " + refreshToken);
         userRepository.save(naverUser);
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization","Bearer "+token);
+        headers.set("RefreshToken","Bearer "+refreshToken);
+
+        //redis에저장
+        refreshRedisService.setValues(refreshToken,String.valueOf(naverUser.getId()));
+
         return ResponseEntity.ok()
-            .headers(headers)
-            .body(new SocialLoginResponseDto(naverUser));
+                .headers(headers)
+                .body(new SocialLoginResponseDto(naverUser));
+
     }
 
     public User registerNaverUserIfNeeded(String email) {
@@ -164,4 +175,6 @@ public class NaverLoginService {
         JsonNode jsonNode = objectMapper.readTree(responseBody);
         return jsonNode.get("access_token").asText();
     }
+
+
 }

@@ -1,6 +1,7 @@
 package com.sparta.bluemoon.user;
 
-import com.sparta.bluemoon.user.responseDto.SocialLoginRequestDto;
+import com.sparta.bluemoon.user.requestDto.RefreshTokenDto;
+import com.sparta.bluemoon.user.requestDto.SocialLoginRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,4 +31,6 @@ public class GoogleLoginController {
         System.out.println(socialLoginRequestDto.getJwtToken());
         return googleLoginService.login(socialLoginRequestDto.getJwtToken());
     }
+
+
 }

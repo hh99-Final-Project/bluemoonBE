@@ -12,6 +12,9 @@ public enum ErrorCode {
     NOT_FOUND_USER(HttpStatus.NOT_FOUND.value(), "U001", "해당 유저를 찾을 수 없습니다."),
     NOT_FOUND_RECOMMENDER(HttpStatus.NOT_FOUND.value(), "U002", "해당 추천인을 찾을 수 없습니다."),
     CANNOT_RECOMMEND_YOURSELF(HttpStatus.BAD_REQUEST.value(), "U003","자신의 닉네임은 적을 수 없습니다."),
+    TOKEN_IS_EXPIRED(HttpStatus.BAD_REQUEST.value(), "U004","만료된 액세스 토큰 입니다."),
+    REFRESH_TOKEN_IS_EXPIRED(HttpStatus.BAD_REQUEST.value(), "U005","만료된 리프레시 토큰 입니다."),
+    DONT_USE_THIS_TOKEN(HttpStatus.BAD_REQUEST.value(), "U006","유효하지 않은 토큰 입니다."),
 
 
     //CHAT-USER

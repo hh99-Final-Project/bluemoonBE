@@ -11,7 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-
+//토큰 유효성 검사
 @Component
 @RequiredArgsConstructor
 public class JWTAuthProvider implements AuthenticationProvider {
