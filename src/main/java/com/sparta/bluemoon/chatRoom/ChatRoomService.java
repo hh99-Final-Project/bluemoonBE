@@ -124,7 +124,7 @@ public class ChatRoomService {
     public List<ChatRoomResponseDto> getChatRoom(UserDetailsImpl userDetails, int page) {
         //user로 챗룸 유저를 찾고>>챗룸 유저에서 채팅방을 찾는다
         //마지막나온 메시지 ,내용 ,시간
-        int display = 5;
+        int display = 10;
         Pageable pageable = PageRequest.of(page,display);
         List<ChatRoomResponseDto> responseDtos = new ArrayList<>();
         Page<ChatRoomUser> chatRoomUsers = chatRoomUserRepository.findAllByUser(userDetails.getUser(),pageable);
