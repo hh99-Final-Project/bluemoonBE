@@ -1,12 +1,10 @@
 package com.sparta.bluemoon.test;
 
+import com.sparta.bluemoon.user.requestDto.RefreshTokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/naver")
@@ -29,4 +27,5 @@ public class NaverLoginController {
 
         return naverLoginService.login(authCode);
     }
+
 }

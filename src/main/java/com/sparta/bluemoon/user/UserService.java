@@ -1,24 +1,34 @@
 package com.sparta.bluemoon.user;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.sparta.bluemoon.point.Point;
+import com.sparta.bluemoon.security.jwt.JwtDecoder;
+import com.sparta.bluemoon.security.jwt.JwtTokenUtils;
 import com.sparta.bluemoon.user.requestDto.NicknameSignupRequestDto;
 import com.sparta.bluemoon.user.responseDto.NicknameSignupResponseDto;
+import com.sparta.bluemoon.user.responseDto.SocialLoginResponseDto;
 import com.sparta.bluemoon.user.responseDto.UserInfoDto;
 import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Objects;
 
 import static com.sparta.bluemoon.exception.ErrorCode.*;
+import static com.sparta.bluemoon.security.jwt.JwtTokenUtils.CLAIM_EXPIRED_DATE;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final JwtDecoder jwtDecoder;
+    private final RefreshRedisService refreshRedisService;
 
     public boolean isDuplicated(String nickname) {
         return !userRepository.existsByNickname(nickname);
@@ -62,5 +72,46 @@ public class UserService {
             recommenderPoint.eventPoint(recommenderPoint.getMyPoint() + 1000);
         }
         return new NicknameSignupResponseDto(user.getPoint());
+    }
+
+
+
+
+    public ResponseEntity updateAccessToken(String refreshToken){
+        //리프레시토큰 만료시간이 지나지 않았을 경우
+
+        DecodedJWT decodedJWT = jwtDecoder.isValidToken(refreshToken)
+                .orElseThrow(() -> new CustomException(DONT_USE_THIS_TOKEN));
+
+        Date expiredDate = decodedJWT
+                .getClaim(CLAIM_EXPIRED_DATE)
+                .asDate();
+
+        if(!expiredDate.before(new Date())){
+            System.out.println("ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ");
+            String userId = refreshRedisService.getValues(refreshToken);
+            User User = userRepository.findById(Long.parseLong(userId)).orElseThrow(
+                    ()-> new CustomException(NOT_FOUND_USER)
+            );
+            UserDetailsImpl userDetails = new UserDetailsImpl(User);
+
+            //액세스 토큰 생성
+            final String token = JwtTokenUtils.generateAccessToken(userDetails);
+            System.out.println("새로운 액세스 "+token);
+
+            userRepository.save(User);
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Authorization","Bearer "+token);
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(new SocialLoginResponseDto(User));
+        } else {
+            System.out.println("?????????????????");
+            refreshRedisService.delValues(refreshToken);
+            throw new CustomException(REFRESH_TOKEN_IS_EXPIRED);
+            //로그인 페이지
+        }
+
     }
 }

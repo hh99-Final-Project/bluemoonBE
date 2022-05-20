@@ -1,4 +1,4 @@
-package com.sparta.bluemoon.user.responseDto;
+package com.sparta.bluemoon.user.requestDto;
 
 import lombok.Getter;
 import lombok.Setter;

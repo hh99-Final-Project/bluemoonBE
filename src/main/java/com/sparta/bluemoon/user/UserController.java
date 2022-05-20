@@ -2,12 +2,14 @@ package com.sparta.bluemoon.user;
 
 import com.sparta.bluemoon.user.requestDto.NicknameCheckRequestDto;
 import com.sparta.bluemoon.user.requestDto.NicknameSignupRequestDto;
+import com.sparta.bluemoon.user.requestDto.RefreshTokenDto;
 import com.sparta.bluemoon.user.responseDto.NicknameSignupResponseDto;
 import com.sparta.bluemoon.user.responseDto.UserInfoDto;
 import com.sparta.bluemoon.point.PointRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.point.PointService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +47,11 @@ public class UserController {
     public String test(){
         System.out.println("요청왔음");
         return "정보가 잘 가나요?";
+    }
+
+    @PostMapping("/api/refresh")
+    public ResponseEntity googleRefresh(@RequestBody RefreshTokenDto refreshTokenDto){
+        return userService.updateAccessToken(refreshTokenDto.getRefreshToken());
     }
 
 
