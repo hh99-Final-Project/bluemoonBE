@@ -105,7 +105,7 @@ public class ChatRoomService {
 
             if (chatRoomUser.size() == 1) {
                 //나만 있을 때
-                if (chatRoomUser.get(0).getUser().equals(userDetails.getUser())) {
+                if (chatRoomUser.get(0).getUser().getId().equals(userDetails.getUser().getId())) {
                     ChatRoomUser user = new ChatRoomUser(anotherUser, userDetails.getUser(), chatRoom);
                     chatRoomUserRepository.save(user);
                 } else {
