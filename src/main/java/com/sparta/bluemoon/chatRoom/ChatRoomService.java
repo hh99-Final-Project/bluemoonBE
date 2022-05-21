@@ -191,7 +191,15 @@ public class ChatRoomService {
                return new ChatRoomOtherUserInfoResponseDto(otherUser);
             }
         }
-        throw new CustomException(DOESNT_EXIST_OTHER_USER);
+
+        User anotherUser = userRepository.findByNickname(users.get(0).getName()).orElseThrow(
+                ()-> new CustomException(DOESNT_EXIST_OTHER_USER)
+        );
+        ChatRoomUser anotherChatRoomUser = new ChatRoomUser(anotherUser, myUser, chatRoom);
+        chatRoomUserRepository.save(anotherChatRoomUser);
+
+        return new ChatRoomOtherUserInfoResponseDto(anotherUser);
+
     }
 
     //채팅방 이전 대화내용 불러오기
