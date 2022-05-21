@@ -177,6 +177,7 @@ public class ChatRoomService {
 //            throw new IllegalArgumentException("존재하지 않는 채팅방 입니다.");
 //        }
     }
+
     //채팅방 입장시 상대 유저 정보 조회
     public ChatRoomOtherUserInfoResponseDto getOtherUserInfo(String roomId, UserDetailsImpl userDetails){
         User myUser = userDetails.getUser();
@@ -187,6 +188,7 @@ public class ChatRoomService {
                return new ChatRoomOtherUserInfoResponseDto(otherUser);
             }
         }
+        //TODO:채팅방에 상대 불러오기
         throw new CustomException(DOESNT_EXIST_OTHER_USER);
     }
 
