@@ -45,8 +45,7 @@ public class UserService {
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new CustomException(NOT_FOUND_USER)
         );
-        user.changeNickname(nicknameSignupRequestDto.getNickname());
-        //TODO:여기에 넣으면 추천인 오류시 닉네임도 처음으로 되돌아감// 컨트롤러에 넣으면 어떻게 되지?
+
         return getEventPoint(nicknameSignupRequestDto, user);
 
     }
@@ -55,6 +54,9 @@ public class UserService {
     //추천인 입력
     @Transactional
     public NicknameSignupResponseDto getEventPoint(NicknameSignupRequestDto nicknameSignupRequestDto, User user) {
+
+        user.changeNickname(nicknameSignupRequestDto.getNickname());
+
         //추천인을 적었다면
         if (nicknameSignupRequestDto.getRecommender() != null && !Objects.equals(nicknameSignupRequestDto.getRecommender().trim(), "")) {
             User recommender = userRepository.findByNickname(nicknameSignupRequestDto.getRecommender()).orElseThrow(
@@ -74,9 +76,6 @@ public class UserService {
         return new NicknameSignupResponseDto(user.getPoint());
     }
 
-
-
-
     public ResponseEntity updateAccessToken(String refreshToken){
         //리프레시토큰 만료시간이 지나지 않았을 경우
 
@@ -88,18 +87,17 @@ public class UserService {
                 .asDate();
 
         if(!expiredDate.before(new Date())){
-            System.out.println("ㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠㅠ");
             String userId = refreshRedisService.getValues(refreshToken);
             User User = userRepository.findById(Long.parseLong(userId)).orElseThrow(
                     ()-> new CustomException(NOT_FOUND_USER)
             );
+
             UserDetailsImpl userDetails = new UserDetailsImpl(User);
 
             //액세스 토큰 생성
             final String token = JwtTokenUtils.generateAccessToken(userDetails);
-            System.out.println("새로운 액세스 "+token);
+            System.out.println("새로운 액세스 토큰: "+token);
 
-            userRepository.save(User);
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization","Bearer "+token);
 
@@ -107,11 +105,8 @@ public class UserService {
                     .headers(headers)
                     .body(new SocialLoginResponseDto(User));
         } else {
-            System.out.println("?????????????????");
             refreshRedisService.delValues(refreshToken);
             throw new CustomException(REFRESH_TOKEN_IS_EXPIRED);
-            //로그인 페이지
         }
-
     }
 }

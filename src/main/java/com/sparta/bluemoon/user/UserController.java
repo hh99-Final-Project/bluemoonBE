@@ -18,11 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
-
-
-    private final PointService pointService;
-    private final PointRepository pointRepository;
 
     //로그인한 유저 정보 가져오기
     @GetMapping("/api/user/islogin")
@@ -39,20 +34,11 @@ public class UserController {
     //로그인한 유저에 닉네임 정보 입력하기
     @PostMapping("/api/user/nickname")
     public NicknameSignupResponseDto signupNickname(@RequestBody NicknameSignupRequestDto nicknameSignupRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-
         return userService.signupNickname(nicknameSignupRequestDto, userDetails);
     }
 
-    @GetMapping("/api/test")
-    public String test(){
-        System.out.println("요청왔음");
-        return "정보가 잘 가나요?";
-    }
-
     @PostMapping("/api/refresh")
-    public ResponseEntity googleRefresh(@RequestBody RefreshTokenDto refreshTokenDto){
+    public ResponseEntity loginByRefreshToken(@RequestBody RefreshTokenDto refreshTokenDto){
         return userService.updateAccessToken(refreshTokenDto.getRefreshToken());
     }
-
-
 }

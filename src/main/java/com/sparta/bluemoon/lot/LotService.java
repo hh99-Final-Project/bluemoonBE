@@ -27,7 +27,7 @@ public class LotService {
 
     public static int bananaCount = 5;
 
-   //판단
+   //당첨 여부 판단
    @Transactional
     public LotResponseDto doLot(User user){
 
@@ -59,14 +59,12 @@ public class LotService {
 
     //룰렛돌리기
     public boolean getLotResult(User user) {
-        System.out.println(bananaCount);
         if(bananaCount>0){
             Random r = new Random();
             boolean result = false;
             int temp = 0;
 
             temp = r.nextInt(100);
-            System.out.println(temp);
 
             //당첨 시:당첨 확률 10%
             if (temp >= 0 && temp < 10) {
@@ -78,7 +76,7 @@ public class LotService {
 
             return result;
         } else {
-            System.out.println("바나나 없음");
+            // System.out.println("바나나 없음");
             return false;
         }
     }

@@ -29,14 +29,13 @@ public class VoiceService {
     public String bucket;  // S3 버킷 이름
 
 
-    // Image 업로드
+    // 파일 업로드
     public String upload(MultipartFile file, String dirName) throws IOException {
 
         File uploadFile = convert(file)  // 파일 변환할 수 없으면 에러
                 .orElseThrow(() -> new CustomException(VOICE_FILE_INVALID));
 
         return upload(uploadFile, dirName);
-
     }
 
     // S3로 파일 업로드하기

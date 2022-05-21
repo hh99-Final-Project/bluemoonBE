@@ -18,7 +18,7 @@ public class CommentController {
     private final CommentService commentService;
     private final VoiceService voiceService;
 
-    //댓글 저장
+    // 댓글 저장
     // 댓글 저장할떄는 상위 댓글의 정보를 받아와야한다.
     // 최상위 댓글의 경우 상위 댓글이 존재하지 않으므로 값을 빈칸으로 보내주면 된다.
     @PostMapping(value = "/api/comments", consumes = {"multipart/form-data"})
@@ -26,7 +26,7 @@ public class CommentController {
                                           @RequestPart(required = false) MultipartFile file,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         String voiceUrl = "";
-        if(file!=null){
+        if(file != null){
             voiceUrl = voiceService.upload(file,"static");
         }
         return commentService.saveComment(requestDto, userDetails.getUser(), voiceUrl);

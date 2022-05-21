@@ -16,7 +16,6 @@ public class LotController {
     //당첨 결과
     @GetMapping("/api/lot")
     public LotResponseDto lotResult(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        ///
         return lotService.doLot(userDetails.getUser());
     }
 
@@ -25,9 +24,7 @@ public class LotController {
     public void writePersonalInfo(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                   @RequestBody PersonalInfoRequestDto requestDto){
 
-
         lotService.writePersonalInfo(userDetails.getUser(), requestDto);
-
     }
 
 }
