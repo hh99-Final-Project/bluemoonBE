@@ -45,9 +45,7 @@ public class PostService {
     // 페이지 sort 대상 (id를 기준으로 내림차순으로 sort할 에정임)
     private static final String SORT_PROPERTIES = "id";
     // 남의 게시글 한 페이지당 보여줄 게시글의 수 (한 페이지당 보여줄 게시글의 수는 1개이지만 5개를 한번에 보내주기로 함)
-    private static final int OTHER_POST_PAGEABLE_SIZE = 1;
-    // 비로그인 사용자에게 보여줄 main post index
-    private static final long MAIN_POST_INDEX_FOR_ANONYMOUS = 1L;
+    private static final int OTHER_POST_PAGEABLE_SIZE = 5;
 
     //게시글 1개 상세 조회
     public PostResponseDto getOnePost(String postId, UserDetailsImpl userDetails) {
@@ -113,14 +111,14 @@ public class PostService {
     }
 
 
-    // 남의 게시글 훔쳐보기 (1개만)
+    // 남의 게시글 훔쳐보기 (5개만)
     public List<PostOtherOnePostResponseDto> findOtherUserPosts(User user, int pageId) {
 
         // 남의 게시글 수
         int otherPostsCount = postRepository.countByUserNot(user);
 
         // paging 처리 해야 하는 수 보다 게시글의 수가 적을 경우 고려
-        int postSize = Math.min(otherPostsCount, MY_POST_PAGEABLE_SIZE);
+        int postSize = Math.min(otherPostsCount, OTHER_POST_PAGEABLE_SIZE);
         try {
             Pageable pageable = PageRequest
                 .of(pageId, postSize, Sort.by((Direction.DESC), SORT_PROPERTIES));
@@ -149,35 +147,29 @@ public class PostService {
 
     //댓글에 로그인한 유저와 비교해 삭제 가능 여부 판단해주는 메소드
     private List<CommentDto> getCommentDtos(UserDetailsImpl userDetails, Post post) {
-        User user = post.getUser();
-
-//        List<Comment> comments = commentRepository.findAllByPost(post);
-        List<Comment> comments = commentQuerydslRepository.findCommentByPost(post);
-        System.out.println("comments.size() = " + comments.size());
-
         List<CommentDto> result = new ArrayList<>();
-        Map<String, CommentDto> map = new HashMap<>();
-        comments.forEach(c -> {
-            CommentDto dto = new CommentDto(c);
-            if (c.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(user.getId())) {
-                dto.setShow(true);
+        Map<String, CommentDto> commentMap = new HashMap<>();
+
+        // 게시글에 해당하는 댓글 들고오기
+        List<Comment> comments = commentQuerydslRepository.findCommentByPost(post);
+
+        comments.forEach(comment -> {
+            CommentDto commentDto = new CommentDto(comment);
+            // 내가 댓글을 작성한 사람이거나, 내가 게시글을 작성한 사람일 경우 setShow -> true
+            if (comment.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(post.getUser().getId())) {
+                commentDto.setShow(true);
             }
 
-            map.put(dto.getCommentUuid(), dto);
-            if(c.getParent() != null) {
-                map.get(c.getParent().getCommentUuid()).getChildren().add(dto);
+            commentMap.put(commentDto.getCommentUuid(), commentDto);
+            // 부모 댓글이 존재하는 경우
+            if(comment.getParent() != null) {
+                // 부모 댓글에 자식 댓글 추가
+                commentMap.get(comment.getParent().getCommentUuid()).getChildren().add(commentDto);
             } else {
-                result.add(dto);
+                result.add(commentDto);
             }
         });
 
-//        for (Comment comment: comments) {
-//            if (comment.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(user.getId())) {
-//                comment.setShow(true);
-//            }
-//            CommentDto commentDto = new CommentDto(comment);
-//            newComments.add(commentDto);
-//        }
         Collections.reverse(result);
         return result;
     }
@@ -197,13 +189,11 @@ public class PostService {
         List<Comment> comments = commentRepository.findAllByPost(post);
         List<CommentDto> newComments = new ArrayList<>();
         for (Comment comment: comments) {
-            comment.setShow(false);
             CommentDto commentDto = new CommentDto(comment);
             newComments.add(commentDto);
         }
 
         //Dto에 담아주기
-
         return new PostResponseDto(post, newComments);
     }
 }

@@ -49,8 +49,6 @@ public class ChatRoomController {
     }
 
     //채팅방 삭제
-
-
     @DeleteMapping("api/rooms/{roomId}")
 
     public void deleteChatRoom(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -75,7 +73,6 @@ public class ChatRoomController {
             @PathVariable String roomId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-        System.out.println(roomId);
         return chatRoomService.getOtherUserInfo(roomId, userDetails);
     }
 }

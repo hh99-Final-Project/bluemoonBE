@@ -34,6 +34,7 @@ public enum ErrorCode {
     FORBIDDEN_CHATROOM(HttpStatus.FORBIDDEN.value(), "R004","접근 불가능한 채팅방 입니다."),
     CANNOT_MAKE_ROOM_ALONE(HttpStatus.BAD_REQUEST.value(), "R005","자기자신에게 채팅을 신청할 수 없습니다"),
     DOESNT_EXIST_OTHER_USER(HttpStatus.NOT_FOUND.value(), "R006","채팅상대가 존재하지 않습니다"),
+    INVALID_MESSAGE(HttpStatus.NOT_FOUND.value(), "R007","메세지를 확인할 수 없습니다."),
 
     //COMMENT
     DOESNT_EXIST_POST_FOR_WRITE(HttpStatus.NOT_FOUND.value(), "C001","해당하는 게시글이 존재하지 않습니다."),

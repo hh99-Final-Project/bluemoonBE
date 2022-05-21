@@ -32,7 +32,7 @@ public class PostController {
 
     }
 
-    // 나의 게시글 전체 조회 (페이지당 5건, id를 기준으로 내림차순으로 반환)
+    // 나의 게시글 전체 조회 (페이지당 10건, id를 기준으로 내림차순으로 반환)
     @GetMapping("/api/myposts/{pageId}")
     public List<PostMyPageResponseDto> getMyPost(@PathVariable Integer pageId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         pageId -= 1;
@@ -40,7 +40,6 @@ public class PostController {
     }
 
     // 남의 게시글 5개 조회
-    // toDo: 코드 리팩토링 하기전
     @GetMapping("/api/posts/{pageId}")
     public List<PostOtherOnePostResponseDto> getOtherPost(
         @AuthenticationPrincipal UserDetailsImpl userDetails,

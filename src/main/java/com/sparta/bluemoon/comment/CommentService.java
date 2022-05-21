@@ -34,6 +34,7 @@ public class CommentService {
     //댓글 저장
     @Transactional
     public CommentResponseDto saveComment(CommentRequestDto requestDto, User user, String voiceUrl) {
+
         Post post= postRepository.findByPostUuid(requestDto.getPostUuid()).orElseThrow(
                 () -> new CustomException(DOESNT_EXIST_POST_FOR_WRITE)
         );
@@ -50,12 +51,14 @@ public class CommentService {
 
         //유저의 현재 포인트
         int userPoint = user.getPoint().getMyPoint();
+
         //게시글에 유저가 쓴 코멘트가 존재하는지 판단
         List<Comment> userComments = commentRepository.findAllByPostAndUser(post, user);
-        //처음썼고 카운트가 남아있다면 포인트 주기 있다면 넘어가기
+
         Point point = pointRepository.findByUser(user);
 
-        if((userComments.size()==1)&&(point.getCommentCount()!=0)){
+        //처음썼고 카운트가 남아있다면 포인트 주기 있다면 넘어가기
+        if((userComments.size() == 1) && (point.getCommentCount() != 0)){
             userPoint = pointService.pointChange(point,"COMMENT_POINT");
         }
 

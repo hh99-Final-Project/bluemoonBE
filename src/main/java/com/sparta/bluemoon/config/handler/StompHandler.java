@@ -46,7 +46,6 @@ public class StompHandler implements ChannelInterceptor {
                 String sessionId = (String) message.getHeaders().get("simpSessionId");
                 redisRepository.saveMyInfo(sessionId, userId);
             }
-
         } else if (StompCommand.DISCONNECT == accessor.getCommand()) { // Websocket 연결 종료
 
             String sessionId = (String) message.getHeaders().get("simpSessionId");
