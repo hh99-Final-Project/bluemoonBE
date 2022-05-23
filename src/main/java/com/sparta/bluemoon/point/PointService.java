@@ -36,7 +36,7 @@ public class PointService {
         }
 
         point.update(myPoint, postCount,commentCount,lottoCount);
-
+        pointRepository.save(point);
         //포인트 값만 뿌려주기...?
         return myPoint;
     }

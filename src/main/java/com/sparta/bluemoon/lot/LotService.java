@@ -31,7 +31,7 @@ public class LotService {
    @Transactional
     public LotResponseDto doLot(User user){
 
-        Point point = pointRepository.findByUser(user);
+        Point point = user.getPoint();
         int userPoint;
         boolean result;
 
