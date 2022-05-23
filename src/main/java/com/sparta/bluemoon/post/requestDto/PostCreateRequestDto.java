@@ -15,8 +15,4 @@ public class PostCreateRequestDto {
 
     private String timer;
 
-    public PostCreateRequestDto(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
 }

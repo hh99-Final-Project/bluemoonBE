@@ -55,7 +55,7 @@ public class CommentService {
         //게시글에 유저가 쓴 코멘트가 존재하는지 판단
         List<Comment> userComments = commentRepository.findAllByPostAndUser(post, user);
 
-        Point point = pointRepository.findByUser(user);
+        Point point = user.getPoint();
 
         //처음썼고 카운트가 남아있다면 포인트 주기 있다면 넘어가기
         if((userComments.size() == 1) && (point.getCommentCount() != 0)){

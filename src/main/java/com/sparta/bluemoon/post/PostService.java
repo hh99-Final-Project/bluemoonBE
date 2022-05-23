@@ -26,6 +26,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import static com.sparta.bluemoon.exception.ErrorCode.*;
@@ -39,6 +40,7 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final CommentQuerydslRepository commentQuerydslRepository;
     private final PointService pointService;
+    private final EntityManager em;
 
     // 내 게시글 한 페이지당 보여줄 게시글의 수
     private static final int MY_POST_PAGEABLE_SIZE = 10;
@@ -67,9 +69,8 @@ public class PostService {
         postRepository.save(post);
 
         int userPoint = user.getPoint().getMyPoint();
-        Point point = pointRepository.findByUser(user);
-        if (point.getPostCount() != 0) {
-            userPoint = pointService.pointChange(point, "POST_POINT");
+        if (user.getPoint().getPostCount() != 0) {
+            userPoint = pointService.pointChange(user.getPoint(), "POST_POINT");
         }
         //TODO: 임의로 음성녹음 파일 추가
         return new PostCreateResponseDto(voiceUrl, userPoint);
