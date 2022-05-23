@@ -37,6 +37,7 @@ public class UserController {
         return userService.signupNickname(nicknameSignupRequestDto, userDetails);
     }
 
+    //리프레쉬 토큰 검증
     @PostMapping("/api/refresh")
     public ResponseEntity loginByRefreshToken(@RequestBody RefreshTokenDto refreshTokenDto){
         return userService.updateAccessToken(refreshTokenDto.getRefreshToken());
