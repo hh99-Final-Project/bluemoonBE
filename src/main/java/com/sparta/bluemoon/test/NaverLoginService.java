@@ -75,8 +75,6 @@ public class NaverLoginService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-
-
         // Token 생성
         final String token = JwtTokenUtils.generateAccessToken(userDetails);
         final String refreshToken = JwtTokenUtils.generaterefreshToken(userDetails);

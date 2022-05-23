@@ -6,6 +6,7 @@ import javax.persistence.*;
 import com.sparta.bluemoon.point.Point;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
 
 
 @Entity

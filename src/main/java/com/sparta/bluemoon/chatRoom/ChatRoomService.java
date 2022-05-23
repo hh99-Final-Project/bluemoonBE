@@ -119,8 +119,6 @@ public class ChatRoomService {
         return false;
     }
 
-
-
     //채팅방 조회
     public List<ChatRoomResponseDto> getChatRoom(UserDetailsImpl userDetails, int page) {
 
