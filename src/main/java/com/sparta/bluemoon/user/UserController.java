@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("/api/refresh")
-    public ResponseEntity loginByRefreshToken(@RequestBody RefreshTokenDto refreshTokenDto){
-        return userService.updateAccessToken(refreshTokenDto.getRefreshToken());
+    public ResponseEntity loginByRefreshToken(@RequestHeader("RefreshToken") String refreshToken){
+        return userService.updateAccessToken(refreshToken.substring(7));
     }
 }
