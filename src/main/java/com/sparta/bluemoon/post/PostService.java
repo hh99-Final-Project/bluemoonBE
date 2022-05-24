@@ -189,6 +189,7 @@ public class PostService {
         // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
         List<Comment> comments = commentRepository.findAllByPost(post);
         List<CommentDto> newComments = new ArrayList<>();
+        Collections.reverse(comments);
         for (Comment comment: comments) {
             CommentDto commentDto = new CommentDto(comment);
             newComments.add(commentDto);
