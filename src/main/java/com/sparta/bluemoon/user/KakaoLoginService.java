@@ -107,8 +107,6 @@ public class KakaoLoginService {
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        //처음 로그인한 유저는 nickname에 빈값을 반환
-
         // Token 생성
         final String token = JwtTokenUtils.generateAccessToken(userDetails);
         final String refreshToken = JwtTokenUtils.generaterefreshToken(userDetails);
