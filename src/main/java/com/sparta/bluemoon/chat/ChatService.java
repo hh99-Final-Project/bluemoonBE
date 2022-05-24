@@ -29,9 +29,17 @@ public class ChatService {
 
     public void enter(Long userId, String roomId) {
         // 채팅방 입장 정보 저장
+        System.out.println("444444444444444444444444");
         redisRepository.userEnterRoomInfo(userId, roomId);
         // 채팅방의 안 읽은 메세지의 수 초기화
+        System.out.println("55555555555555555555555555");
         redisRepository.initChatRoomMessageInfo(roomId, userId);
+        System.out.println("666666666666666666666666666");
+        System.out.println("redisRepository.getUserEnterRoomId(userId) = " + redisRepository
+            .getUserEnterRoomId(userId));
+        System.out.println("777777777777777777777777777");
+        System.out.println("redisRepository = " + redisRepository.getChatRoomMessageCount(roomId, userId));
+        System.out.println("8888888888888888888888888888");
     }
 
     //채팅
