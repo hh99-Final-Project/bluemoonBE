@@ -50,11 +50,12 @@ public class ChatController {
         chatService.sendMessage(chatMessageDto, user);
         chatService.updateUnReadMessageCount(chatMessageDto);
     }
-    //알람
+    //알람 - 보낸 상대방 유저정보로 저장해야한다.
     @MessageMapping("/chat/alarm")
-    public void alarm(ChatMessageDto chatMessageDto, @Header("token") String token){
-        String username = jwtDecoder.decodeUsername(token.substring(7));
-        User user = userRepository.findByUsername(username).orElseThrow(
+    public void alarm(ChatMessageDto chatMessageDto){
+        Long otherUserId = chatMessageDto.getOtherUserId();
+        User user = userRepository.findById(otherUserId).orElseThrow(
+
             () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
         );
 
