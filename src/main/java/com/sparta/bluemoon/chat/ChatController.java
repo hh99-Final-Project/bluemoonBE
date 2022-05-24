@@ -27,11 +27,13 @@ public class ChatController {
      */
     @MessageMapping("/chat/enter")
     public void enter(ChatMessageDto chatMessageDto, @Header("token") String token) {
+        System.out.println("11111111111111111111111");
         String username = jwtDecoder.decodeUsername(token.substring(7));
+        System.out.println("22222222222222222222222222");
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(NOT_FOUND_USER_IN_CHAT)
         );
-
+        System.out.println("3333333333333333333333333333");
         chatService.enter(user.getId(), chatMessageDto.getRoomId());
     }
 
