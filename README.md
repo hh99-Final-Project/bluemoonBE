@@ -17,7 +17,7 @@ Bluemoon 서비스는 <b>익명</b> & <b>다이어리 </b> 서비스입니다.
 | [최봉진](https://github.com/cbjjzzang)|<img src="https://img.shields.io/badge/Springboot-6DB33F?style=flat-square&logo=Springboot&logoColor=white"/>|
 
 ### 📝 공통 문서
-- **ERD(Entity Relationship Diagram)** - <a href="daram.tistory.com" >상세보기 - WIKI 이동</a>
+- **ERD(Entity Relationship Diagram)** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/API" >상세보기 - WIKI 이동</a>
 - **API(Application Programming Interface)** - <a href="daram.tistory.com" >상세보기 - WIKI 이동</a>
 
 ### ⚙️ 개발 환경
