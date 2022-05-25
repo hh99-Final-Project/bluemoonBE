@@ -41,7 +41,7 @@
 
 
 ### 📝 공통 문서
-- **ERD(Entity Relationship Diagram)** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/API" > WIKI 이동</a>
+- **ERD(Entity Relationship Diagram)** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/ERD" > WIKI 이동</a>
 - **API(Application Programming Interface)** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/API" > WIKI 이동</a>
 - **Error Code**<a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/Errorcode" > WIKI 이동</a>
 - **JWT 및 이중로그인 방지** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/JWT-%EB%B0%8F-%EC%9D%B4%EC%A4%91%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EB%B0%A9%EC%A7%80" > WIKI 이동</a>
