@@ -27,7 +27,7 @@
 
 
 ### 👉 서비스 아키텍쳐
-![image](https://user-images.githubusercontent.com/100131652/170226815-a2ec819a-bd8e-4c12-a771-e60a6d4f6db2.png)
+![image](https://user-images.githubusercontent.com/81352857/170249061-0e995564-d8f1-454c-8273-9dff5fc104e4.png)
 
 
 ### 💻 기술 스택
