@@ -1,5 +1,6 @@
 package com.sparta.bluemoon.user;
 
+import com.sparta.bluemoon.util.Timestamped;
 import javax.persistence.*;
 
 
@@ -12,7 +13,7 @@ import org.hibernate.annotations.Fetch;
 @Entity
 @NoArgsConstructor
 @Getter
-public class User {
+public class User extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

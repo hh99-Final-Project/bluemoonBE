@@ -28,7 +28,7 @@ public class CommentController {
                                           @RequestPart(required = false) MultipartFile file,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         //댓글이 빈칸으로 들어왔을 경우 에러 발생
-        if(requestDto.getContent() == null && file == null) throw new CustomException(PLEASE_ENTER_TEXT_OR_VOICE);
+        if(requestDto.getContent().isEmpty() && file == null) throw new CustomException(PLEASE_ENTER_TEXT_OR_VOICE);
 
         String voiceUrl = "";
         if(file != null){
