@@ -126,9 +126,10 @@ public class PostService {
             Page<Post> otherPosts = postRepository.findAllByUserNot(user, pageable);
 
             List<PostOtherOnePostResponseDto> postDtos = new ArrayList<>();
-            for (int i = 0; i < Math.min(5, otherPosts.getSize()); i++) {
-                postDtos.add(new PostOtherOnePostResponseDto(otherPosts.getContent().get(i)));
+            for (Post post : otherPosts.getContent()) {
+                postDtos.add(new PostOtherOnePostResponseDto(post));
             }
+
             return postDtos;
         } catch (Exception e) {
             return new ArrayList<>();
