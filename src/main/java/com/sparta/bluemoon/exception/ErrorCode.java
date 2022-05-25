@@ -40,6 +40,7 @@ public enum ErrorCode {
     DOESNT_EXIST_POST_FOR_WRITE(HttpStatus.NOT_FOUND.value(), "C001","해당하는 게시글이 존재하지 않습니다."),
     DOESNT_EXIST_POST_FOR_DELETE(HttpStatus.NOT_FOUND.value(), "C002","해당하는 게시글이 존재하지 않습니다."),
     ONLY_CAN_DELETE_COMMENT_WRITER(HttpStatus.FORBIDDEN.value(), "C003","글을 작성한 유저만 삭제할 수 있습니다."),
+    PLEASE_ENTER_TEXT_OR_VOICE(HttpStatus.FORBIDDEN.value(), "C004","댓글을 입력해 주시기 바랍니다."),
 
     //VOICE
     VOICE_FILE_INVALID(HttpStatus.BAD_REQUEST.value(), "V001","잘못된 파일 형식입니다."),
