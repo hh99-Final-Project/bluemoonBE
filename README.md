@@ -29,6 +29,8 @@
 ### 👉 서비스 아키텍쳐
 ![image](https://user-images.githubusercontent.com/81352857/170249061-0e995564-d8f1-454c-8273-9dff5fc104e4.png)
 
+### 👉 ERD
+![image](https://user-images.githubusercontent.com/47101085/170249038-6053bdbc-516f-457d-901e-ab224eace724.png)
 
 ### 💻 기술 스택
 <img src="https://img.shields.io/badge/Java-007396?style=flat-square&logo=Java&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=flat-square&logo=Spring Boot&logoColor=white"/> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=flat-square&logo=Spring Security&logoColor=white"/>
