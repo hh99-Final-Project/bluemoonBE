@@ -25,6 +25,7 @@ public class Post extends Timestamped {
     private String title;
 
     // 게시글 내용
+    @Column(length = 500)
     private String content;
 
     //게시글 음성파일
