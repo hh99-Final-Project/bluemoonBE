@@ -15,7 +15,6 @@ public class CommentRequestDto {
 
     private String postUuid;
 
-    @NotBlank(message = "댓글 내용을 입력해 주십시오")
     private String content;
 
     private String parentUuid;

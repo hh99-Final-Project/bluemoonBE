@@ -13,7 +13,6 @@ public class PostCreateRequestDto {
     @NotBlank(message = "제목을 입력해 주십시오")
     private String title;
 
-    @NotBlank(message = "게시글 내용을 입력해 주십시오")
     private String content;
 
     private String timer;
