@@ -2,18 +2,20 @@ package com.sparta.bluemoon.lot;
 
 import com.sparta.bluemoon.lot.requestDto.PersonalInfoRequestDto;
 import com.sparta.bluemoon.user.User;
+import com.sparta.bluemoon.util.Timestamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
-public class Lot {
+public class Lot extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

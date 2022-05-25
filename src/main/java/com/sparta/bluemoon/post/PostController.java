@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class PostController {
 
     //게시글 작성
     @PostMapping(value = "/api/posts", consumes = {"multipart/form-data"})
-    public PostCreateResponseDto create(@RequestPart(required = false) PostCreateRequestDto requestDto,
+    public PostCreateResponseDto create(@Valid @RequestPart(required = false) PostCreateRequestDto requestDto,
                                         @RequestPart(required = false) MultipartFile file,
                                         @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         String voiceUrl = "";
