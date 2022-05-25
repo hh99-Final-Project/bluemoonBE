@@ -52,7 +52,6 @@ public class ChatController {
     public void alarm(ChatMessageDto chatMessageDto){
         Long otherUserId = chatMessageDto.getOtherUserId();
         User user = userRepository.findById(otherUserId).orElseThrow(
-
             () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
         );
 
