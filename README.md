@@ -23,7 +23,7 @@ Bluemoon 서비스는 <b>익명</b> & <b>다이어리 </b> 서비스입니다.
 - **API(Application Programming Interface)** - <a href="daram.tistory.com" >상세보기 - WIKI 이동</a>
 
 ### ⚙️ 개발 환경
-- **Server** : AWS EC2(Linux 2 AMI)<img src="https://img.shields.io/badge/Spring-6DB33F?style=flat-square&logo=Spring&logoColor=white"/>
+- **Server** : AWS EC2(Linux 2 AMI)<img src="https://img.shields.io/badge/AWS-232F3E?style=flat-square&logo=AWS&logoColor=white"/>
 - **Framework** : Springboot
 - **Database** : Mysql (AWS RDS), Redis (Aws ElastiCache)
 - **ETC** : AWS S3, AWS IAM, AWS Parameter Store, AWS Code deploy, Docker hub, NginX
