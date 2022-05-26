@@ -15,6 +15,7 @@ public class CommentResponseDto {
     private String nickname;
     private String content;
     private String createdAt;
+    private String timer;
     private boolean isShow;
     private boolean isLock;
     private int point;
@@ -26,6 +27,7 @@ public class CommentResponseDto {
         this.content = commentRequestDto.getContent();
         this.createdAt = dateResult;
         this.isShow = true;
+        this.timer = commentRequestDto.getTimer();
         //댓글 작성자가 설정한 값을 보내줌
         this.isLock = commentRequestDto.isLock();
         this.point= point;
