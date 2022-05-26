@@ -72,9 +72,6 @@ public class CommentService {
             () -> new CustomException(DOESNT_EXIST_POST_FOR_DELETE)
         );
 
-        System.out.println("comment.getUser().getId() = " + comment.getUser().getId());
-        System.out.println("userDetails.getUser().getId() = " + userDetails.getUser().getId());
-        System.out.println("comment.getPost().getUser().getId() = " + comment.getPost().getUser().getId());
         if (!comment.getUser().getId().equals(userDetails.getUser().getId()) &&
                 !comment.getPost().getUser().getId().equals(userDetails.getUser().getId())){
             throw new CustomException(ONLY_CAN_DELETE_COMMENT_WRITER);
