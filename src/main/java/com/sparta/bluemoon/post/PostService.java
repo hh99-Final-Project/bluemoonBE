@@ -158,7 +158,7 @@ public class PostService {
         comments.forEach(comment -> {
             CommentDto commentDto = new CommentDto(comment);
             // 내가 댓글을 작성한 사람이거나, 내가 게시글을 작성한 사람일 경우 setShow -> true
-            if (comment.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(post.getUser().getId())) {
+            if (userDetails != null && (comment.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(post.getUser().getId()))) {
                 commentDto.setShow(true);
             }
 
@@ -188,13 +188,7 @@ public class PostService {
         Post post = postRepository.findAll().get(0);
 
         // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
-        List<Comment> comments = commentRepository.findAllByPost(post);
-        List<CommentDto> newComments = new ArrayList<>();
-        Collections.reverse(comments);
-        for (Comment comment: comments) {
-            CommentDto commentDto = new CommentDto(comment);
-            newComments.add(commentDto);
-        }
+        List<CommentDto> newComments = getCommentDtos(null, post);
 
         //Dto에 담아주기
         return new PostResponseDto(post, newComments);
