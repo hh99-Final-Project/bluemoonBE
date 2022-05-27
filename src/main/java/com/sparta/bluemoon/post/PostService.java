@@ -11,6 +11,7 @@ import com.sparta.bluemoon.comment.CommentQuerydslRepository;
 import com.sparta.bluemoon.comment.CommentRepository;
 import com.sparta.bluemoon.point.PointRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
+import com.sparta.bluemoon.user.UserRoleEnum;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -157,7 +158,7 @@ public class PostService {
         comments.forEach(comment -> {
             CommentDto commentDto = new CommentDto(comment);
             // 내가 댓글을 작성한 사람이거나, 내가 게시글을 작성한 사람일 경우 setShow -> true
-            if (userDetails != null && (comment.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(post.getUser().getId()))) {
+            if (userDetails != null && (userDetails.getUser().getRole().equals(UserRoleEnum.ADMIN) || comment.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(post.getUser().getId()))) {
                 commentDto.setShow(true);
             }
 
@@ -191,5 +192,43 @@ public class PostService {
 
         //Dto에 담아주기
         return new PostResponseDto(post, newComments);
+    }
+
+    public List<PostMyPageResponseDto> findAdminPage(Integer pageId, User user) {
+
+        try {
+            Pageable pageable = PageRequest
+                .of(pageId, MY_POST_PAGEABLE_SIZE, Sort.by((Direction.DESC), SORT_PROPERTIES));
+            // 내가 쓴 게시글 페이징을 이용해서 들고오기
+            Page<Post> pagedPosts = postRepository.findAll(pageable);
+            // 들고온 게시글을 dto로 변환해서 반환
+            return convertPostsToPostDtos(pagedPosts);
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public PostResponseDto getAdminPost(String postId, UserDetailsImpl userDetails) {
+        Post post = postRepository.findByPostUuid(postId).orElseThrow(
+            () -> new CustomException(CANNOT_FIND_POST_NOT_EXIST)
+        );
+
+        // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
+        List<CommentDto> newCommentList = getCommentDtos(userDetails, post);
+        //댓글 비공개 시 볼 수 있는 사람 특정
+
+        return new PostResponseDto(post, newCommentList);
+    }
+
+    public void adminDelete(String postId, User user) {
+        Post post = postRepository.findByPostUuid(postId).orElseThrow(
+            () -> new CustomException(CANNOT_DELETE_NOT_EXIST_POST)
+        );
+
+//        if (!user.getId().equals(post.getUser().getId()) && !user.getRole().equals(UserRoleEnum.ADMIN)) {
+//            throw new CustomException(ONLY_CAN_DELETE_POST_WRITER);
+//        }
+
+        postRepository.delete(post);
     }
 }

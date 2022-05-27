@@ -4,6 +4,7 @@ import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.post.reponseDto.*;
 import com.sparta.bluemoon.post.requestDto.PostCreateRequestDto;
 import com.sparta.bluemoon.security.UserDetailsImpl;
+import com.sparta.bluemoon.user.UserRoleEnum;
 import com.sparta.bluemoon.user.User;
 import com.sparta.bluemoon.user.UserRepository;
 import com.sparta.bluemoon.util.VoiceService;
@@ -41,6 +42,9 @@ public class PostController {
     @GetMapping("/api/myposts/{pageId}")
     public List<PostMyPageResponseDto> getMyPost(@PathVariable Integer pageId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         pageId -= 1;
+        if (userDetails.getUser().getRole().equals(UserRoleEnum.ADMIN)) {
+            return postService.findAdminPage(pageId, userDetails.getUser());
+        }
         return postService.findOneMyPage(pageId, userDetails.getUser());
     }
 
@@ -55,12 +59,18 @@ public class PostController {
     //게시글 1개 상세 조회
     @GetMapping("/api/postsDetail/{postId}")
     public PostResponseDto getOnePost(@PathVariable String postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails.getUser().getRole().equals(UserRoleEnum.ADMIN)) {
+            return postService.getAdminPost(postId, userDetails);
+        }
         return postService.getOnePost(postId, userDetails);
     }
 
     // 게시글 삭제
     @DeleteMapping("/api/posts/{postId}")
     public void delete(@PathVariable String postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails.getUser().getRole().equals(UserRoleEnum.ADMIN)) {
+            postService.adminDelete(postId, userDetails.getUser());
+        }
         postService.delete(postId, userDetails.getUser());
     }
 
