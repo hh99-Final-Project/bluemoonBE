@@ -48,7 +48,7 @@ public class PostService {
     // 페이지 sort 대상 (id를 기준으로 내림차순으로 sort할 에정임)
     private static final String SORT_PROPERTIES = "id";
     // 남의 게시글 한 페이지당 보여줄 게시글의 수 (한 페이지당 보여줄 게시글의 수는 1개이지만 5개를 한번에 보내주기로 함)
-    private static final int OTHER_POST_PAGEABLE_SIZE = 5;
+    private static final int POST_PAGEABLE_SIZE = 5;
 
     //게시글 1개 상세 조회
     public PostResponseDto getOnePost(String postId, UserDetailsImpl userDetails) {
@@ -114,21 +114,20 @@ public class PostService {
 
 
     // 남의 게시글 훔쳐보기 (5개만)
-    public List<PostOtherOnePostResponseDto> findOtherUserPosts(User user, int pageId) {
-
-        // 남의 게시글 수
-        int otherPostsCount = postRepository.countByUserNot(user);
+    public List<AllPostResponseDto> findOtherUserPosts(int pageId) {
+        // 전체 게시글 수
+        int postsCount = postRepository.findAll().size();
 
         // paging 처리 해야 하는 수 보다 게시글의 수가 적을 경우 고려
-        int postSize = Math.min(otherPostsCount, OTHER_POST_PAGEABLE_SIZE);
+        int postSize = Math.min(postsCount,POST_PAGEABLE_SIZE);
         try {
             Pageable pageable = PageRequest
                 .of(pageId, postSize, Sort.by((Direction.DESC), SORT_PROPERTIES));
-            Page<Post> otherPosts = postRepository.findAllByUserNot(user, pageable);
+            Page<Post> posts = postRepository.findAll(pageable);
 
-            List<PostOtherOnePostResponseDto> postDtos = new ArrayList<>();
-            for (Post post : otherPosts.getContent()) {
-                postDtos.add(new PostOtherOnePostResponseDto(post));
+            List<AllPostResponseDto> postDtos = new ArrayList<>();
+            for (Post post : posts.getContent()) {
+                postDtos.add(new AllPostResponseDto(post));
             }
 
             return postDtos;

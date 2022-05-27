@@ -36,7 +36,7 @@ public class UserService {
 
     //로그인한 유저 정보 가져오기
     public UserInfoDto isLogin(UserDetailsImpl userDetails) {
-        return new UserInfoDto(userDetails);
+        return new UserInfoDto(userDetails.getUser());
     }
 
     //로그인한 유저에 닉네임 정보 입력하기
@@ -71,6 +71,7 @@ public class UserService {
             Point recommenderPoint = recommender.getPoint();
 
             userPoint.eventPoint(userPoint.getMyPoint() + 500);
+            recommenderPoint.recommendCount(recommenderPoint.getRecommendCount() + 1);
             recommenderPoint.eventPoint(recommenderPoint.getMyPoint() + 1000);
         }
         return new NicknameSignupResponseDto(user.getPoint());

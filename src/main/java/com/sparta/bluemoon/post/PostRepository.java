@@ -10,13 +10,14 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-    int countByUserNot(User user);
+   // int countByUserNot(User user);
 
     List<Post> findByUser(User user);
 
-    Page<Post> findAllByUserNot(User user, Pageable pageable);
-
-    List<Post> findAllByUserNot(User user);
+//    Page<Post> findAllByUserNot(User user, Pageable pageable);
+//
+//    List<Post> findAllByUserNot(User user);
+    Page<Post> findAll(Pageable pageable);
 
     Page<Post> findByUser(User user, Pageable pageable);
 

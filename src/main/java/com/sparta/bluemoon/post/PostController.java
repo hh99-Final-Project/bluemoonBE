@@ -1,9 +1,12 @@
 package com.sparta.bluemoon.post;
 
+import com.sparta.bluemoon.exception.CustomException;
 import com.sparta.bluemoon.post.reponseDto.*;
 import com.sparta.bluemoon.post.requestDto.PostCreateRequestDto;
 import com.sparta.bluemoon.security.UserDetailsImpl;
 import com.sparta.bluemoon.user.UserRoleEnum;
+import com.sparta.bluemoon.user.User;
+import com.sparta.bluemoon.user.UserRepository;
 import com.sparta.bluemoon.util.VoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -46,11 +50,10 @@ public class PostController {
 
     // 남의 게시글 5개 조회
     @GetMapping("/api/posts/{pageId}")
-    public List<PostOtherOnePostResponseDto> getOtherPost(
-        @AuthenticationPrincipal UserDetailsImpl userDetails,
-        @PathVariable int pageId) {
+    public List<AllPostResponseDto> getAllPost(@PathVariable int pageId) {
         pageId -= 1;
-        return postService.findOtherUserPosts(userDetails.getUser(), pageId);
+
+        return postService.findOtherUserPosts(pageId);
     }
 
     //게시글 1개 상세 조회
