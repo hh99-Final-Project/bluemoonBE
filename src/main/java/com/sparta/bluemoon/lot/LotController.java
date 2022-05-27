@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class LotController {
     private final LotService lotService;
-    private final LotRepository lotRepository;
 
     //당첨 결과
     @GetMapping("/api/lot")

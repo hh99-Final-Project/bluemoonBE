@@ -19,6 +19,7 @@ public class PointService {
         int postCount = point.getPostCount();
         int commentCount = point.getCommentCount();
         int lottoCount = point.getLottoCount();
+        int recommendCount = point.getRecommendCount();
 
         if(state.equals("POST_POINT")){
             myPoint+=500;
@@ -32,10 +33,15 @@ public class PointService {
 
         else if(state.equals("LOTTO_POINT")){
             myPoint-=1000;
-            lottoCount--;
+            if(recommendCount > 0){
+                recommendCount--;
+            }else{
+                lottoCount--;
+            }
+
         }
 
-        point.update(myPoint, postCount,commentCount,lottoCount);
+        point.update(myPoint, postCount, commentCount, lottoCount, recommendCount);
         pointRepository.save(point);
         //포인트 값만 뿌려주기...?
         return myPoint;
