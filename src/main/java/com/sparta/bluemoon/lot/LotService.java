@@ -93,7 +93,7 @@ public class LotService {
            throw new CustomException(PERSONAL_INFO_DISAGREE);
        } else {
            String nickname = user.getNickname();
-           List<Lot> winners = lotRepository.findByNicknameAndPersonalInfo(nickname, false);
+           List<Lot> winners = lotRepository.findByNicknameAndPersonalInfoAndPhoneNumberStatus(nickname, true, PhoneNumberStatus.PENDING);
            if(!Pattern.matches(checkPhoneNumber,requestDto.getPhoneNumber())){
                throw new CustomException(WRONG_FORMAT);
            }

@@ -50,10 +50,12 @@ public class PostService {
     private static final int OTHER_POST_PAGEABLE_SIZE = 5;
 
     //게시글 1개 상세 조회
+    @Transactional
     public PostResponseDto getOnePost(String postId, UserDetailsImpl userDetails) {
         Post post = postRepository.findByPostUuid(postId).orElseThrow(
             () -> new CustomException(CANNOT_FIND_POST_NOT_EXIST)
         );
+        post.addViewCount();
 
         // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
         List<CommentDto> newCommentList = getCommentDtos(userDetails, post);
