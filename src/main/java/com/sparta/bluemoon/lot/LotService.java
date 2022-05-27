@@ -1,5 +1,6 @@
 package com.sparta.bluemoon.lot;
 
+import com.sparta.bluemoon.lot.Lot.PhoneNumberStatus;
 import com.sparta.bluemoon.lot.requestDto.PersonalInfoRequestDto;
 import com.sparta.bluemoon.lot.responseDto.LotResponseDto;
 import com.sparta.bluemoon.point.Point;
@@ -67,10 +68,13 @@ public class LotService {
             temp = r.nextInt(100);
 
             //당첨 시:당첨 확률 10%
-            if (temp >= 0 && temp < 10) {
+            if (temp >= 0 && temp < 20) {
                 result = true;
                 bananaCount--;
-                Lot lot = new Lot(user);
+                Lot lot = new Lot(user, result, PhoneNumberStatus.PENDING);
+                lotRepository.save(lot);
+            } else {
+                Lot lot = new Lot(user, result, PhoneNumberStatus.NOTREQUIRE);
                 lotRepository.save(lot);
             }
 
