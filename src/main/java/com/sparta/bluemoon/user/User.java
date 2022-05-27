@@ -29,6 +29,9 @@ public class User extends Timestamped {
 
     private String type;
 
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
+
     //포인트
     @OneToOne(mappedBy = "user")
     private Point point;
@@ -39,12 +42,14 @@ public class User extends Timestamped {
         this.password = password;
         this.nickname = nickname;
         this.type = type;
+        this.role = UserRoleEnum.USER;
     }
 
     public User(String username, String nickname, String password) {
         this.username = username;
         this.nickname = nickname;
         this.password = password;
+        this.role = UserRoleEnum.USER;
     }
 
     public void changeNickname(String nickname){
