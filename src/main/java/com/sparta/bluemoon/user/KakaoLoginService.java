@@ -95,7 +95,8 @@ public class KakaoLoginService {
             int postCount = 1;
             int commentCount = 5;
             int lottoCount = 1;
-            Point point = new Point(mypoint, kakaoUser, postCount, commentCount, lottoCount);
+            int recommendCount = 0;
+            Point point = new Point(mypoint, kakaoUser, postCount, commentCount, lottoCount, recommendCount);
             pointRepository.save(point);
         }
 

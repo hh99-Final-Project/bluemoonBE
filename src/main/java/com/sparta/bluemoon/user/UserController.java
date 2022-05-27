@@ -31,7 +31,7 @@ public class UserController {
         return userService.isDuplicated(nicknameCheckRequestDto.getNickname());
     }
 
-    //로그인한 유저에 닉네임 정보 입력하기
+    //로그인한 유저에 닉네임, 추천인 입력하기
     @PostMapping("/api/user/nickname")
     public NicknameSignupResponseDto signupNickname(@RequestBody NicknameSignupRequestDto nicknameSignupRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return userService.signupNickname(nicknameSignupRequestDto, userDetails);
