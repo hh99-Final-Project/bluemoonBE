@@ -1,6 +1,6 @@
 package com.sparta.bluemoon.user.responseDto;
 
-import com.sparta.bluemoon.security.UserDetailsImpl;
+import com.sparta.bluemoon.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,10 +13,10 @@ public class UserInfoDto {
     private int myPoint;
     private int lottoCount;
 
-    public UserInfoDto(UserDetailsImpl userDetails) {
-        this.userId = userDetails.getUser().getId();
-        this.nickname = userDetails.getUser().getNickname();
-        this.myPoint = userDetails.getUser().getPoint().getMyPoint();
-        this.lottoCount = userDetails.getUser().getPoint().getLottoCount();
+    public UserInfoDto(User user) {
+        this.userId = user.getId();
+        this.nickname = user.getNickname();
+        this.myPoint = user.getPoint().getMyPoint();
+        this.lottoCount = user.getPoint().getLottoCount() + user.getPoint().getRecommendCount();
     }
 }
