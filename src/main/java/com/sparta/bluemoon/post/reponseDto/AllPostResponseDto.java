@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PostOtherOnePostResponseDto {
+public class AllPostResponseDto {
     // 게시글 pk
     private String postUuid;
 
@@ -32,7 +32,7 @@ public class PostOtherOnePostResponseDto {
     // 게시글 작성 시간
     private LocalDateTime createdAt;
 
-    public PostOtherOnePostResponseDto(Post post) {
+    public AllPostResponseDto(Post post) {
         this.postUuid = post.getPostUuid();
         this.nickname = post.getUser().getNickname();
         this.userId = post.getUser().getId();
