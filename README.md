@@ -58,8 +58,8 @@
 
 
 ### 💥 트러블 슈팅
-- **N+1 문제** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/N---1-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%EC%9D%84-%EC%9C%84%ED%95%9C-@EntityGraph-%EB%8F%84%EC%9E%85"> WIKI 이동</a>
-- **Jasypt를 이용한 암호화 적용시 발생한 문제** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/Jasypt%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%A3%BC%EC%9A%94%EC%A0%95%EB%B3%B4-%EC%95%94%ED%98%B8%ED%99%94"> WIKI 이동</a>
-- **Spring Security에서 전역 예외처리가 안되는 문제** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/Spring-security%EC%97%90%EC%84%9C%EC%9D%98-%EC%98%88%EC%99%B8%EC%B2%98%EB%A6%AC"> WIKI 이동</a>
+- **N+1 문제** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/%F0%9F%92%A5%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85-(N%E5%8D%811-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%EC%9D%84-%EC%9C%84%ED%95%9C-@EntityGraph-%EB%8F%84%EC%9E%85)"> WIKI 이동</a>
+- **Jasypt를 이용한 암호화 적용시 발생한 문제** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/%F0%9F%92%A5%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85-(Jasypt%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%A3%BC%EC%9A%94%EC%A0%95%EB%B3%B4-%EC%95%94%ED%98%B8%ED%99%94)"> WIKI 이동</a>
+- **Spring Security에서 전역 예외처리가 안되는 문제** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/%F0%9F%92%A5%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85-(Spring-security%EC%97%90%EC%84%9C%EC%9D%98-%EC%98%88%EC%99%B8%EC%B2%98%EB%A6%AC)"> WIKI 이동</a>
 - **Access Token의 유효기간 설정에 따른 보안 문제** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/%F0%9F%92%A5%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85-(Refresh-Token)"> WIKI 이동</a>
-- **이벤트 참여 횟수를 매일 초기화 하는 문제** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%B0%B8%EC%97%AC-%ED%9A%9F%EC%88%98%EB%A5%BC-%EB%A7%A4%EC%9D%BC-%EC%B4%88%EA%B8%B0%ED%99%94-%ED%95%B4%EC%95%BC-%EB%90%98%EB%8A%94-%EB%AC%B8%EC%A0%9C"> WIKI 이동</a>
+- **이벤트 참여 횟수를 매일 초기화 하는 문제** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/%F0%9F%92%A5%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85-(%EC%9D%B4%EB%B2%A4%ED%8A%B8-%EC%B0%B8%EC%97%AC-%ED%9A%9F%EC%88%98%EB%A5%BC-%EB%A7%A4%EC%9D%BC-%EC%B4%88%EA%B8%B0%ED%99%94-%ED%95%B4%EC%95%BC-%EB%90%98%EB%8A%94-%EB%AC%B8%EC%A0%9C)"> WIKI 이동</a>
