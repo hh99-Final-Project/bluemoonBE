@@ -57,7 +57,7 @@
 - **ETC** : AWS S3, AWS IAM, AWS Parameter Store, AWS Code deploy, Docker hub, NginX
 
 
-### 💣 트러블 슈팅
+### 💥 트러블 슈팅
 - **N+1 문제** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/N---1-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%EC%9D%84-%EC%9C%84%ED%95%9C-@EntityGraph-%EB%8F%84%EC%9E%85"> WIKI 이동</a>
 - **Jasypt를 이용한 암호화 적용시 발생한 문제** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/Jasypt%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EC%A3%BC%EC%9A%94%EC%A0%95%EB%B3%B4-%EC%95%94%ED%98%B8%ED%99%94"> WIKI 이동</a>
 - **Spring Security에서 전역 예외처리가 안되는 문제** - <a href="https://github.com/hh99-Final-Project/bluemoonBE/wiki/Spring-security%EC%97%90%EC%84%9C%EC%9D%98-%EC%98%88%EC%99%B8%EC%B2%98%EB%A6%AC"> WIKI 이동</a>
