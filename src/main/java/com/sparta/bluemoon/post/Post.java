@@ -45,6 +45,8 @@ public class Post extends Timestamped {
     @ManyToOne
     private User user;
 
+    private Long viewCount;
+
     //requestDto가 비어있을경우 빈칸으로 처리
     public Post(PostCreateRequestDto requestDto, String voiceUrl, User user) {
         this.title = (requestDto == null ? "" : requestDto.getTitle());
@@ -52,6 +54,7 @@ public class Post extends Timestamped {
         this.timer = (requestDto == null ? "" : requestDto.getTimer());
         this.voiceUrl = voiceUrl;
         this.user = user;
+        this.viewCount = 0L;
     }
 
 
@@ -59,5 +62,10 @@ public class Post extends Timestamped {
         this.title = postCreateRequestDto.getTitle();
         this.content = postCreateRequestDto.getContent();
         this.user = user;
+        this.viewCount = 0L;
+    }
+
+    public void addViewCount() {
+        this.viewCount++;
     }
 }
