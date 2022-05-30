@@ -113,7 +113,8 @@ public class NaverLoginService {
             int postCount = 1;
             int commentCount = 5;
             int lottoCount = 1;
-            Point point = new Point(mypoint, naverUser, postCount, commentCount, lottoCount);
+            int recommendCount = 0;
+            Point point = new Point(mypoint, naverUser, postCount, commentCount, lottoCount, recommendCount);
             pointRepository.save(point);
         }
         return naverUser;

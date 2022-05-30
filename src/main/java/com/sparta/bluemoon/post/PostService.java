@@ -11,6 +11,7 @@ import com.sparta.bluemoon.comment.CommentQuerydslRepository;
 import com.sparta.bluemoon.comment.CommentRepository;
 import com.sparta.bluemoon.point.PointRepository;
 import com.sparta.bluemoon.security.UserDetailsImpl;
+import com.sparta.bluemoon.user.UserRoleEnum;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class PostService {
     // 페이지 sort 대상 (id를 기준으로 내림차순으로 sort할 에정임)
     private static final String SORT_PROPERTIES = "id";
     // 남의 게시글 한 페이지당 보여줄 게시글의 수 (한 페이지당 보여줄 게시글의 수는 1개이지만 5개를 한번에 보내주기로 함)
-    private static final int OTHER_POST_PAGEABLE_SIZE = 5;
+    private static final int POST_PAGEABLE_SIZE = 5;
 
     //게시글 1개 상세 조회
     public PostResponseDto getOnePost(String postId, UserDetailsImpl userDetails) {
@@ -113,21 +114,20 @@ public class PostService {
 
 
     // 남의 게시글 훔쳐보기 (5개만)
-    public List<PostOtherOnePostResponseDto> findOtherUserPosts(User user, int pageId) {
-
-        // 남의 게시글 수
-        int otherPostsCount = postRepository.countByUserNot(user);
+    public List<AllPostResponseDto> findOtherUserPosts(int pageId) {
+        // 전체 게시글 수
+        int postsCount = postRepository.findAll().size();
 
         // paging 처리 해야 하는 수 보다 게시글의 수가 적을 경우 고려
-        int postSize = Math.min(otherPostsCount, OTHER_POST_PAGEABLE_SIZE);
+        int postSize = Math.min(postsCount,POST_PAGEABLE_SIZE);
         try {
             Pageable pageable = PageRequest
                 .of(pageId, postSize, Sort.by((Direction.DESC), SORT_PROPERTIES));
-            Page<Post> otherPosts = postRepository.findAllByUserNot(user, pageable);
+            Page<Post> posts = postRepository.findAll(pageable);
 
-            List<PostOtherOnePostResponseDto> postDtos = new ArrayList<>();
-            for (Post post : otherPosts.getContent()) {
-                postDtos.add(new PostOtherOnePostResponseDto(post));
+            List<AllPostResponseDto> postDtos = new ArrayList<>();
+            for (Post post : posts.getContent()) {
+                postDtos.add(new AllPostResponseDto(post));
             }
 
             return postDtos;
@@ -158,7 +158,7 @@ public class PostService {
         comments.forEach(comment -> {
             CommentDto commentDto = new CommentDto(comment);
             // 내가 댓글을 작성한 사람이거나, 내가 게시글을 작성한 사람일 경우 setShow -> true
-            if (userDetails != null && (comment.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(post.getUser().getId()))) {
+            if (userDetails != null && (userDetails.getUser().getRole().equals(UserRoleEnum.ADMIN) || comment.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(post.getUser().getId()))) {
                 commentDto.setShow(true);
             }
 
@@ -192,5 +192,43 @@ public class PostService {
 
         //Dto에 담아주기
         return new PostResponseDto(post, newComments);
+    }
+
+    public List<PostMyPageResponseDto> findAdminPage(Integer pageId, User user) {
+
+        try {
+            Pageable pageable = PageRequest
+                .of(pageId, MY_POST_PAGEABLE_SIZE, Sort.by((Direction.DESC), SORT_PROPERTIES));
+            // 내가 쓴 게시글 페이징을 이용해서 들고오기
+            Page<Post> pagedPosts = postRepository.findAll(pageable);
+            // 들고온 게시글을 dto로 변환해서 반환
+            return convertPostsToPostDtos(pagedPosts);
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public PostResponseDto getAdminPost(String postId, UserDetailsImpl userDetails) {
+        Post post = postRepository.findByPostUuid(postId).orElseThrow(
+            () -> new CustomException(CANNOT_FIND_POST_NOT_EXIST)
+        );
+
+        // 댓글의 삭제 가능 여부를 확인한 뒤 Dto로 변환
+        List<CommentDto> newCommentList = getCommentDtos(userDetails, post);
+        //댓글 비공개 시 볼 수 있는 사람 특정
+
+        return new PostResponseDto(post, newCommentList);
+    }
+
+    public void adminDelete(String postId, User user) {
+        Post post = postRepository.findByPostUuid(postId).orElseThrow(
+            () -> new CustomException(CANNOT_DELETE_NOT_EXIST_POST)
+        );
+
+//        if (!user.getId().equals(post.getUser().getId()) && !user.getRole().equals(UserRoleEnum.ADMIN)) {
+//            throw new CustomException(ONLY_CAN_DELETE_POST_WRITER);
+//        }
+
+        postRepository.delete(post);
     }
 }

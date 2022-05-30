@@ -22,7 +22,6 @@ import static com.sparta.bluemoon.exception.ErrorCode.*;
 public class LotService {
 
     private final PointService pointService;
-    private final PointRepository pointRepository;
     private final LotRepository lotRepository;
 
     public static int bananaCount = 5;
@@ -34,7 +33,6 @@ public class LotService {
         Point point = user.getPoint();
         int userPoint;
         boolean result;
-
 
         if (point.getLottoCount() != 0 && point.getMyPoint() >= 1000) {
             //포인트 변경,카운트 감소
