@@ -70,6 +70,7 @@ public class PostController {
     public void delete(@PathVariable String postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         if (userDetails.getUser().getRole() != null && userDetails.getUser().getRole().equals(UserRoleEnum.ADMIN)) {
             postService.adminDelete(postId, userDetails.getUser());
+            return;
         }
         postService.delete(postId, userDetails.getUser());
     }
