@@ -158,7 +158,7 @@ public class PostService {
         comments.forEach(comment -> {
             CommentDto commentDto = new CommentDto(comment);
             // 내가 댓글을 작성한 사람이거나, 내가 게시글을 작성한 사람일 경우 setShow -> true
-            if (userDetails != null && (userDetails.getUser().getRole().equals(UserRoleEnum.ADMIN) || comment.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(post.getUser().getId()))) {
+            if (userDetails != null && ((userDetails.getUser().getRole() != null && userDetails.getUser().getRole().equals(UserRoleEnum.ADMIN)) || comment.getUser().getId().equals(userDetails.getUser().getId()) || userDetails.getUser().getId().equals(post.getUser().getId()))) {
                 commentDto.setShow(true);
             }
 
