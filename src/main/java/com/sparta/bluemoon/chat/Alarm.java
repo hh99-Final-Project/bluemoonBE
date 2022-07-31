@@ -19,6 +19,7 @@ public class Alarm extends Timestamped {
 
     private String title; //어느 게시글에 댓글을 달았는지 확인하기 위해
 
+
     private String postUuid;
 
     private String message;
